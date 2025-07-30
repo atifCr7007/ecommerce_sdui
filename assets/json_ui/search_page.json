@@ -1,0 +1,281 @@
+{
+  "screenId": "search",
+  "title": "Search Products",
+  "theme": {
+    "primaryColor": "#2196F3",
+    "secondaryColor": "#FF5722",
+    "backgroundColor": "#FFFFFF",
+    "textColor": "#212121"
+  },
+  "components": [
+    {
+      "type": "column",
+      "properties": {
+        "mainAxisAlignment": "start",
+        "crossAxisAlignment": "stretch"
+      },
+      "children": [
+        {
+          "type": "container",
+          "properties": {
+            "backgroundColor": "#F5F5F5",
+            "padding": {
+              "all": 16
+            }
+          },
+          "children": [
+            {
+              "type": "row",
+              "properties": {
+                "crossAxisAlignment": "center"
+              },
+              "children": [
+                {
+                  "type": "expanded",
+                  "children": [
+                    {
+                      "type": "container",
+                      "id": "search_field",
+                      "properties": {
+                        "backgroundColor": "#FFFFFF",
+                        "borderRadius": 25,
+                        "padding": {
+                          "horizontal": 16,
+                          "vertical": 12
+                        }
+                      },
+                      "children": [
+                        {
+                          "type": "row",
+                          "properties": {
+                            "crossAxisAlignment": "center"
+                          },
+                          "children": [
+                            {
+                              "type": "text",
+                              "properties": {
+                                "text": "🔍",
+                                "fontSize": 16
+                              }
+                            },
+                            {
+                              "type": "sizedbox",
+                              "properties": {
+                                "width": 8
+                              }
+                            },
+                            {
+                              "type": "expanded",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "search_hint",
+                                  "properties": {
+                                    "text": "Search products...",
+                                    "fontSize": 16,
+                                    "color": "#757575"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "sizedbox",
+                  "properties": {
+                    "width": 12
+                  }
+                },
+                {
+                  "type": "button",
+                  "id": "filter_button",
+                  "properties": {
+                    "text": "⚙️",
+                    "backgroundColor": "#2196F3",
+                    "textColor": "#FFFFFF",
+                    "width": 48,
+                    "height": 48,
+                    "borderRadius": 24
+                  },
+                  "action": {
+                    "type": "show_filters"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "container",
+          "id": "filter_chips",
+          "properties": {
+            "padding": {
+              "horizontal": 16,
+              "vertical": 8
+            }
+          },
+          "children": [
+            {
+              "type": "row",
+              "properties": {
+                "mainAxisAlignment": "start"
+              },
+              "children": [
+                {
+                  "type": "container",
+                  "properties": {
+                    "backgroundColor": "#E3F2FD",
+                    "borderRadius": 16,
+                    "padding": {
+                      "horizontal": 12,
+                      "vertical": 6
+                    }
+                  },
+                  "children": [
+                    {
+                      "type": "text",
+                      "properties": {
+                        "text": "All Categories",
+                        "fontSize": 12,
+                        "color": "#1976D2"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "sizedbox",
+                  "properties": {
+                    "width": 8
+                  }
+                },
+                {
+                  "type": "container",
+                  "properties": {
+                    "backgroundColor": "#F3E5F5",
+                    "borderRadius": 16,
+                    "padding": {
+                      "horizontal": 12,
+                      "vertical": 6
+                    }
+                  },
+                  "children": [
+                    {
+                      "type": "text",
+                      "properties": {
+                        "text": "Price: Low to High",
+                        "fontSize": 12,
+                        "color": "#7B1FA2"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "divider",
+          "properties": {
+            "color": "#E0E0E0"
+          }
+        },
+        {
+          "type": "expanded",
+          "children": [
+            {
+              "type": "container",
+              "id": "search_results",
+              "children": [
+                {
+                  "type": "column",
+                  "children": [
+                    {
+                      "type": "container",
+                      "properties": {
+                        "padding": {
+                          "all": 16
+                        }
+                      },
+                      "children": [
+                        {
+                          "type": "row",
+                          "properties": {
+                            "mainAxisAlignment": "spacebetween",
+                            "crossAxisAlignment": "center"
+                          },
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "results_count",
+                              "properties": {
+                                "text": "0 results found",
+                                "fontSize": 14,
+                                "color": "#757575"
+                              }
+                            },
+                            {
+                              "type": "row",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "properties": {
+                                    "text": "Sort by:",
+                                    "fontSize": 12,
+                                    "color": "#757575"
+                                  }
+                                },
+                                {
+                                  "type": "sizedbox",
+                                  "properties": {
+                                    "width": 4
+                                  }
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "sort_option",
+                                  "properties": {
+                                    "text": "Relevance",
+                                    "fontSize": 12,
+                                    "color": "#2196F3",
+                                    "fontWeight": "w600"
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "expanded",
+                      "children": [
+                        {
+                          "type": "container",
+                          "id": "product_grid",
+                          "children": [
+                            {
+                              "type": "productlist",
+                              "properties": {
+                                "title": "",
+                                "isHorizontal": false,
+                                "limit": 20
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

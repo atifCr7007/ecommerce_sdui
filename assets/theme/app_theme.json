@@ -1,0 +1,218 @@
+{
+  "themeId": "onemart_default",
+  "name": "Onemart Default Theme",
+  "version": "1.0.0",
+  "colors": {
+    "primary": "#2196F3",
+    "primaryVariant": "#1976D2",
+    "secondary": "#FF5722",
+    "secondaryVariant": "#E64A19",
+    "background": "#FFFFFF",
+    "surface": "#FFFFFF",
+    "error": "#F44336",
+    "onPrimary": "#FFFFFF",
+    "onSecondary": "#FFFFFF",
+    "onBackground": "#212121",
+    "onSurface": "#212121",
+    "onError": "#FFFFFF",
+    "success": "#4CAF50",
+    "warning": "#FF9800",
+    "info": "#2196F3",
+    "cardBackground": "#FAFAFA",
+    "divider": "#E0E0E0",
+    "shadow": "#000000",
+    "overlay": "#000000"
+  },
+  "typography": {
+    "fontFamily": "Roboto",
+    "headline1": {
+      "fontSize": 32,
+      "fontWeight": "bold",
+      "color": "#212121"
+    },
+    "headline2": {
+      "fontSize": 28,
+      "fontWeight": "bold",
+      "color": "#212121"
+    },
+    "headline3": {
+      "fontSize": 24,
+      "fontWeight": "w600",
+      "color": "#212121"
+    },
+    "headline4": {
+      "fontSize": 20,
+      "fontWeight": "w600",
+      "color": "#212121"
+    },
+    "headline5": {
+      "fontSize": 18,
+      "fontWeight": "w600",
+      "color": "#212121"
+    },
+    "headline6": {
+      "fontSize": 16,
+      "fontWeight": "w600",
+      "color": "#212121"
+    },
+    "subtitle1": {
+      "fontSize": 16,
+      "fontWeight": "normal",
+      "color": "#757575"
+    },
+    "subtitle2": {
+      "fontSize": 14,
+      "fontWeight": "normal",
+      "color": "#757575"
+    },
+    "body1": {
+      "fontSize": 16,
+      "fontWeight": "normal",
+      "color": "#212121"
+    },
+    "body2": {
+      "fontSize": 14,
+      "fontWeight": "normal",
+      "color": "#212121"
+    },
+    "button": {
+      "fontSize": 14,
+      "fontWeight": "w600",
+      "color": "#FFFFFF"
+    },
+    "caption": {
+      "fontSize": 12,
+      "fontWeight": "normal",
+      "color": "#757575"
+    },
+    "overline": {
+      "fontSize": 10,
+      "fontWeight": "normal",
+      "color": "#757575"
+    }
+  },
+  "spacing": {
+    "xs": 4,
+    "sm": 8,
+    "md": 16,
+    "lg": 24,
+    "xl": 32,
+    "xxl": 48
+  },
+  "borderRadius": {
+    "small": 4,
+    "medium": 8,
+    "large": 12,
+    "extraLarge": 16,
+    "circular": 50
+  },
+  "elevation": {
+    "none": 0,
+    "low": 2,
+    "medium": 4,
+    "high": 8,
+    "extraHigh": 16
+  },
+  "components": {
+    "appBar": {
+      "backgroundColor": "#2196F3",
+      "foregroundColor": "#FFFFFF",
+      "elevation": 4,
+      "height": 56
+    },
+    "bottomNavigationBar": {
+      "backgroundColor": "#FFFFFF",
+      "selectedItemColor": "#2196F3",
+      "unselectedItemColor": "#757575",
+      "elevation": 8,
+      "height": 60
+    },
+    "card": {
+      "backgroundColor": "#FFFFFF",
+      "shadowColor": "#000000",
+      "elevation": 2,
+      "borderRadius": 8,
+      "padding": 16
+    },
+    "button": {
+      "primary": {
+        "backgroundColor": "#2196F3",
+        "foregroundColor": "#FFFFFF",
+        "borderRadius": 8,
+        "elevation": 2,
+        "padding": {
+          "horizontal": 24,
+          "vertical": 12
+        }
+      },
+      "secondary": {
+        "backgroundColor": "transparent",
+        "foregroundColor": "#2196F3",
+        "borderColor": "#2196F3",
+        "borderWidth": 1,
+        "borderRadius": 8,
+        "padding": {
+          "horizontal": 24,
+          "vertical": 12
+        }
+      }
+    },
+    "textField": {
+      "backgroundColor": "#FAFAFA",
+      "borderColor": "#E0E0E0",
+      "focusedBorderColor": "#2196F3",
+      "borderRadius": 8,
+      "padding": {
+        "horizontal": 16,
+        "vertical": 12
+      }
+    },
+    "carousel": {
+      "indicatorActiveColor": "#2196F3",
+      "indicatorInactiveColor": "#E0E0E0",
+      "borderRadius": 12,
+      "autoPlayInterval": 3000
+    },
+    "productCard": {
+      "backgroundColor": "#FFFFFF",
+      "borderRadius": 12,
+      "elevation": 2,
+      "padding": 8,
+      "imageAspectRatio": 1.0,
+      "priceColor": "#4CAF50",
+      "originalPriceColor": "#757575",
+      "ratingColor": "#FF9800"
+    },
+    "banner": {
+      "borderRadius": 12,
+      "overlayOpacity": 0.3,
+      "titleColor": "#FFFFFF",
+      "subtitleColor": "#FFFFFF"
+    },
+    "tabBar": {
+      "backgroundColor": "#FFFFFF",
+      "selectedLabelColor": "#2196F3",
+      "unselectedLabelColor": "#757575",
+      "indicatorColor": "#2196F3",
+      "indicatorWeight": 2
+    }
+  },
+  "animations": {
+    "duration": {
+      "short": 200,
+      "medium": 300,
+      "long": 500
+    },
+    "curves": {
+      "easeIn": "easeIn",
+      "easeOut": "easeOut",
+      "easeInOut": "easeInOut",
+      "bounce": "bounceInOut"
+    }
+  },
+  "breakpoints": {
+    "mobile": 600,
+    "tablet": 900,
+    "desktop": 1200
+  }
+}

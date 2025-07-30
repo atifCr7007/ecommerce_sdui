@@ -1,0 +1,317 @@
+{
+  "products": [
+    {
+      "id": "prod_electronics_001",
+      "title": "Premium Wireless Headphones",
+      "description": "High-quality wireless headphones with noise cancellation, 30-hour battery life, and premium sound quality. Perfect for music lovers and professionals.",
+      "thumbnail": "https://png.pngtree.com/thumb_back/fh260/background/20230620/pngtree-turquoise-background-horizontal-banner-featuring-white-headphones-in-3d-rendering-image_3647835.jpg",
+      "images": [
+        {
+          "id": "img_headphones_001",
+          "url": "https://png.pngtree.com/thumb_back/fh260/background/20230620/pngtree-turquoise-background-horizontal-banner-featuring-white-headphones-in-3d-rendering-image_3647835.jpg"
+        }
+      ],
+      "variants": [
+        {
+          "id": "var_headphones_001",
+          "title": "Black",
+          "prices": [
+            {
+              "id": "price_headphones_001",
+              "currency_code": "USD",
+              "amount": 29999
+            }
+          ]
+        }
+      ],
+      "categories": [
+        {
+          "id": "electronics",
+          "name": "Electronics"
+        }
+      ]
+    },
+    {
+      "id": "prod_electronics_002",
+      "title": "Smart Fitness Watch",
+      "description": "Advanced fitness tracking watch with heart rate monitoring, GPS, sleep tracking, and 7-day battery life. Water-resistant design.",
+      "thumbnail": "https://www.chronopassion.com/files/2024/10/sbgw321_horizontal.jpg",
+      "images": [
+        {
+          "id": "img_watch_001",
+          "url": "https://www.chronopassion.com/files/2024/10/sbgw321_horizontal.jpg"
+        }
+      ],
+      "variants": [
+        {
+          "id": "var_watch_001",
+          "title": "Silver",
+          "prices": [
+            {
+              "id": "price_watch_001",
+              "currency_code": "USD",
+              "amount": 24999
+            }
+          ]
+        }
+      ],
+      "categories": [
+        {
+          "id": "electronics",
+          "name": "Electronics"
+        }
+      ]
+    },
+    {
+      "id": "prod_clothing_001",
+      "title": "Premium Cotton T-Shirt",
+      "description": "Soft, comfortable 100% organic cotton t-shirt. Available in multiple colors and sizes. Perfect for casual wear.",
+      "thumbnail": "https://assets.myntassets.com/w_412,q_60,dpr_2,fl_progressive/assets/images/27380732/2024/2/6/f269c8c6-9bd6-4663-9c4c-4cc23a33142b1707221187836USPoloAssnMenStripedPoloCollarAppliqueSlimFitT-shirt1.jpg",
+      "images": [
+        {
+          "id": "img_tshirt_001",
+          "url": "https://assets.myntassets.com/w_412,q_60,dpr_2,fl_progressive/assets/images/27380732/2024/2/6/f269c8c6-9bd6-4663-9c4c-4cc23a33142b1707221187836USPoloAssnMenStripedPoloCollarAppliqueSlimFitT-shirt1.jpg"
+        }
+      ],
+      "variants": [
+        {
+          "id": "var_tshirt_001",
+          "title": "Medium - Blue",
+          "prices": [
+            {
+              "id": "price_tshirt_001",
+              "currency_code": "USD",
+              "amount": 2999
+            }
+          ]
+        }
+      ],
+      "categories": [
+        {
+          "id": "clothing",
+          "name": "Clothing & Fashion"
+        }
+      ]
+    },
+    {
+      "id": "prod_clothing_002",
+      "title": "Designer Jeans",
+      "description": "Premium denim jeans with modern fit and classic styling. Made from high-quality materials for durability and comfort.",
+      "thumbnail": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSM4HB3kageM4pgm-ni11O3S-Cl8Y6oTN4RYQ&s",
+      "images": [
+        {
+          "id": "img_jeans_001",
+          "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSM4HB3kageM4pgm-ni11O3S-Cl8Y6oTN4RYQ&s"
+        }
+      ],
+      "variants": [
+        {
+          "id": "var_jeans_001",
+          "title": "32x32 - Dark Blue",
+          "prices": [
+            {
+              "id": "price_jeans_001",
+              "currency_code": "USD",
+              "amount": 8999
+            }
+          ]
+        }
+      ],
+      "categories": [
+        {
+          "id": "clothing",
+          "name": "Clothing & Fashion"
+        }
+      ]
+    },
+    {
+      "id": "prod_books_001",
+      "title": "The Art of Programming",
+      "description": "Comprehensive guide to modern programming practices, design patterns, and software architecture. Essential reading for developers.",
+      "thumbnail": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDwd25Q-o0lnVfvaFXLoMjhhiRhNUqxK4Qhw&s",
+      "images": [
+        {
+          "id": "img_book_001",
+          "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDwd25Q-o0lnVfvaFXLoMjhhiRhNUqxK4Qhw&s"
+        }
+      ],
+      "variants": [
+        {
+          "id": "var_book_001",
+          "title": "Paperback",
+          "prices": [
+            {
+              "id": "price_book_001",
+              "currency_code": "USD",
+              "amount": 4999
+            }
+          ]
+        }
+      ],
+      "categories": [
+        {
+          "id": "books",
+          "name": "Books & Media"
+        }
+      ]
+    },
+    {
+      "id": "prod_home_001",
+      "title": "Smart LED Light Bulb",
+      "description": "WiFi-enabled smart LED bulb with color changing capabilities, dimming control, and voice assistant compatibility.",
+      "thumbnail": "https://cpimg.tistatic.com/09745803/b/4/Ultra-Thin-Strip-Induction-Type-Under-Wireless-Light-Led-Cabinet-Motion-Sensor-Lighting-For-Kitchen..jpg",
+      "images": [
+        {
+          "id": "img_bulb_001",
+          "url": "https://cpimg.tistatic.com/09745803/b/4/Ultra-Thin-Strip-Induction-Type-Under-Wireless-Light-Led-Cabinet-Motion-Sensor-Lighting-For-Kitchen..jpg"
+        }
+      ],
+      "variants": [
+        {
+          "id": "var_bulb_001",
+          "title": "E26 Base",
+          "prices": [
+            {
+              "id": "price_bulb_001",
+              "currency_code": "USD",
+              "amount": 1999
+            }
+          ]
+        }
+      ],
+      "categories": [
+        {
+          "id": "home",
+          "name": "Home & Garden"
+        }
+      ]
+    },
+    {
+      "id": "prod_sports_001",
+      "title": "Professional Yoga Mat",
+      "description": "Non-slip yoga mat made from eco-friendly materials. Perfect for yoga, pilates, and general fitness exercises.",
+      "thumbnail": "https://thumbs.dreamstime.com/b/sports-equipment-yoga-mat-fitball-dumbbells-roller-room-near-window-balcony-sports-home-healthy-lifestyle-379969284.jpg",
+      "images": [
+        {
+          "id": "img_yoga_001",
+          "url": "https://thumbs.dreamstime.com/b/sports-equipment-yoga-mat-fitball-dumbbells-roller-room-near-window-balcony-sports-home-healthy-lifestyle-379969284.jpg"
+        }
+      ],
+      "variants": [
+        {
+          "id": "var_yoga_001",
+          "title": "6mm Thick - Purple",
+          "prices": [
+            {
+              "id": "price_yoga_001",
+              "currency_code": "USD",
+              "amount": 3999
+            }
+          ]
+        }
+      ],
+      "categories": [
+        {
+          "id": "sports",
+          "name": "Sports & Outdoors"
+        }
+      ]
+    },
+    {
+      "id": "prod_electronics_003",
+      "title": "Wireless Charging Pad",
+      "description": "Fast wireless charging pad compatible with all Qi-enabled devices. Sleek design with LED indicator and overcharge protection.",
+      "thumbnail": "https://suryastores.com/wp-content/uploads/2023/05/Portronics-Freedom-33-3-in-1-Desktop-Wireless-Charger-10.jpg",
+      "images": [
+        {
+          "id": "img_charger_001",
+          "url": "https://suryastores.com/wp-content/uploads/2023/05/Portronics-Freedom-33-3-in-1-Desktop-Wireless-Charger-10.jpg"
+        }
+      ],
+      "variants": [
+        {
+          "id": "var_charger_001",
+          "title": "Black",
+          "prices": [
+            {
+              "id": "price_charger_001",
+              "currency_code": "USD",
+              "amount": 3499
+            }
+          ]
+        }
+      ],
+      "categories": [
+        {
+          "id": "electronics",
+          "name": "Electronics"
+        }
+      ]
+    },
+    {
+      "id": "prod_clothing_003",
+      "title": "Casual Sneakers",
+      "description": "Comfortable casual sneakers with breathable mesh upper and cushioned sole. Perfect for everyday wear and light exercise.",
+      "thumbnail": "https://cdn.vox-cdn.com/thumbor/oP7bqSrjg_nZL4-tHoIMBUkc77o=/0x0:2480x1754/1200x0/filters:focal(0x0:2480x1754):no_upscale()/cdn.vox-cdn.com/uploads/chorus_asset/file/6549791/16SS_SP_Rihanna-Creeper_Trio_Horizontal-RGB__1_.0.jpg",
+      "images": [
+        {
+          "id": "img_sneakers_001",
+          "url":"https://cdn.vox-cdn.com/thumbor/oP7bqSrjg_nZL4-tHoIMBUkc77o=/0x0:2480x1754/1200x0/filters:focal(0x0:2480x1754):no_upscale()/cdn.vox-cdn.com/uploads/chorus_asset/file/6549791/16SS_SP_Rihanna-Creeper_Trio_Horizontal-RGB__1_.0.jpg"
+        }
+      ],
+      "variants": [
+        {
+          "id": "var_sneakers_001",
+          "title": "Size 10 - White",
+          "prices": [
+            {
+              "id": "price_sneakers_001",
+              "currency_code": "USD",
+              "amount": 7999
+            }
+          ]
+        }
+      ],
+      "categories": [
+        {
+          "id": "clothing",
+          "name": "Clothing & Fashion"
+        }
+      ]
+    },
+    {
+      "id": "prod_home_002",
+      "title": "Ceramic Coffee Mug Set",
+      "description": "Set of 4 premium ceramic coffee mugs with ergonomic handles. Microwave and dishwasher safe. Perfect for home or office.",
+      "thumbnail": "https://5.imimg.com/data5/SELLER/Default/2024/8/439910976/CN/QG/KM/579896/ceramic-tea-cups-280-ml-each-set-of-4-royel-3-sold-in-last-10-hours-500x500.jpg",
+      "images": [
+        {
+          "id": "img_mugs_001",
+          "url": "https://5.imimg.com/data5/SELLER/Default/2024/8/439910976/CN/QG/KM/579896/ceramic-tea-cups-280-ml-each-set-of-4-royel-3-sold-in-last-10-hours-500x500.jpg"
+        }
+      ],
+      "variants": [
+        {
+          "id": "var_mugs_001",
+          "title": "Set of 4 - Mixed Colors",
+          "prices": [
+            {
+              "id": "price_mugs_001",
+              "currency_code": "USD",
+              "amount": 2499
+            }
+          ]
+        }
+      ],
+      "categories": [
+        {
+          "id": "home",
+          "name": "Home & Garden"
+        }
+      ]
+    }
+  ],
+  "count": 10,
+  "offset": 0,
+  "limit": 20
+}

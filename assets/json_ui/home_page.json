@@ -1,0 +1,291 @@
+{
+  "screenId": "home",
+  "title": "Onemart Home",
+  "theme": {
+    "primaryColor": "#2196F3",
+    "secondaryColor": "#FF5722",
+    "backgroundColor": "#FFFFFF",
+    "textColor": "#212121",
+    "cardColor": "#FAFAFA",
+    "dividerColor": "#E0E0E0"
+  },
+  "components": [
+    {
+      "type": "column",
+      "properties": {
+        "mainAxisAlignment": "start",
+        "crossAxisAlignment": "stretch"
+      },
+      "children": [
+            {
+              "type": "carousel",
+              "id": "main_carousel",
+              "properties": {
+                "images": [
+                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTalWSpjUWrsCSPlcH5idyrUFUYX4CmxWppxmzOn4RW803iHuZ0NoB7s8NQvmVIRp0qTCA&usqp=CAU",
+                  "https://t4.ftcdn.net/jpg/04/84/87/61/360_F_484876187_u6HIlCgA2iZdfkoOamuQa43OJH2zaDVR.jpg",
+                  "https://t4.ftcdn.net/jpg/02/62/24/31/360_F_262243135_q7xBjfg02gaeD1NVfIqHBLz3qrOMFYcw.jpg",
+                  "https://t4.ftcdn.net/jpg/10/07/17/59/360_F_1007175939_JlUTrfWgqHIr4rt0xjbUIbPo881bqML1.jpg"
+                ],
+                "autoPlay": true,
+                "autoPlayInterval": 4,
+                "showIndicators": true,
+                "height": 280,
+                "fullWidth": true
+              }
+            },
+            {
+              "type": "sizedbox",
+              "properties": {
+                "height": 20
+              }
+            },
+            {
+              "type": "categorytabs",
+              "id": "category_tabs",
+              "properties": {
+                "title": "Shop by Category",
+                "tabs": [
+                  {
+                    "id": "electronics",
+                    "name": "Electronics",
+                    "categoryId": "electronics"
+                  },
+                  {
+                    "id": "clothing",
+                    "name": "Clothing",
+                    "categoryId": "clothing"
+                  },
+                  {
+                    "id": "books",
+                    "name": "Books",
+                    "categoryId": "books"
+                  },
+                  {
+                    "id": "home",
+                    "name": "Home & Garden",
+                    "categoryId": "home"
+                  },
+                  {
+                    "id": "sports",
+                    "name": "Sports",
+                    "categoryId": "sports"
+                  }
+                ],
+                "defaultTab": "electronics",
+                "productLimit": 6
+              }
+            },
+            {
+              "type": "productlist",
+              "id": "featured_products",
+              "properties": {
+                "title": "Featured Products",
+                "isHorizontal": false,
+                "limit": 6,
+                "showViewAll": true
+              }
+            },
+            {
+              "type": "sizedbox",
+              "properties": {
+                "height": 20
+              }
+            },
+            {
+              "type": "productlist",
+              "id": "popular_products",
+              "properties": {
+                "title": "Popular Products",
+                "isHorizontal": true,
+                "showViewAll": true,
+                "limit": 8
+              }
+            },
+            {
+              "type": "sizedbox",
+              "properties": {
+                "height": 20
+              }
+            },
+            {
+              "type": "banner",
+              "id": "splash_offer",
+              "properties": {
+                "imageUrl": "https://via.placeholder.com/800x200/FF9800/FFFFFF?text=FLASH+SALE+-+Limited+Time+Offer",
+                "title": "Flash Sale",
+                "subtitle": "Limited time offer - Don't miss out!",
+                "height": 150,
+                "overlayColor": "#2196F3",
+                "overlayOpacity": 0.85,
+                "blendMode": "multiply",
+                "borderRadius": 12,
+                "margin": {
+                  "horizontal": 16
+                }
+              },
+              "action": {
+                "type": "navigate",
+                "route": "/flash-sale"
+              }
+            },
+            {
+              "type": "sizedbox",
+              "properties": {
+                "height": 20
+              }
+            },
+            {
+              "type": "productlist",
+              "id": "sale_products",
+              "properties": {
+                "title": "Sale Products",
+                "isHorizontal": true,
+                "showViewAll": true,
+                "limit": 6,
+                "categoryId": "books"
+              }
+            },
+            {
+              "type": "sizedbox",
+              "properties": {
+                "height": 20
+              }
+            },
+            {
+              "type": "row",
+              "properties": {
+                "mainAxisAlignment": "spacebetween"
+              },
+              "children": [
+                {
+                  "type": "expanded",
+                  "children": [
+                    {
+                      "type": "banner",
+                      "properties": {
+                        "imageUrl": "https://via.placeholder.com/250x300/E91E63/FFFFFF?text=New+Arrivals",
+                        "title": "New Arrivals",
+                        "height": 200,
+                        "overlayColor": "#2196F3",
+                        "overlayOpacity": 0.85,
+                        "blendMode": "multiply",
+                        "borderRadius": 12
+                      },
+                      "action": {
+                        "type": "navigate",
+                        "route": "/new-arrivals"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "sizedbox",
+                  "properties": {
+                    "width": 10
+                  }
+                },
+                {
+                  "type": "expanded",
+                  "children": [
+                    {
+                      "type": "column",
+                      "children": [
+                        {
+                          "type": "banner",
+                          "properties": {
+                            "imageUrl": "https://via.placeholder.com/250x145/FFC107/FFFFFF?text=Summer+Sale",
+                            "title": "Summer Sale",
+                            "height": 95,
+                            "overlayColor": "#2196F3",
+                            "overlayOpacity": 0.85,
+                            "blendMode": "multiply",
+                            "borderRadius": 12
+                          },
+                          "action": {
+                            "type": "navigate",
+                            "route": "/summer-sale"
+                          }
+                        },
+                        {
+                          "type": "sizedbox",
+                          "properties": {
+                            "height": 10
+                          }
+                        },
+                        {
+                          "type": "banner",
+                          "properties": {
+                            "imageUrl": "https://via.placeholder.com/250x145/795548/FFFFFF?text=Black+Friday",
+                            "title": "Black Friday",
+                            "height": 95,
+                            "overlayColor": "#2196F3",
+                            "overlayOpacity": 0.85,
+                            "blendMode": "multiply",
+                            "borderRadius": 12
+                          },
+                          "action": {
+                            "type": "navigate",
+                            "route": "/black-friday"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "sizedbox",
+              "properties": {
+                "height": 20
+              }
+            },
+            {
+              "type": "productlist",
+              "id": "bestseller_products",
+              "properties": {
+                "title": "Best Sellers",
+                "isHorizontal": true,
+                "showViewAll": true,
+                "limit": 8,
+                "categoryId": "home"
+              }
+            },
+            {
+              "type": "sizedbox",
+              "properties": {
+                "height": 20
+              }
+            },
+            {
+              "type": "banner",
+              "id": "promotional_banner",
+              "properties": {
+                "imageUrl": "https://via.placeholder.com/800x250/4CAF50/FFFFFF?text=50%25+OFF+Everything+-+Use+Code+SAVE50",
+                "title": "50% OFF Everything",
+                "subtitle": "Use code SAVE50 at checkout",
+                "height": 180,
+                "overlayColor": "#2196F3",
+                "overlayOpacity": 0.85,
+                "blendMode": "multiply",
+                "borderRadius": 12,
+                "margin": {
+                  "horizontal": 16
+                }
+              },
+              "action": {
+                "type": "navigate",
+                "route": "/promotional-offers"
+              }
+            },
+            {
+              "type": "sizedbox",
+              "properties": {
+                "height": 30
+              }
+            }
+          ]
+    }
+  ]
+}

@@ -1,0 +1,271 @@
+{
+  "product_categories": [
+    {
+      "id": "electronics",
+      "name": "Electronics",
+      "description": "Latest gadgets, smartphones, laptops, and electronic accessories for modern living",
+      "handle": "electronics",
+      "is_active": true,
+      "is_internal": false,
+      "rank": 1,
+      "parent_category_id": null,
+      "created_at": "2024-01-01T00:00:00.000Z",
+      "updated_at": "2024-01-01T00:00:00.000Z",
+      "category_children": [
+        {
+          "id": "smartphones",
+          "name": "Smartphones",
+          "description": "Latest smartphones and mobile devices",
+          "handle": "smartphones",
+          "is_active": true,
+          "is_internal": false,
+          "rank": 1,
+          "parent_category_id": "electronics",
+          "created_at": "2024-01-01T00:00:00.000Z",
+          "updated_at": "2024-01-01T00:00:00.000Z"
+        },
+        {
+          "id": "laptops",
+          "name": "Laptops & Computers",
+          "description": "Laptops, desktops, and computer accessories",
+          "handle": "laptops",
+          "is_active": true,
+          "is_internal": false,
+          "rank": 2,
+          "parent_category_id": "electronics",
+          "created_at": "2024-01-01T00:00:00.000Z",
+          "updated_at": "2024-01-01T00:00:00.000Z"
+        },
+        {
+          "id": "audio",
+          "name": "Audio & Headphones",
+          "description": "Headphones, speakers, and audio equipment",
+          "handle": "audio",
+          "is_active": true,
+          "is_internal": false,
+          "rank": 3,
+          "parent_category_id": "electronics",
+          "created_at": "2024-01-01T00:00:00.000Z",
+          "updated_at": "2024-01-01T00:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": "clothing",
+      "name": "Clothing & Fashion",
+      "description": "Trendy fashion, clothing, shoes, and accessories for all occasions and styles",
+      "handle": "clothing",
+      "is_active": true,
+      "is_internal": false,
+      "rank": 2,
+      "parent_category_id": null,
+      "created_at": "2024-01-01T00:00:00.000Z",
+      "updated_at": "2024-01-01T00:00:00.000Z",
+      "category_children": [
+        {
+          "id": "mens-clothing",
+          "name": "Men's Clothing",
+          "description": "Fashion and clothing for men",
+          "handle": "mens-clothing",
+          "is_active": true,
+          "is_internal": false,
+          "rank": 1,
+          "parent_category_id": "clothing",
+          "created_at": "2024-01-01T00:00:00.000Z",
+          "updated_at": "2024-01-01T00:00:00.000Z"
+        },
+        {
+          "id": "womens-clothing",
+          "name": "Women's Clothing",
+          "description": "Fashion and clothing for women",
+          "handle": "womens-clothing",
+          "is_active": true,
+          "is_internal": false,
+          "rank": 2,
+          "parent_category_id": "clothing",
+          "created_at": "2024-01-01T00:00:00.000Z",
+          "updated_at": "2024-01-01T00:00:00.000Z"
+        },
+        {
+          "id": "shoes",
+          "name": "Shoes & Footwear",
+          "description": "Shoes, sneakers, and footwear for all occasions",
+          "handle": "shoes",
+          "is_active": true,
+          "is_internal": false,
+          "rank": 3,
+          "parent_category_id": "clothing",
+          "created_at": "2024-01-01T00:00:00.000Z",
+          "updated_at": "2024-01-01T00:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": "books",
+      "name": "Books & Media",
+      "description": "Books, magazines, audiobooks, and educational materials for learning and entertainment",
+      "handle": "books",
+      "is_active": true,
+      "is_internal": false,
+      "rank": 3,
+      "parent_category_id": null,
+      "created_at": "2024-01-01T00:00:00.000Z",
+      "updated_at": "2024-01-01T00:00:00.000Z",
+      "category_children": [
+        {
+          "id": "fiction",
+          "name": "Fiction",
+          "description": "Fiction books and novels",
+          "handle": "fiction",
+          "is_active": true,
+          "is_internal": false,
+          "rank": 1,
+          "parent_category_id": "books",
+          "created_at": "2024-01-01T00:00:00.000Z",
+          "updated_at": "2024-01-01T00:00:00.000Z"
+        },
+        {
+          "id": "non-fiction",
+          "name": "Non-Fiction",
+          "description": "Non-fiction books and educational materials",
+          "handle": "non-fiction",
+          "is_active": true,
+          "is_internal": false,
+          "rank": 2,
+          "parent_category_id": "books",
+          "created_at": "2024-01-01T00:00:00.000Z",
+          "updated_at": "2024-01-01T00:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": "home",
+      "name": "Home & Garden",
+      "description": "Home decor, furniture, kitchen appliances, and garden supplies for comfortable living",
+      "handle": "home",
+      "is_active": true,
+      "is_internal": false,
+      "rank": 4,
+      "parent_category_id": null,
+      "created_at": "2024-01-01T00:00:00.000Z",
+      "updated_at": "2024-01-01T00:00:00.000Z",
+      "category_children": [
+        {
+          "id": "furniture",
+          "name": "Furniture",
+          "description": "Home and office furniture",
+          "handle": "furniture",
+          "is_active": true,
+          "is_internal": false,
+          "rank": 1,
+          "parent_category_id": "home",
+          "created_at": "2024-01-01T00:00:00.000Z",
+          "updated_at": "2024-01-01T00:00:00.000Z"
+        },
+        {
+          "id": "kitchen",
+          "name": "Kitchen & Dining",
+          "description": "Kitchen appliances and dining accessories",
+          "handle": "kitchen",
+          "is_active": true,
+          "is_internal": false,
+          "rank": 2,
+          "parent_category_id": "home",
+          "created_at": "2024-01-01T00:00:00.000Z",
+          "updated_at": "2024-01-01T00:00:00.000Z"
+        },
+        {
+          "id": "garden",
+          "name": "Garden & Outdoor",
+          "description": "Garden tools, plants, and outdoor equipment",
+          "handle": "garden",
+          "is_active": true,
+          "is_internal": false,
+          "rank": 3,
+          "parent_category_id": "home",
+          "created_at": "2024-01-01T00:00:00.000Z",
+          "updated_at": "2024-01-01T00:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": "sports",
+      "name": "Sports & Outdoors",
+      "description": "Sports equipment, fitness gear, and outdoor adventure products for active lifestyles",
+      "handle": "sports",
+      "is_active": true,
+      "is_internal": false,
+      "rank": 5,
+      "parent_category_id": null,
+      "created_at": "2024-01-01T00:00:00.000Z",
+      "updated_at": "2024-01-01T00:00:00.000Z",
+      "category_children": [
+        {
+          "id": "fitness",
+          "name": "Fitness Equipment",
+          "description": "Home fitness and gym equipment",
+          "handle": "fitness",
+          "is_active": true,
+          "is_internal": false,
+          "rank": 1,
+          "parent_category_id": "sports",
+          "created_at": "2024-01-01T00:00:00.000Z",
+          "updated_at": "2024-01-01T00:00:00.000Z"
+        },
+        {
+          "id": "outdoor",
+          "name": "Outdoor Recreation",
+          "description": "Camping, hiking, and outdoor adventure gear",
+          "handle": "outdoor",
+          "is_active": true,
+          "is_internal": false,
+          "rank": 2,
+          "parent_category_id": "sports",
+          "created_at": "2024-01-01T00:00:00.000Z",
+          "updated_at": "2024-01-01T00:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": "beauty",
+      "name": "Beauty & Personal Care",
+      "description": "Skincare, makeup, hair care, and personal care products for wellness and beauty",
+      "handle": "beauty",
+      "is_active": true,
+      "is_internal": false,
+      "rank": 6,
+      "parent_category_id": null,
+      "created_at": "2024-01-01T00:00:00.000Z",
+      "updated_at": "2024-01-01T00:00:00.000Z",
+      "category_children": [
+        {
+          "id": "skincare",
+          "name": "Skincare",
+          "description": "Skincare products and treatments",
+          "handle": "skincare",
+          "is_active": true,
+          "is_internal": false,
+          "rank": 1,
+          "parent_category_id": "beauty",
+          "created_at": "2024-01-01T00:00:00.000Z",
+          "updated_at": "2024-01-01T00:00:00.000Z"
+        },
+        {
+          "id": "makeup",
+          "name": "Makeup & Cosmetics",
+          "description": "Makeup and cosmetic products",
+          "handle": "makeup",
+          "is_active": true,
+          "is_internal": false,
+          "rank": 2,
+          "parent_category_id": "beauty",
+          "created_at": "2024-01-01T00:00:00.000Z",
+          "updated_at": "2024-01-01T00:00:00.000Z"
+        }
+      ]
+    }
+  ],
+  "count": 6,
+  "offset": 0,
+  "limit": 100
+}
