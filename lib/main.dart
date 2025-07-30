@@ -4,11 +4,15 @@ import 'controllers/home_controller.dart';
 import 'controllers/product_detail_controller.dart';
 import 'controllers/search_controller.dart';
 import 'controllers/category_controller.dart';
+import 'controllers/cart_controller.dart';
+import 'controllers/favorites_controller.dart';
 import 'utils/theme_manager.dart';
 import 'views/home_view.dart';
 import 'views/product_detail_view.dart';
 import 'views/search_view.dart';
 import 'views/category_view.dart';
+import 'views/cart_view.dart';
+import 'views/bookmarks_view.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,6 +29,8 @@ class OneMartApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Initialize GetX controllers
+    Get.put(FavoritesController());
+    Get.put(CartController());
     Get.put(HomeController());
     Get.put(ProductDetailController());
     Get.put(ProductSearchController());
@@ -83,33 +89,69 @@ class _MainAppShellState extends State<MainAppShell> {
 
   final List<Widget> _pages = [
     const HomeView(),
-    const PlaceholderPage(title: 'Cart'),
+    const CartView(),
     const PlaceholderPage(title: 'My Orders'),
-    const PlaceholderPage(title: 'Overview'),
+    const BookmarksView(),
   ];
 
-  final List<BottomNavigationBarItem> _bottomNavItems = [
-    const BottomNavigationBarItem(
-      icon: Icon(Icons.home_outlined),
-      activeIcon: Icon(Icons.home),
-      label: 'Home',
-    ),
-    const BottomNavigationBarItem(
-      icon: Icon(Icons.shopping_cart_outlined),
-      activeIcon: Icon(Icons.shopping_cart),
-      label: 'Cart',
-    ),
-    const BottomNavigationBarItem(
-      icon: Icon(Icons.receipt_long_outlined),
-      activeIcon: Icon(Icons.receipt_long),
-      label: 'My Orders',
-    ),
-    const BottomNavigationBarItem(
-      icon: Icon(Icons.person_outline),
-      activeIcon: Icon(Icons.person),
-      label: 'Overview',
-    ),
-  ];
+  List<BottomNavigationBarItem> get _bottomNavItems {
+    final cartController = Get.find<CartController>();
+
+    return [
+      const BottomNavigationBarItem(
+        icon: Icon(Icons.home_outlined),
+        activeIcon: Icon(Icons.home),
+        label: 'Home',
+      ),
+      BottomNavigationBarItem(
+        icon: Obx(() => _buildCartIcon(cartController, false)),
+        activeIcon: Obx(() => _buildCartIcon(cartController, true)),
+        label: 'Cart',
+      ),
+      const BottomNavigationBarItem(
+        icon: Icon(Icons.receipt_long_outlined),
+        activeIcon: Icon(Icons.receipt_long),
+        label: 'My Orders',
+      ),
+      const BottomNavigationBarItem(
+        icon: Icon(Icons.bookmark_outline),
+        activeIcon: Icon(Icons.bookmark),
+        label: 'Bookmarks',
+      ),
+    ];
+  }
+
+  Widget _buildCartIcon(CartController cartController, bool isActive) {
+    final itemCount = cartController.totalQuantity;
+
+    return Stack(
+      children: [
+        Icon(isActive ? Icons.shopping_cart : Icons.shopping_cart_outlined),
+        if (itemCount > 0)
+          Positioned(
+            right: 0,
+            top: 0,
+            child: Container(
+              padding: const EdgeInsets.all(2),
+              decoration: BoxDecoration(
+                color: Colors.red,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
+              child: Text(
+                itemCount > 99 ? '99+' : itemCount.toString(),
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 10,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {

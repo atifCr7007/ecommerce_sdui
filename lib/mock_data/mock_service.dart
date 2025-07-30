@@ -1,8 +1,8 @@
 import 'dart:math';
 import 'package:flutter/foundation.dart';
-import '../models/product.dart';
-import '../models/category.dart' as cat;
-import '../services/cart_service.dart';
+import 'package:ecommerce_sdui/models/product.dart';
+import 'package:ecommerce_sdui/models/category.dart' as cat;
+import 'package:ecommerce_sdui/services/cart_service.dart';
 
 /// Mock data service that provides realistic data matching Medusa API structure.
 ///

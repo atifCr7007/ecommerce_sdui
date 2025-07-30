@@ -1,0 +1,214 @@
+{
+  "screenId": "orders",
+  "title": "My Orders",
+  "theme": {
+    "primaryColor": "#2196F3",
+    "secondaryColor": "#FF5722",
+    "backgroundColor": "#FFFFFF",
+    "textColor": "#212121",
+    "cardColor": "#FAFAFA",
+    "dividerColor": "#E0E0E0"
+  },
+  "components": [
+    {
+      "type": "scrollview",
+      "properties": {
+        "scrollDirection": "vertical"
+      },
+      "children": [
+        {
+          "type": "column",
+          "properties": {
+            "mainAxisAlignment": "start",
+            "crossAxisAlignment": "stretch"
+          },
+          "children": [
+            {
+              "type": "padding",
+              "properties": {
+                "padding": {
+                  "all": 16
+                }
+              },
+              "children": [
+                {
+                  "type": "text",
+                  "properties": {
+                    "text": "My Orders",
+                    "fontSize": 24,
+                    "fontWeight": "bold",
+                    "color": "#212121"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "id": "orders_container",
+              "properties": {
+                "minHeight": 200
+              },
+              "children": [
+                {
+                  "type": "orders_list",
+                  "id": "orders_list",
+                  "properties": {
+                    "showEmptyState": true,
+                    "emptyStateTitle": "No Orders Yet",
+                    "emptyStateMessage": "Start shopping to see your orders here",
+                    "emptyStateButtonText": "Start Shopping",
+                    "emptyStateIcon": "shopping_bag"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "sizedbox",
+              "properties": {
+                "height": 20
+              }
+            },
+            {
+              "type": "container",
+              "id": "order_stats_container",
+              "properties": {
+                "backgroundColor": "#F5F5F5",
+                "borderRadius": 12,
+                "margin": {
+                  "horizontal": 16,
+                  "vertical": 8
+                },
+                "padding": {
+                  "all": 16
+                }
+              },
+              "children": [
+                {
+                  "type": "order_statistics",
+                  "id": "order_stats",
+                  "properties": {
+                    "showTotalOrders": true,
+                    "showTotalSpent": true,
+                    "showCompletedOrders": true
+                  }
+                }
+              ]
+            },
+            {
+              "type": "sizedbox",
+              "properties": {
+                "height": 20
+              }
+            },
+            {
+              "type": "padding",
+              "properties": {
+                "padding": {
+                  "horizontal": 16
+                }
+              },
+              "children": [
+                {
+                  "type": "text",
+                  "properties": {
+                    "text": "Order Status Guide",
+                    "fontSize": 18,
+                    "fontWeight": "w600",
+                    "color": "#212121"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "sizedbox",
+              "properties": {
+                "height": 12
+              }
+            },
+            {
+              "type": "container",
+              "properties": {
+                "margin": {
+                  "horizontal": 16
+                },
+                "padding": {
+                  "all": 16
+                },
+                "backgroundColor": "#FFFFFF",
+                "borderRadius": 12,
+                "elevation": 2
+              },
+              "children": [
+                {
+                  "type": "column",
+                  "children": [
+                    {
+                      "type": "order_status_item",
+                      "properties": {
+                        "status": "placed",
+                        "title": "Order Placed",
+                        "description": "Your order has been received and is being processed",
+                        "color": "#2196F3"
+                      }
+                    },
+                    {
+                      "type": "sizedbox",
+                      "properties": {
+                        "height": 8
+                      }
+                    },
+                    {
+                      "type": "order_status_item",
+                      "properties": {
+                        "status": "confirmed",
+                        "title": "Order Confirmed",
+                        "description": "Your order has been confirmed and is being prepared",
+                        "color": "#4CAF50"
+                      }
+                    },
+                    {
+                      "type": "sizedbox",
+                      "properties": {
+                        "height": 8
+                      }
+                    },
+                    {
+                      "type": "order_status_item",
+                      "properties": {
+                        "status": "shipped",
+                        "title": "Order Shipped",
+                        "description": "Your order is on its way to you",
+                        "color": "#9C27B0"
+                      }
+                    },
+                    {
+                      "type": "sizedbox",
+                      "properties": {
+                        "height": 8
+                      }
+                    },
+                    {
+                      "type": "order_status_item",
+                      "properties": {
+                        "status": "delivered",
+                        "title": "Order Delivered",
+                        "description": "Your order has been successfully delivered",
+                        "color": "#4CAF50"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "sizedbox",
+              "properties": {
+                "height": 32
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

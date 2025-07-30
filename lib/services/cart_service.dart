@@ -1,25 +1,26 @@
 import 'package:flutter/foundation.dart';
+import 'package:intl/intl.dart';
 import '../models/product.dart';
 import 'api_service.dart';
 
 /// Service class for handling cart-related API operations.
-/// 
+///
 /// This service provides methods for:
 /// - Adding items to cart
 /// - Removing items from cart
 /// - Updating item quantities
 /// - Getting cart contents
 /// - Calculating totals
-/// 
+///
 /// All methods return Future objects and handle errors appropriately.
 class CartService {
   final ApiService _apiService;
-  
-  CartService({ApiService? apiService}) 
-      : _apiService = apiService ?? ApiService();
+
+  CartService({ApiService? apiService})
+    : _apiService = apiService ?? ApiService();
 
   /// Adds a product to the cart
-  /// 
+  ///
   /// Parameters:
   /// - [productId]: The ID of the product to add
   /// - [variantId]: The specific variant of the product
@@ -40,17 +41,14 @@ class CartService {
         throw CartServiceException('Quantity must be greater than 0');
       }
 
-      final body = {
-        'variant_id': variantId,
-        'quantity': quantity,
-      };
+      final body = {'variant_id': variantId, 'quantity': quantity};
 
-      final endpoint = cartId != null 
+      final endpoint = cartId != null
           ? '/store/carts/$cartId/line-items'
           : '/store/carts';
 
       final response = await _apiService.post(endpoint, body: body);
-      
+
       return CartResponse.fromJson(response);
     } catch (e) {
       debugPrint('Error adding to cart: $e');
@@ -59,7 +57,7 @@ class CartService {
   }
 
   /// Updates the quantity of an item in the cart
-  /// 
+  ///
   /// Parameters:
   /// - [cartId]: The cart ID
   /// - [lineItemId]: The line item ID to update
@@ -88,7 +86,7 @@ class CartService {
         '/store/carts/$cartId/line-items/$lineItemId',
         body: body,
       );
-      
+
       return CartResponse.fromJson(response);
     } catch (e) {
       debugPrint('Error updating cart item: $e');
@@ -97,14 +95,11 @@ class CartService {
   }
 
   /// Removes an item from the cart
-  /// 
+  ///
   /// Parameters:
   /// - [cartId]: The cart ID
   /// - [lineItemId]: The line item ID to remove
-  Future<CartResponse> removeFromCart(
-    String cartId,
-    String lineItemId,
-  ) async {
+  Future<CartResponse> removeFromCart(String cartId, String lineItemId) async {
     try {
       if (cartId.isEmpty || lineItemId.isEmpty) {
         throw CartServiceException('Cart ID and line item ID cannot be empty');
@@ -113,7 +108,7 @@ class CartService {
       final response = await _apiService.delete(
         '/store/carts/$cartId/line-items/$lineItemId',
       );
-      
+
       return CartResponse.fromJson(response);
     } catch (e) {
       debugPrint('Error removing from cart: $e');
@@ -122,14 +117,11 @@ class CartService {
   }
 
   /// Gets the current cart contents
-  /// 
+  ///
   /// Parameters:
   /// - [cartId]: The cart ID
   /// - [useCache]: Whether to use cached results (default: false)
-  Future<CartResponse> getCart(
-    String cartId, {
-    bool useCache = false,
-  }) async {
+  Future<CartResponse> getCart(String cartId, {bool useCache = false}) async {
     try {
       if (cartId.isEmpty) {
         throw CartServiceException('Cart ID cannot be empty');
@@ -139,7 +131,7 @@ class CartService {
         '/store/carts/$cartId',
         useCache: useCache,
       );
-      
+
       return CartResponse.fromJson(response);
     } catch (e) {
       debugPrint('Error getting cart: $e');
@@ -148,19 +140,19 @@ class CartService {
   }
 
   /// Creates a new cart
-  /// 
+  ///
   /// Parameters:
   /// - [region]: Optional region for the cart
   Future<CartResponse> createCart({String? region}) async {
     try {
       final body = <String, dynamic>{};
-      
+
       if (region != null && region.isNotEmpty) {
         body['region_id'] = region;
       }
 
       final response = await _apiService.post('/store/carts', body: body);
-      
+
       return CartResponse.fromJson(response);
     } catch (e) {
       debugPrint('Error creating cart: $e');
@@ -169,7 +161,7 @@ class CartService {
   }
 
   /// Clears all items from the cart
-  /// 
+  ///
   /// Parameters:
   /// - [cartId]: The cart ID
   Future<CartResponse> clearCart(String cartId) async {
@@ -180,12 +172,12 @@ class CartService {
 
       // Get current cart to get all line items
       final cart = await getCart(cartId);
-      
+
       // Remove each item
       for (final item in cart.cart.items) {
         await removeFromCart(cartId, item.id);
       }
-      
+
       // Return updated cart
       return await getCart(cartId);
     } catch (e) {
@@ -207,15 +199,11 @@ class CartResponse {
   CartResponse({required this.cart});
 
   factory CartResponse.fromJson(Map<String, dynamic> json) {
-    return CartResponse(
-      cart: Cart.fromJson(json['cart'] ?? json),
-    );
+    return CartResponse(cart: Cart.fromJson(json['cart'] ?? json));
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'cart': cart.toJson(),
-    };
+    return {'cart': cart.toJson()};
   }
 }
 
@@ -241,15 +229,19 @@ class Cart {
 
   factory Cart.fromJson(Map<String, dynamic> json) {
     final itemsList = json['items'] as List<dynamic>? ?? [];
-    
+
     return Cart(
       id: json['id'] as String,
       items: itemsList.map((item) => CartItem.fromJson(item)).toList(),
       subtotal: json['subtotal'] as int? ?? 0,
       total: json['total'] as int? ?? 0,
-      currencyCode: json['currency_code'] as String? ?? 'USD',
-      createdAt: DateTime.parse(json['created_at'] as String? ?? DateTime.now().toIso8601String()),
-      updatedAt: DateTime.parse(json['updated_at'] as String? ?? DateTime.now().toIso8601String()),
+      currencyCode: json['currency_code'] as String? ?? 'INR',
+      createdAt: DateTime.parse(
+        json['created_at'] as String? ?? DateTime.now().toIso8601String(),
+      ),
+      updatedAt: DateTime.parse(
+        json['updated_at'] as String? ?? DateTime.now().toIso8601String(),
+      ),
     );
   }
 
@@ -269,10 +261,26 @@ class Cart {
   int get itemCount => items.fold(0, (sum, item) => sum + item.quantity);
 
   /// Gets the formatted total price
-  String get formattedTotal => '\$${(total / 100).toStringAsFixed(2)}';
+  String get formattedTotal => _formatCurrency(total / 100);
 
   /// Gets the formatted subtotal price
-  String get formattedSubtotal => '\$${(subtotal / 100).toStringAsFixed(2)}';
+  String get formattedSubtotal => _formatCurrency(subtotal / 100);
+
+  /// Gets the total amount as double
+  double get totalAmount => total / 100;
+
+  /// Gets the subtotal amount as double
+  double get subtotalAmount => subtotal / 100;
+
+  /// Format currency in INR
+  String _formatCurrency(double amount) {
+    final formatter = NumberFormat.currency(
+      locale: 'en_IN',
+      symbol: '₹',
+      decimalDigits: 2,
+    );
+    return formatter.format(amount);
+  }
 }
 
 /// Model representing an item in the cart
@@ -324,10 +332,20 @@ class CartItem {
   }
 
   /// Gets the formatted unit price
-  String get formattedUnitPrice => '\$${(unitPrice / 100).toStringAsFixed(2)}';
+  String get formattedUnitPrice => _formatCurrency(unitPrice / 100);
 
   /// Gets the formatted total price
-  String get formattedTotal => '\$${(total / 100).toStringAsFixed(2)}';
+  String get formattedTotal => _formatCurrency(total / 100);
+
+  /// Format currency in INR
+  String _formatCurrency(double amount) {
+    final formatter = NumberFormat.currency(
+      locale: 'en_IN',
+      symbol: '₹',
+      decimalDigits: 2,
+    );
+    return formatter.format(amount);
+  }
 }
 
 /// Custom exception class for cart service errors

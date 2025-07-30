@@ -2,8 +2,11 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:share_plus/share_plus.dart';
 import '../models/product.dart';
 import '../controllers/home_controller.dart';
+import '../controllers/cart_controller.dart';
+import '../controllers/favorites_controller.dart';
 
 class ProductDetailController extends GetxController {
   // Base URLs - In production, these would come from environment variables
@@ -16,6 +19,7 @@ class ProductDetailController extends GetxController {
   final RxInt quantity = 1.obs;
   final RxBool isFavorite = false.obs;
   final RxList<Product> relatedProducts = <Product>[].obs;
+  final RxBool isAddingToCart = false.obs;
 
   // Load product details
   Future<void> loadProduct(String productId) async {
@@ -24,6 +28,8 @@ class ProductDetailController extends GetxController {
 
     try {
       await Future.wait([_fetchProduct(productId), _fetchRelatedProducts()]);
+      // Load favorite status after product is loaded
+      await _loadFavoriteStatus();
     } catch (e) {
       error.value = 'Failed to load product: $e';
     } finally {
@@ -92,24 +98,57 @@ class ProductDetailController extends GetxController {
   }
 
   // Favorite management
-  void toggleFavorite() {
-    isFavorite.value = !isFavorite.value;
+  Future<void> toggleFavorite() async {
+    final currentProduct = product.value;
+    if (currentProduct == null) return;
 
-    // In a real app, this would sync with backend
-    _saveFavoriteStatus();
+    try {
+      final favoritesController = Get.find<FavoritesController>();
+      final newStatus = await favoritesController.toggleFavorite(
+        currentProduct,
+      );
+      isFavorite.value = newStatus;
+    } catch (e) {
+      debugPrint('Error toggling favorite: $e');
+      // Revert the UI state if there was an error
+      isFavorite.value = !isFavorite.value;
+    }
   }
 
   // Cart management
-  void addToCart() {
+  Future<void> addToCart() async {
     if (product.value == null) return;
 
-    // In a real app, this would add to cart via API
-    debugPrint(
-      'Adding ${product.value!.title} to cart (quantity: ${quantity.value})',
-    );
+    try {
+      isAddingToCart.value = true;
 
-    // Show success message or navigate to cart
-    _showAddToCartSuccess();
+      // Get the cart controller
+      final cartController = Get.find<CartController>();
+
+      // Get the first variant ID (in a real app, user would select variant)
+      final variantId = product.value!.variants?.first.id ?? product.value!.id;
+
+      // Add to cart
+      final success = await cartController.addToCart(
+        product.value!.id,
+        variantId,
+        quantity: quantity.value,
+      );
+
+      if (success) {
+        debugPrint('Successfully added ${product.value!.title} to cart');
+      }
+    } catch (e) {
+      debugPrint('Error adding to cart: $e');
+      Get.snackbar(
+        'Error',
+        'Failed to add item to cart',
+        snackPosition: SnackPosition.BOTTOM,
+        duration: const Duration(seconds: 3),
+      );
+    } finally {
+      isAddingToCart.value = false;
+    }
   }
 
   // Refresh product data
@@ -120,16 +159,58 @@ class ProductDetailController extends GetxController {
     }
   }
 
-  void _saveFavoriteStatus() {
-    // In a real app, this would save to local storage or API
-    debugPrint(
-      'Favorite status for ${product.value?.title}: ${isFavorite.value}',
-    );
+  // Load favorite status for the current product
+  Future<void> _loadFavoriteStatus() async {
+    final currentProduct = product.value;
+    if (currentProduct == null) return;
+
+    try {
+      final favoritesController = Get.find<FavoritesController>();
+      await favoritesController.loadFavoriteStatus(currentProduct.id);
+      isFavorite.value = favoritesController.isFavorite(currentProduct.id);
+    } catch (e) {
+      debugPrint('Error loading favorite status: $e');
+      isFavorite.value = false;
+    }
   }
 
-  void _showAddToCartSuccess() {
-    // In a real app, this would show a snackbar or navigate to cart
-    debugPrint('Product added to cart successfully!');
+  // Share functionality
+  Future<void> shareProduct() async {
+    final currentProduct = product.value;
+    if (currentProduct == null) return;
+
+    try {
+      final productUrl = 'https://onemart.app/product/${currentProduct.id}';
+      final shareText =
+          '''
+Check out this amazing product!
+
+${currentProduct.title}
+${currentProduct.displayPrice}
+
+${currentProduct.description ?? 'Great product with excellent features.'}
+
+Shop now: $productUrl
+
+#OneMart #Shopping #${currentProduct.categories?.first.name.replaceAll(' ', '') ?? 'Product'}
+'''
+              .trim();
+
+      await Share.share(
+        shareText,
+        subject: 'Check out ${currentProduct.title} on OneMart',
+      );
+
+      debugPrint('Product shared successfully');
+    } catch (e) {
+      debugPrint('Error sharing product: $e');
+      Get.snackbar(
+        'Error',
+        'Failed to share product',
+        snackPosition: SnackPosition.BOTTOM,
+        duration: const Duration(seconds: 3),
+      );
+    }
   }
 
   // Mock data for demo purposes

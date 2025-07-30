@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../models/ui_models.dart';
 import '../utils/widget_mapper.dart';
+import '../widgets/orders_list_widget.dart';
+import '../widgets/order_statistics_widget.dart';
 
 class JsonUIParser {
   static Widget parseScreen(UIScreen screen, BuildContext context) {
@@ -36,6 +38,12 @@ class JsonUIParser {
         return _buildBanner(component, context);
       case 'button':
         return _buildButton(component, context);
+      case 'orders_list':
+        return _buildOrdersList(component, context);
+      case 'order_statistics':
+        return _buildOrderStatistics(component, context);
+      case 'order_status_item':
+        return _buildOrderStatusItem(component, context);
       case 'spacer':
         return _buildSpacer(component, context);
       case 'divider':
@@ -583,5 +591,64 @@ class JsonUIParser {
       default:
         return BoxFit.cover;
     }
+  }
+
+  /// Build orders list component
+  static Widget _buildOrdersList(UIComponent component, BuildContext context) {
+    return OrdersListWidget(component: component);
+  }
+
+  /// Build order statistics component
+  static Widget _buildOrderStatistics(
+    UIComponent component,
+    BuildContext context,
+  ) {
+    return OrderStatisticsWidget(component: component);
+  }
+
+  /// Build order status item component
+  static Widget _buildOrderStatusItem(
+    UIComponent component,
+    BuildContext context,
+  ) {
+    final status = component.properties?['status'] as String? ?? '';
+    final title = component.properties?['title'] as String? ?? '';
+    final description = component.properties?['description'] as String? ?? '';
+    final colorHex = component.properties?['color'] as String? ?? '#2196F3';
+
+    final color = Color(int.parse(colorHex.replaceFirst('#', '0xFF')));
+
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        children: [
+          Container(
+            width: 12,
+            height: 12,
+            decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  description,
+                  style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

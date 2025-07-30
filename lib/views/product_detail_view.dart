@@ -119,7 +119,8 @@ class _ProductDetailViewState extends State<ProductDetailView> {
           IconButton(
             icon: const Icon(Icons.share),
             onPressed: () {
-              // Handle share
+              final controller = Get.find<ProductDetailController>();
+              controller.shareProduct();
             },
           ),
         ],
@@ -186,11 +187,12 @@ class ProductDetailJsonParser {
     BuildContext context,
     ProductDetailController controller,
   ) {
-    return Column(
-      children: screen.components.map((component) {
-        return _parseComponent(component, context, controller);
-      }).toList(),
-    );
+    // Handle the root component properly - it should be a scrollview
+    if (screen.components.isNotEmpty) {
+      return _parseComponent(screen.components.first, context, controller);
+    }
+
+    return const Center(child: Text('No content available'));
   }
 
   static Widget _parseComponent(
@@ -198,7 +200,7 @@ class ProductDetailJsonParser {
     BuildContext context,
     ProductDetailController controller,
   ) {
-    // Handle special product detail components
+    // Handle special product detail components by ID first
     switch (component.id) {
       case 'product_images':
         return _buildProductImages(component, context, controller);
@@ -216,8 +218,28 @@ class ProductDetailJsonParser {
         return _buildAddToCartButton(component, context, controller);
       case 'related_products':
         return _buildRelatedProducts(component, context, controller);
+      case 'decrease_quantity':
+        return _buildQuantityButton(component, context, controller, false);
+      case 'increase_quantity':
+        return _buildQuantityButton(component, context, controller, true);
+      case 'favorite_button':
+        return _buildFavoriteButton(component, context, controller);
       default:
-        // Use the standard JSON parser for other components
+        // For components with children, parse them recursively
+        if (component.children != null && component.children!.isNotEmpty) {
+          final parsedChildren = component.children!.map((child) {
+            return _parseComponent(child, context, controller);
+          }).toList();
+
+          // Use standard parser but handle children properly
+          return _buildComponentWithChildren(
+            component,
+            parsedChildren,
+            context,
+          );
+        }
+
+        // Use the standard JSON UI parser for leaf components
         return JsonUIParser.parseComponent(component, context);
     }
   }
@@ -227,7 +249,7 @@ class ProductDetailJsonParser {
     BuildContext context,
     ProductDetailController controller,
   ) {
-    final product = controller.product;
+    final product = controller.product.value;
     if (product == null) {
       return Container(
         height: 300,
@@ -237,8 +259,8 @@ class ProductDetailJsonParser {
     }
 
     final images =
-        product.value?.images?.map((img) => img.url).toList() ??
-        [product.value?.thumbnail ?? ''];
+        product.images?.map((img) => img.url).toList() ??
+        [product.thumbnail ?? ''];
 
     // Update the component properties with actual product images
     final updatedComponent = UIComponent(
@@ -340,13 +362,32 @@ class ProductDetailJsonParser {
     BuildContext context,
     ProductDetailController controller,
   ) {
-    return SizedBox(
-      height: (component.properties['height'] as num?)?.toDouble() ?? 48,
-      child: ElevatedButton(
-        onPressed: controller.product.value != null
-            ? () => controller.addToCart()
-            : null,
-        child: Text(component.properties['text']?.toString() ?? 'Add to Cart'),
+    return Obx(
+      () => SizedBox(
+        height: (component.properties['height'] as num?)?.toDouble() ?? 48,
+        child: ElevatedButton(
+          onPressed:
+              controller.product.value != null &&
+                  !controller.isAddingToCart.value
+              ? () => controller.addToCart()
+              : null,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: _parseColor(
+              component.properties['backgroundColor'],
+            ),
+            foregroundColor: _parseColor(component.properties['textColor']),
+          ),
+          child: controller.isAddingToCart.value
+              ? const SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  ),
+                )
+              : Text(component.properties['text']?.toString() ?? 'Add to Cart'),
+        ),
       ),
     );
   }
@@ -358,5 +399,134 @@ class ProductDetailJsonParser {
   ) {
     // Use the standard product list component
     return JsonUIParser.parseComponent(component, context);
+  }
+
+  static Widget _buildQuantityButton(
+    UIComponent component,
+    BuildContext context,
+    ProductDetailController controller,
+    bool isIncrease,
+  ) {
+    return SizedBox(
+      width: (component.properties['width'] as num?)?.toDouble() ?? 40,
+      height: (component.properties['height'] as num?)?.toDouble() ?? 40,
+      child: ElevatedButton(
+        onPressed: () {
+          if (isIncrease) {
+            controller.increaseQuantity();
+          } else {
+            controller.decreaseQuantity();
+          }
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: _parseColor(component.properties['backgroundColor']),
+          foregroundColor: _parseColor(component.properties['textColor']),
+          padding: EdgeInsets.zero,
+        ),
+        child: Text(component.properties['text']?.toString() ?? ''),
+      ),
+    );
+  }
+
+  static Widget _buildFavoriteButton(
+    UIComponent component,
+    BuildContext context,
+    ProductDetailController controller,
+  ) {
+    return Obx(
+      () => SizedBox(
+        width: (component.properties['width'] as num?)?.toDouble() ?? 48,
+        height: (component.properties['height'] as num?)?.toDouble() ?? 48,
+        child: OutlinedButton(
+          onPressed: () => controller.toggleFavorite(),
+          style: OutlinedButton.styleFrom(
+            backgroundColor: _parseColor(
+              component.properties['backgroundColor'],
+            ),
+            foregroundColor: controller.isFavorite.value
+                ? Colors.red
+                : _parseColor(component.properties['textColor']),
+            side: BorderSide(
+              color: controller.isFavorite.value
+                  ? Colors.red
+                  : _parseColor(component.properties['borderColor']) ??
+                        Colors.grey,
+              width:
+                  (component.properties['borderWidth'] as num?)?.toDouble() ??
+                  1,
+            ),
+            padding: EdgeInsets.zero,
+          ),
+          child: Icon(
+            controller.isFavorite.value
+                ? Icons.favorite
+                : Icons.favorite_border,
+            size: 20,
+          ),
+        ),
+      ),
+    );
+  }
+
+  static Widget _buildComponentWithChildren(
+    UIComponent component,
+    List<Widget> children,
+    BuildContext context,
+  ) {
+    switch (component.type.toLowerCase()) {
+      case 'scrollview':
+        return SingleChildScrollView(child: Column(children: children));
+      case 'column':
+        return Column(children: children);
+      case 'row':
+        return Row(children: children);
+      case 'container':
+        return Container(
+          height: (component.properties['height'] as num?)?.toDouble(),
+          width: (component.properties['width'] as num?)?.toDouble(),
+          color: _parseColor(component.properties['backgroundColor']),
+          child: children.isNotEmpty ? children.first : null,
+        );
+      case 'padding':
+        final padding =
+            component.properties['padding'] as Map<String, dynamic>?;
+        return Padding(
+          padding: _parsePadding(padding),
+          child: children.isNotEmpty ? children.first : null,
+        );
+      case 'expanded':
+        return Expanded(
+          child: children.isNotEmpty ? children.first : const SizedBox(),
+        );
+      default:
+        return Column(children: children);
+    }
+  }
+
+  static Color? _parseColor(dynamic colorValue) {
+    if (colorValue == null) return null;
+    if (colorValue is String) {
+      if (colorValue.startsWith('#')) {
+        return Color(
+          int.parse(colorValue.substring(1), radix: 16) + 0xFF000000,
+        );
+      }
+    }
+    return null;
+  }
+
+  static EdgeInsets _parsePadding(Map<String, dynamic>? padding) {
+    if (padding == null) return EdgeInsets.zero;
+
+    if (padding.containsKey('all')) {
+      return EdgeInsets.all((padding['all'] as num).toDouble());
+    }
+
+    return EdgeInsets.only(
+      top: (padding['top'] as num?)?.toDouble() ?? 0,
+      bottom: (padding['bottom'] as num?)?.toDouble() ?? 0,
+      left: (padding['left'] as num?)?.toDouble() ?? 0,
+      right: (padding['right'] as num?)?.toDouble() ?? 0,
+    );
   }
 }

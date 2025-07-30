@@ -22,10 +22,10 @@
               "id": "main_carousel",
               "properties": {
                 "images": [
-                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTalWSpjUWrsCSPlcH5idyrUFUYX4CmxWppxmzOn4RW803iHuZ0NoB7s8NQvmVIRp0qTCA&usqp=CAU",
-                  "https://t4.ftcdn.net/jpg/04/84/87/61/360_F_484876187_u6HIlCgA2iZdfkoOamuQa43OJH2zaDVR.jpg",
-                  "https://t4.ftcdn.net/jpg/02/62/24/31/360_F_262243135_q7xBjfg02gaeD1NVfIqHBLz3qrOMFYcw.jpg",
-                  "https://t4.ftcdn.net/jpg/10/07/17/59/360_F_1007175939_JlUTrfWgqHIr4rt0xjbUIbPo881bqML1.jpg"
+                  "https://img.freepik.com/free-vector/fashion-sale-with-discount-template_23-2148936503.jpg",
+                  "https://img.freepik.com/free-vector/grocery-store-sale-banner-template_23-2151089846.jpg",
+                  "https://img.freepik.com/free-vector/household-appliances-realistic-composition_1284-65307.jpg",
+                  "https://img.freepik.com/free-vector/delicious-cookies-banner-template_23-2148898360.jpg"
                 ],
                 "autoPlay": true,
                 "autoPlayInterval": 4,
@@ -112,13 +112,12 @@
               "type": "banner",
               "id": "splash_offer",
               "properties": {
-                "imageUrl": "https://via.placeholder.com/800x200/FF9800/FFFFFF?text=FLASH+SALE+-+Limited+Time+Offer",
+                "imageUrl": "https://media.istockphoto.com/id/2153947113/vector/limited-time-sale-logo-illustration.jpg?s=612x612&w=0&k=20&c=5UgYoKGPHEC4cDwQRR2iVYGyF74lu6s88AE97Dz_pUc=",
                 "title": "Flash Sale",
                 "subtitle": "Limited time offer - Don't miss out!",
                 "height": 150,
                 "overlayColor": "#2196F3",
                 "overlayOpacity": 0.85,
-                "blendMode": "multiply",
                 "borderRadius": 12,
                 "margin": {
                   "horizontal": 16

@@ -1,0 +1,229 @@
+{
+  "screenId": "bookmarks",
+  "title": "My Bookmarks",
+  "theme": {
+    "primaryColor": "#2196F3",
+    "secondaryColor": "#FF5722",
+    "backgroundColor": "#FFFFFF",
+    "textColor": "#212121"
+  },
+  "components": [
+    {
+      "type": "scrollview",
+      "properties": {
+        "scrollDirection": "vertical"
+      },
+      "children": [
+        {
+          "type": "column",
+          "properties": {
+            "mainAxisAlignment": "start",
+            "crossAxisAlignment": "stretch"
+          },
+          "children": [
+            {
+              "type": "padding",
+              "properties": {
+                "padding": {
+                  "all": 16
+                }
+              },
+              "children": [
+                {
+                  "type": "row",
+                  "properties": {
+                    "mainAxisAlignment": "spacebetween",
+                    "crossAxisAlignment": "center"
+                  },
+                  "children": [
+                    {
+                      "type": "text",
+                      "properties": {
+                        "text": "My Bookmarks",
+                        "fontSize": 24,
+                        "fontWeight": "bold",
+                        "color": "#212121"
+                      }
+                    },
+                    {
+                      "type": "text",
+                      "id": "bookmarks_count",
+                      "properties": {
+                        "text": "0 items",
+                        "fontSize": 14,
+                        "color": "#757575"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "id": "bookmarks_grid_container",
+              "properties": {
+                "minHeight": 200
+              },
+              "children": [
+                {
+                  "type": "bookmarks_grid",
+                  "id": "bookmarks_grid"
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "id": "empty_bookmarks_state",
+              "properties": {
+                "padding": {
+                  "all": 32
+                },
+                "alignment": "center"
+              },
+              "children": [
+                {
+                  "type": "column",
+                  "properties": {
+                    "mainAxisAlignment": "center",
+                    "crossAxisAlignment": "center"
+                  },
+                  "children": [
+                    {
+                      "type": "icon",
+                      "properties": {
+                        "icon": "favorite_border",
+                        "size": 64,
+                        "color": "#BDBDBD"
+                      }
+                    },
+                    {
+                      "type": "sizedbox",
+                      "properties": {
+                        "height": 16
+                      }
+                    },
+                    {
+                      "type": "text",
+                      "properties": {
+                        "text": "No bookmarks yet",
+                        "fontSize": 18,
+                        "fontWeight": "w600",
+                        "color": "#757575"
+                      }
+                    },
+                    {
+                      "type": "sizedbox",
+                      "properties": {
+                        "height": 8
+                      }
+                    },
+                    {
+                      "type": "text",
+                      "properties": {
+                        "text": "Start adding products to your favorites",
+                        "fontSize": 14,
+                        "color": "#9E9E9E"
+                      }
+                    },
+                    {
+                      "type": "sizedbox",
+                      "properties": {
+                        "height": 24
+                      }
+                    },
+                    {
+                      "type": "button",
+                      "properties": {
+                        "text": "Browse Products",
+                        "backgroundColor": "#2196F3",
+                        "textColor": "#FFFFFF",
+                        "height": 48,
+                        "width": 200
+                      },
+                      "action": {
+                        "type": "navigate",
+                        "route": "/home"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "id": "bookmarks_actions",
+              "properties": {
+                "margin": {
+                  "all": 16
+                },
+                "padding": {
+                  "all": 16
+                },
+                "backgroundColor": "#F5F5F5",
+                "borderRadius": 8
+              },
+              "children": [
+                {
+                  "type": "column",
+                  "children": [
+                    {
+                      "type": "text",
+                      "properties": {
+                        "text": "Bookmark Actions",
+                        "fontSize": 16,
+                        "fontWeight": "w600",
+                        "color": "#212121"
+                      }
+                    },
+                    {
+                      "type": "sizedbox",
+                      "properties": {
+                        "height": 12
+                      }
+                    },
+                    {
+                      "type": "row",
+                      "properties": {
+                        "mainAxisAlignment": "spaceevenly"
+                      },
+                      "children": [
+                        {
+                          "type": "button",
+                          "id": "clear_bookmarks_button",
+                          "properties": {
+                            "text": "Clear All",
+                            "backgroundColor": "#FF5722",
+                            "textColor": "#FFFFFF",
+                            "height": 40,
+                            "width": 120
+                          },
+                          "action": {
+                            "type": "clear_bookmarks"
+                          }
+                        },
+                        {
+                          "type": "button",
+                          "id": "share_bookmarks_button",
+                          "properties": {
+                            "text": "Share List",
+                            "backgroundColor": "#4CAF50",
+                            "textColor": "#FFFFFF",
+                            "height": 40,
+                            "width": 120
+                          },
+                          "action": {
+                            "type": "share_bookmarks"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

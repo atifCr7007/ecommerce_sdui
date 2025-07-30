@@ -1,0 +1,303 @@
+{
+  "screenId": "cart",
+  "title": "Shopping Cart",
+  "theme": {
+    "primaryColor": "#2196F3",
+    "secondaryColor": "#FF5722",
+    "backgroundColor": "#FFFFFF",
+    "textColor": "#212121"
+  },
+  "components": [
+    {
+      "type": "scrollview",
+      "properties": {
+        "scrollDirection": "vertical"
+      },
+      "children": [
+        {
+          "type": "column",
+          "properties": {
+            "mainAxisAlignment": "start",
+            "crossAxisAlignment": "stretch"
+          },
+          "children": [
+            {
+              "type": "padding",
+              "properties": {
+                "padding": {
+                  "all": 16
+                }
+              },
+              "children": [
+                {
+                  "type": "text",
+                  "properties": {
+                    "text": "My Cart",
+                    "fontSize": 24,
+                    "fontWeight": "bold",
+                    "color": "#212121"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "id": "cart_items_container",
+              "properties": {
+                "minHeight": 200
+              },
+              "children": [
+                {
+                  "type": "cart_items_list",
+                  "id": "cart_items"
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "id": "empty_cart_state",
+              "properties": {
+                "padding": {
+                  "all": 32
+                },
+                "alignment": "center"
+              },
+              "children": [
+                {
+                  "type": "column",
+                  "properties": {
+                    "mainAxisAlignment": "center",
+                    "crossAxisAlignment": "center"
+                  },
+                  "children": [
+                    {
+                      "type": "icon",
+                      "properties": {
+                        "icon": "shopping_cart_outlined",
+                        "size": 64,
+                        "color": "#BDBDBD"
+                      }
+                    },
+                    {
+                      "type": "sizedbox",
+                      "properties": {
+                        "height": 16
+                      }
+                    },
+                    {
+                      "type": "text",
+                      "properties": {
+                        "text": "Your cart is empty",
+                        "fontSize": 18,
+                        "fontWeight": "w600",
+                        "color": "#757575"
+                      }
+                    },
+                    {
+                      "type": "sizedbox",
+                      "properties": {
+                        "height": 8
+                      }
+                    },
+                    {
+                      "type": "text",
+                      "properties": {
+                        "text": "Add some items to get started",
+                        "fontSize": 14,
+                        "color": "#9E9E9E"
+                      }
+                    },
+                    {
+                      "type": "sizedbox",
+                      "properties": {
+                        "height": 24
+                      }
+                    },
+                    {
+                      "type": "button",
+                      "properties": {
+                        "text": "Continue Shopping",
+                        "backgroundColor": "#2196F3",
+                        "textColor": "#FFFFFF",
+                        "height": 48,
+                        "width": 200
+                      },
+                      "action": {
+                        "type": "navigate",
+                        "route": "/home"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "id": "cart_summary",
+              "properties": {
+                "margin": {
+                  "all": 16
+                },
+                "padding": {
+                  "all": 16
+                },
+                "backgroundColor": "#F5F5F5",
+                "borderRadius": 8
+              },
+              "children": [
+                {
+                  "type": "column",
+                  "children": [
+                    {
+                      "type": "text",
+                      "properties": {
+                        "text": "Order Summary",
+                        "fontSize": 18,
+                        "fontWeight": "w600",
+                        "color": "#212121"
+                      }
+                    },
+                    {
+                      "type": "sizedbox",
+                      "properties": {
+                        "height": 16
+                      }
+                    },
+                    {
+                      "type": "row",
+                      "properties": {
+                        "mainAxisAlignment": "spacebetween"
+                      },
+                      "children": [
+                        {
+                          "type": "text",
+                          "properties": {
+                            "text": "Subtotal",
+                            "fontSize": 14,
+                            "color": "#757575"
+                          }
+                        },
+                        {
+                          "type": "text",
+                          "id": "subtotal_amount",
+                          "properties": {
+                            "text": "$0.00",
+                            "fontSize": 14,
+                            "fontWeight": "w500",
+                            "color": "#212121"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "sizedbox",
+                      "properties": {
+                        "height": 8
+                      }
+                    },
+                    {
+                      "type": "row",
+                      "properties": {
+                        "mainAxisAlignment": "spacebetween"
+                      },
+                      "children": [
+                        {
+                          "type": "text",
+                          "properties": {
+                            "text": "Shipping",
+                            "fontSize": 14,
+                            "color": "#757575"
+                          }
+                        },
+                        {
+                          "type": "text",
+                          "properties": {
+                            "text": "Free",
+                            "fontSize": 14,
+                            "fontWeight": "w500",
+                            "color": "#4CAF50"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "sizedbox",
+                      "properties": {
+                        "height": 8
+                      }
+                    },
+                    {
+                      "type": "divider",
+                      "properties": {
+                        "color": "#E0E0E0"
+                      }
+                    },
+                    {
+                      "type": "sizedbox",
+                      "properties": {
+                        "height": 8
+                      }
+                    },
+                    {
+                      "type": "row",
+                      "properties": {
+                        "mainAxisAlignment": "spacebetween"
+                      },
+                      "children": [
+                        {
+                          "type": "text",
+                          "properties": {
+                            "text": "Total",
+                            "fontSize": 16,
+                            "fontWeight": "bold",
+                            "color": "#212121"
+                          }
+                        },
+                        {
+                          "type": "text",
+                          "id": "total_amount",
+                          "properties": {
+                            "text": "$0.00",
+                            "fontSize": 16,
+                            "fontWeight": "bold",
+                            "color": "#2196F3"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "padding",
+              "properties": {
+                "padding": {
+                  "horizontal": 16,
+                  "bottom": 32
+                }
+              },
+              "children": [
+                {
+                  "type": "button",
+                  "id": "checkout_button",
+                  "properties": {
+                    "text": "Proceed to Checkout",
+                    "backgroundColor": "#2196F3",
+                    "textColor": "#FFFFFF",
+                    "height": 56,
+                    "fontSize": 16,
+                    "fontWeight": "w600"
+                  },
+                  "action": {
+                    "type": "checkout"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
