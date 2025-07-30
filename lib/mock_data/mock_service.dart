@@ -263,6 +263,51 @@ class MockDataService {
     }
   }
 
+  /// Gets real image URL based on category and product number
+  String _getCategoryImageUrl(String category, int productNumber) {
+    final categoryImages = {
+      'Electronics': [
+        'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop',
+        'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300&h=300&fit=crop',
+        'https://images.unsplash.com/photo-1583394838336-acd977736f90?w=300&h=300&fit=crop',
+        'https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?w=300&h=300&fit=crop',
+      ],
+      'Clothing': [
+        'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=300&h=300&fit=crop',
+        'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=300&h=300&fit=crop',
+        'https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=300&h=300&fit=crop',
+        'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=300&h=300&fit=crop',
+      ],
+      'Books': [
+        'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=300&h=300&fit=crop',
+        'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=300&h=300&fit=crop',
+        'https://images.unsplash.com/photo-1512820790803-83ca734da794?w=300&h=300&fit=crop',
+        'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop',
+      ],
+      'Home & Garden': [
+        'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=300&h=300&fit=crop',
+        'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&h=300&fit=crop',
+        'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=300&h=300&fit=crop',
+        'https://images.unsplash.com/photo-1484154218962-a197022b5858?w=300&h=300&fit=crop',
+      ],
+      'Sports': [
+        'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=300&h=300&fit=crop',
+        'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=300&h=300&fit=crop',
+        'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=300&h=300&fit=crop',
+        'https://images.unsplash.com/photo-1593786481097-74fa64ee5b3c?w=300&h=300&fit=crop',
+      ],
+      'Beauty': [
+        'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=300&h=300&fit=crop',
+        'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=300&h=300&fit=crop',
+        'https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=300&h=300&fit=crop',
+        'https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=300&h=300&fit=crop',
+      ],
+    };
+
+    final images = categoryImages[category] ?? categoryImages['Electronics']!;
+    return images[productNumber.abs() % images.length];
+  }
+
   /// Generates fallback products when JSON loading fails
   List<Product> _generateFallbackProducts(int count) {
     final categories = [
@@ -311,13 +356,11 @@ class MockDataService {
       title: '$category Product ${productNumber.abs()}',
       description:
           'High-quality $category product with excellent features and great value.',
-      thumbnail:
-          'https://via.placeholder.com/300x300/4CAF50/FFFFFF?text=${Uri.encodeComponent(category)}+${productNumber.abs()}',
+      thumbnail: _getCategoryImageUrl(category, productNumber),
       images: [
         ProductImage(
           id: '${productId}_img_1',
-          url:
-              'https://via.placeholder.com/300x300/4CAF50/FFFFFF?text=${Uri.encodeComponent(category)}+${productNumber.abs()}',
+          url: _getCategoryImageUrl(category, productNumber),
         ),
       ],
       variants: [
@@ -327,8 +370,9 @@ class MockDataService {
           prices: [
             ProductVariantPrice(
               id: '${productId}_price_1',
-              currencyCode: 'USD',
-              amount: 1500 + (productNumber.abs() % 5000),
+              currencyCode: 'INR',
+              amount:
+                  99900 + (productNumber.abs() % 500000), // ₹999 to ₹5999 range
             ),
           ],
         ),

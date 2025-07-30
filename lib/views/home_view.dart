@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -53,6 +54,18 @@ class _HomeViewState extends State<HomeView> {
       if (!jsonData.containsKey('screenId') ||
           !jsonData.containsKey('components')) {
         throw Exception('JSON missing required fields: screenId or components');
+      }
+
+      if (kDebugMode) {
+        debugPrint('[HomeView] ===== HOME JSON UI =====');
+        debugPrint(
+          '[HomeView] JSON Content: ${jsonString.substring(0, 500)}...',
+        );
+        debugPrint('[HomeView] Screen ID: ${jsonData['screenId']}');
+        debugPrint(
+          '[HomeView] Components Count: ${jsonData['components']?.length ?? 0}',
+        );
+        debugPrint('[HomeView] ===========================');
       }
 
       setState(() {

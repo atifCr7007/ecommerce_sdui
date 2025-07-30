@@ -152,6 +152,23 @@ class HomeController extends GetxController {
     await initializeHome();
   }
 
+  // Helper method to get real product images
+  static String _getProductImageUrl(int index) {
+    final productImages = [
+      'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop', // Headphones
+      'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300&h=300&fit=crop', // Sneakers
+      'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=300&h=300&fit=crop', // Books
+      'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=300&h=300&fit=crop', // T-shirt
+      'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=300&h=300&fit=crop', // Home decor
+      'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=300&h=300&fit=crop', // Sports equipment
+      'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=300&h=300&fit=crop', // Beauty products
+      'https://images.unsplash.com/photo-1583394838336-acd977736f90?w=300&h=300&fit=crop', // Watch
+      'https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?w=300&h=300&fit=crop', // Laptop
+      'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=300&h=300&fit=crop', // Sunglasses
+    ];
+    return productImages[index % productImages.length];
+  }
+
   // Mock data methods for demo purposes
   static List<Product> _getMockProducts(int limit) {
     final mockProducts = <Product>[];
@@ -163,15 +180,8 @@ class HomeController extends GetxController {
           title: 'Product ${i + 1}',
           description:
               'This is a sample product description for product ${i + 1}',
-          thumbnail:
-              'https://via.placeholder.com/300x300/4CAF50/FFFFFF?text=Product+${i + 1}',
-          images: [
-            ProductImage(
-              id: 'img_$i',
-              url:
-                  'https://via.placeholder.com/300x300/4CAF50/FFFFFF?text=Product+${i + 1}',
-            ),
-          ],
+          thumbnail: _getProductImageUrl(i),
+          images: [ProductImage(id: 'img_$i', url: _getProductImageUrl(i))],
           variants: [
             ProductVariant(
               id: 'variant_$i',
@@ -179,8 +189,10 @@ class HomeController extends GetxController {
               prices: [
                 ProductVariantPrice(
                   id: 'price_$i',
-                  currencyCode: 'USD',
-                  amount: (1000 + (i * 500)), // Price in cents
+                  currencyCode: 'INR',
+                  amount:
+                      (99900 +
+                      (i * 50000)), // Price in paise (₹999 + ₹500 increments)
                 ),
               ],
             ),
@@ -249,7 +261,7 @@ class HomeController extends GetxController {
         title: 'Summer Sale',
         subtitle: 'Up to 50% off',
         imageUrl:
-            'https://via.placeholder.com/800x300/FF5722/FFFFFF?text=Summer+Sale',
+            'https://images.unsplash.com/photo-1607083206869-4c7672e72a8a?w=800&h=300&fit=crop',
         isActive: true,
         priority: 1,
       ),
@@ -258,7 +270,7 @@ class HomeController extends GetxController {
         title: 'New Arrivals',
         subtitle: 'Check out our latest products',
         imageUrl:
-            'https://via.placeholder.com/800x300/2196F3/FFFFFF?text=New+Arrivals',
+            'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&h=300&fit=crop',
         isActive: true,
         priority: 2,
       ),
@@ -267,7 +279,7 @@ class HomeController extends GetxController {
         title: 'Black Friday',
         subtitle: 'Biggest discounts of the year',
         imageUrl:
-            'https://via.placeholder.com/800x300/9C27B0/FFFFFF?text=Black+Friday',
+            'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800&h=300&fit=crop',
         isActive: true,
         priority: 3,
       ),

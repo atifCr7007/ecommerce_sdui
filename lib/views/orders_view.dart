@@ -41,6 +41,13 @@ class _OrdersViewState extends State<OrdersView> {
       );
       final Map<String, dynamic> jsonData = json.decode(jsonString);
 
+      if (kDebugMode) {
+        debugPrint('[OrdersView] ===== ORDERS JSON UI =====');
+        debugPrint('[OrdersView] JSON Content: $jsonString');
+        debugPrint('[OrdersView] Parsed Data: $jsonData');
+        debugPrint('[OrdersView] ===========================');
+      }
+
       setState(() {
         _ordersScreen = UIScreen.fromJson(jsonData);
         _isLoading = false;
@@ -64,31 +71,21 @@ class _OrdersViewState extends State<OrdersView> {
   Widget build(BuildContext context) {
     if (_isLoading) {
       return Scaffold(
-        appBar: AppBar(
-          title: const Text('My Orders'),
-          centerTitle: true,
-        ),
+        appBar: AppBar(title: const Text('My Orders'), centerTitle: true),
         body: const Center(child: CircularProgressIndicator()),
       );
     }
 
     if (_error != null) {
       return Scaffold(
-        appBar: AppBar(
-          title: const Text('My Orders'),
-          centerTitle: true,
-        ),
+        appBar: AppBar(title: const Text('My Orders'), centerTitle: true),
         body: Center(
           child: Padding(
             padding: const EdgeInsets.all(32),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
-                  Icons.error_outline,
-                  size: 64,
-                  color: Colors.red[300],
-                ),
+                Icon(Icons.error_outline, size: 64, color: Colors.red[300]),
                 const SizedBox(height: 16),
                 Text(
                   'Error Loading Orders',
@@ -102,9 +99,7 @@ class _OrdersViewState extends State<OrdersView> {
                 Text(
                   _error!,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.grey[600],
-                  ),
+                  style: TextStyle(color: Colors.grey[600]),
                 ),
                 const SizedBox(height: 24),
                 ElevatedButton(
@@ -120,10 +115,7 @@ class _OrdersViewState extends State<OrdersView> {
 
     if (_ordersScreen == null) {
       return Scaffold(
-        appBar: AppBar(
-          title: const Text('My Orders'),
-          centerTitle: true,
-        ),
+        appBar: AppBar(title: const Text('My Orders'), centerTitle: true),
         body: const Center(child: Text('No content available')),
       );
     }

@@ -4,6 +4,7 @@ import '../models/ui_models.dart';
 import '../utils/widget_mapper.dart';
 import '../widgets/orders_list_widget.dart';
 import '../widgets/order_statistics_widget.dart';
+import '../controllers/cart_controller.dart';
 
 class JsonUIParser {
   static Widget parseScreen(UIScreen screen, BuildContext context) {
@@ -12,6 +13,29 @@ class JsonUIParser {
           .map((component) => parseComponent(component, context))
           .toList(),
     );
+  }
+
+  static Widget parseScreenWithScaffold(
+    UIScreen screen,
+    BuildContext context, {
+    Map<String, dynamic>? screenData,
+  }) {
+    Widget body = Column(
+      children: screen.components
+          .map((component) => parseComponent(component, context))
+          .toList(),
+    );
+
+    // Check if screen data has floating action button
+    FloatingActionButton? fab;
+    if (screenData != null && screenData.containsKey('floatingActionButton')) {
+      fab = _buildFloatingActionButton(
+        screenData['floatingActionButton'],
+        context,
+      );
+    }
+
+    return Scaffold(body: body, floatingActionButton: fab);
   }
 
   static Widget parseComponent(UIComponent component, BuildContext context) {
@@ -198,6 +222,8 @@ class JsonUIParser {
     final images = properties['images'] as List<dynamic>? ?? [];
     final height = _parseDouble(properties['height']) ?? 200;
     final fullWidth = properties['fullWidth'] as bool? ?? false;
+    final fit = _parseBoxFit(properties['fit']) ?? BoxFit.cover;
+    final showOverlay = properties['showOverlay'] as bool? ?? true;
 
     if (images.isEmpty) {
       return Container(
@@ -213,35 +239,48 @@ class JsonUIParser {
         itemCount: images.length,
         itemBuilder: (context, index) {
           final imageUrl = images[index] as String;
-          return Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  const Color(0xFF2196F3).withValues(alpha: 0.8),
-                  const Color(0xFF2196F3).withValues(alpha: 0.9),
-                ],
-              ),
-            ),
-            child: Image.network(
-              imageUrl,
-              fit: BoxFit.cover,
-              colorBlendMode: BlendMode.multiply,
-              errorBuilder: (context, error, stackTrace) {
-                return Container(
-                  color: const Color(0xFF2196F3),
-                  child: const Center(
-                    child: Icon(
-                      Icons.broken_image,
-                      color: Colors.white,
-                      size: 48,
-                    ),
-                  ),
-                );
-              },
-            ),
+
+          Widget imageWidget = Image.network(
+            imageUrl,
+            fit: fit,
+            width: double.infinity,
+            height: double.infinity,
+            errorBuilder: (context, error, stackTrace) {
+              return Container(
+                color: Colors.grey[300],
+                child: const Center(
+                  child: Icon(Icons.broken_image, color: Colors.grey, size: 48),
+                ),
+              );
+            },
           );
+
+          // Only add overlay for banners, not product images
+          if (showOverlay && component.id != 'product_images') {
+            return Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    const Color(0xFF2196F3).withValues(alpha: 0.8),
+                    const Color(0xFF2196F3).withValues(alpha: 0.9),
+                  ],
+                ),
+              ),
+              child: ClipRect(
+                child: ColorFiltered(
+                  colorFilter: const ColorFilter.mode(
+                    Color(0xFF2196F3),
+                    BlendMode.multiply,
+                  ),
+                  child: imageWidget,
+                ),
+              ),
+            );
+          } else {
+            return ClipRect(child: imageWidget);
+          }
         },
       ),
     );
@@ -650,5 +689,115 @@ class JsonUIParser {
         ],
       ),
     );
+  }
+
+  static FloatingActionButton _buildFloatingActionButton(
+    Map<String, dynamic> fabData,
+    BuildContext context,
+  ) {
+    final properties = fabData['properties'] as Map<String, dynamic>? ?? {};
+    final iconName = properties['icon'] as String? ?? 'add';
+    final backgroundColor =
+        properties['backgroundColor'] as String? ?? '#2196F3';
+    final foregroundColor =
+        properties['foregroundColor'] as String? ?? '#FFFFFF';
+    final tooltip = properties['tooltip'] as String? ?? '';
+    final onPressed = properties['onPressed'] as Map<String, dynamic>?;
+
+    // Parse colors
+    final bgColor = Color(int.parse(backgroundColor.replaceFirst('#', '0xFF')));
+    final fgColor = Color(int.parse(foregroundColor.replaceFirst('#', '0xFF')));
+
+    // Parse icon
+    IconData icon = Icons.add;
+    switch (iconName.toLowerCase()) {
+      case 'shopping_cart':
+        icon = Icons.shopping_cart;
+        break;
+      case 'add':
+        icon = Icons.add;
+        break;
+      case 'favorite':
+        icon = Icons.favorite;
+        break;
+      case 'share':
+        icon = Icons.share;
+        break;
+      default:
+        icon = Icons.add;
+    }
+
+    return FloatingActionButton(
+      onPressed: () => _handleFabAction(onPressed, context),
+      backgroundColor: bgColor,
+      foregroundColor: fgColor,
+      tooltip: tooltip.isNotEmpty ? tooltip : null,
+      child: Icon(icon),
+    );
+  }
+
+  static void _handleFabAction(
+    Map<String, dynamic>? action,
+    BuildContext context,
+  ) {
+    if (action == null) return;
+
+    final actionType = action['action'] as String?;
+    switch (actionType?.toLowerCase()) {
+      case 'navigate':
+        final route = action['route'] as String?;
+        if (route != null) {
+          _navigateToRoute(route, context);
+        }
+        break;
+      case 'callback':
+        // Handle callback actions if needed
+        break;
+      default:
+        break;
+    }
+  }
+
+  static void _navigateToRoute(String route, BuildContext context) {
+    switch (route.toLowerCase()) {
+      case '/cart':
+        // Navigate back to main app and switch to cart tab
+        // Since we're in product detail, we need to go back to main app
+        Navigator.of(context).pop(); // Go back to main app
+        // Use a post-frame callback to switch to cart tab
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          // Find the main app shell and switch to cart tab
+          _switchToTab(context, 1);
+        });
+        break;
+      case '/home':
+        Navigator.of(context).pop();
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _switchToTab(context, 0);
+        });
+        break;
+      case '/orders':
+        Navigator.of(context).pop();
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _switchToTab(context, 2);
+        });
+        break;
+      case '/bookmarks':
+        Navigator.of(context).pop();
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _switchToTab(context, 3);
+        });
+        break;
+      default:
+        // Handle other routes or use Navigator
+        Navigator.of(context).pushNamed(route);
+        break;
+    }
+  }
+
+  static void _switchToTab(BuildContext context, int tabIndex) {
+    // This is a simple approach - we'll use a global key or event system
+    // For now, let's use GetX to publish an event
+    Get.find<CartController>().update(); // Trigger update to refresh UI
   }
 }

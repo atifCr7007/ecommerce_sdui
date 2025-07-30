@@ -101,7 +101,7 @@ class CartController extends GetxController {
           items: [],
           subtotal: 0,
           total: 0,
-          currencyCode: 'USD',
+          currencyCode: 'INR',
           createdAt: DateTime.now(),
           updatedAt: DateTime.now(),
         );
@@ -200,12 +200,17 @@ class CartController extends GetxController {
         );
       }
 
-      // Show success message
+      // Show success message with better styling
       Get.snackbar(
         'Success',
         'Item added to cart',
         snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
         duration: const Duration(seconds: 2),
+        margin: const EdgeInsets.all(16),
+        borderRadius: 8,
+        icon: const Icon(Icons.check_circle, color: Colors.white),
       );
 
       return true;

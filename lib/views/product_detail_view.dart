@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import '../controllers/product_detail_controller.dart';
 import '../models/ui_models.dart';
-import '../models/product.dart';
+
 import '../parsers/json_parser.dart';
 import '../utils/theme_manager.dart';
 
@@ -19,6 +19,7 @@ class ProductDetailView extends StatefulWidget {
 
 class _ProductDetailViewState extends State<ProductDetailView> {
   UIScreen? _productDetailScreen;
+  Map<String, dynamic>? _productDetailScreenData;
   bool _isLoading = true;
   String? _error;
 
@@ -43,6 +44,7 @@ class _ProductDetailViewState extends State<ProductDetailView> {
 
       setState(() {
         _productDetailScreen = UIScreen.fromJson(jsonData);
+        _productDetailScreenData = jsonData;
         _isLoading = false;
       });
 
@@ -172,10 +174,11 @@ class _ProductDetailViewState extends State<ProductDetailView> {
 
   Widget _buildProductDetailContent(ProductDetailController controller) {
     // Create a custom parser that can handle product-specific data
-    return ProductDetailJsonParser.parseScreen(
+    return ProductDetailJsonParser.parseScreenWithScaffold(
       _productDetailScreen!,
       context,
       controller,
+      _productDetailScreenData,
     );
   }
 }
@@ -193,6 +196,26 @@ class ProductDetailJsonParser {
     }
 
     return const Center(child: Text('No content available'));
+  }
+
+  static Widget parseScreenWithScaffold(
+    UIScreen screen,
+    BuildContext context,
+    ProductDetailController controller,
+    Map<String, dynamic>? screenData,
+  ) {
+    Widget body = SafeArea(child: parseScreen(screen, context, controller));
+
+    // Check if screen data has floating action button
+    FloatingActionButton? fab;
+    if (screenData != null && screenData.containsKey('floatingActionButton')) {
+      fab = _buildFloatingActionButton(
+        screenData['floatingActionButton'],
+        context,
+      );
+    }
+
+    return Scaffold(body: body, floatingActionButton: fab);
   }
 
   static Widget _parseComponent(
@@ -260,7 +283,10 @@ class ProductDetailJsonParser {
 
     final images =
         product.images?.map((img) => img.url).toList() ??
-        [product.thumbnail ?? ''];
+        [
+          product.thumbnail ??
+              'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop',
+        ];
 
     // Update the component properties with actual product images
     final updatedComponent = UIComponent(
@@ -363,19 +389,30 @@ class ProductDetailJsonParser {
     ProductDetailController controller,
   ) {
     return Obx(
-      () => SizedBox(
+      () => AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
         height: (component.properties['height'] as num?)?.toDouble() ?? 48,
         child: ElevatedButton(
           onPressed:
               controller.product.value != null &&
                   !controller.isAddingToCart.value
-              ? () => controller.addToCart()
+              ? () async {
+                  // Add haptic feedback
+                  HapticFeedback.lightImpact();
+
+                  // Call add to cart with proper error handling
+                  await controller.addToCart();
+                }
               : null,
           style: ElevatedButton.styleFrom(
-            backgroundColor: _parseColor(
-              component.properties['backgroundColor'],
-            ),
+            backgroundColor: controller.isAddingToCart.value
+                ? Colors.grey[400]
+                : _parseColor(component.properties['backgroundColor']),
             foregroundColor: _parseColor(component.properties['textColor']),
+            elevation: controller.isAddingToCart.value ? 0 : 2,
+            shadowColor: controller.isAddingToCart.value
+                ? Colors.transparent
+                : null,
           ),
           child: controller.isAddingToCart.value
               ? const SizedBox(
@@ -528,5 +565,81 @@ class ProductDetailJsonParser {
       left: (padding['left'] as num?)?.toDouble() ?? 0,
       right: (padding['right'] as num?)?.toDouble() ?? 0,
     );
+  }
+
+  static FloatingActionButton _buildFloatingActionButton(
+    Map<String, dynamic> fabData,
+    BuildContext context,
+  ) {
+    final properties = fabData['properties'] as Map<String, dynamic>? ?? {};
+    final iconName = properties['icon'] as String? ?? 'add';
+    final backgroundColor =
+        properties['backgroundColor'] as String? ?? '#2196F3';
+    final foregroundColor =
+        properties['foregroundColor'] as String? ?? '#FFFFFF';
+    final tooltip = properties['tooltip'] as String? ?? '';
+    final onPressed = properties['onPressed'] as Map<String, dynamic>?;
+
+    // Parse colors
+    final bgColor = Color(int.parse(backgroundColor.replaceFirst('#', '0xFF')));
+    final fgColor = Color(int.parse(foregroundColor.replaceFirst('#', '0xFF')));
+
+    // Parse icon
+    IconData icon = Icons.add;
+    switch (iconName.toLowerCase()) {
+      case 'shopping_cart':
+        icon = Icons.shopping_cart;
+        break;
+      case 'add':
+        icon = Icons.add;
+        break;
+      case 'favorite':
+        icon = Icons.favorite;
+        break;
+      case 'share':
+        icon = Icons.share;
+        break;
+      default:
+        icon = Icons.add;
+    }
+
+    return FloatingActionButton(
+      onPressed: () => _handleFabAction(onPressed, context),
+      backgroundColor: bgColor,
+      foregroundColor: fgColor,
+      tooltip: tooltip.isNotEmpty ? tooltip : null,
+      child: Icon(icon),
+    );
+  }
+
+  static void _handleFabAction(
+    Map<String, dynamic>? action,
+    BuildContext context,
+  ) {
+    if (action == null) return;
+
+    final actionType = action['action'] as String?;
+    switch (actionType?.toLowerCase()) {
+      case 'navigate':
+        final route = action['route'] as String?;
+        if (route != null) {
+          _navigateToRoute(route, context);
+        }
+        break;
+      default:
+        break;
+    }
+  }
+
+  static void _navigateToRoute(String route, BuildContext context) {
+    switch (route.toLowerCase()) {
+      case '/cart':
+        // Navigate back to main app and switch to cart tab
+        Navigator.of(context).pop(); // Go back to main app
+        break;
+      default:
+        Navigator.of(context).pushNamed(route);
+        break;
+    }
   }
 }

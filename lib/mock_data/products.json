@@ -18,8 +18,8 @@
           "prices": [
             {
               "id": "price_headphones_001",
-              "currency_code": "USD",
-              "amount": 29999
+              "currency_code": "INR",
+              "amount": 2999900
             }
           ]
         }
@@ -80,8 +80,8 @@
           "prices": [
             {
               "id": "price_tshirt_001",
-              "currency_code": "USD",
-              "amount": 2999
+              "currency_code": "INR",
+              "amount": 299900
             }
           ]
         }

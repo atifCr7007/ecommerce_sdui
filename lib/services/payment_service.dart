@@ -32,10 +32,10 @@ class PaymentResult {
 class PaymentService {
   static const String _keyId = 'rzp_test_ZUpflviU0kpnf0';
   static const String _secretKey = 'vaVSn1chhm19HW809rG0X8HS';
-  
+
   late Razorpay _razorpay;
   PaymentResult? _currentPaymentResult;
-  
+
   // Callback functions
   Function(PaymentResult)? _onPaymentComplete;
 
@@ -48,7 +48,7 @@ class PaymentService {
     _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
     _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
     _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
-    
+
     if (kDebugMode) {
       debugPrint('[PaymentService] Razorpay initialized successfully');
     }
@@ -64,15 +64,17 @@ class PaymentService {
   }) async {
     try {
       if (kDebugMode) {
-        debugPrint('[PaymentService] Starting payment process for cart: ${cart.formattedTotal}');
+        debugPrint(
+          '[PaymentService] Starting payment process for cart: ${cart.formattedTotal}',
+        );
       }
 
       // Convert amount to paise (Razorpay expects amount in smallest currency unit)
       final amountInPaise = (cart.totalAmount * 100).round();
-      
+
       // Generate unique order ID
       final orderId = _generateOrderId();
-      
+
       final options = {
         'key': _keyId,
         'amount': amountInPaise,
@@ -85,19 +87,12 @@ class PaymentService {
           'email': customerEmail,
           'name': customerName,
         },
-        'theme': {
-          'color': '#2196F3',
-        },
-        'modal': {
-          'ondismiss': () {
-            if (kDebugMode) {
-              debugPrint('[PaymentService] Payment modal dismissed');
-            }
-          }
-        },
+        'theme': {'color': '#2196F3'},
         'notes': {
           'cart_items': cart.items.length.toString(),
-          'total_quantity': cart.items.fold(0, (sum, item) => sum + item.quantity).toString(),
+          'total_quantity': cart.items
+              .fold(0, (sum, item) => sum + item.quantity)
+              .toString(),
         },
       };
 
@@ -113,12 +108,11 @@ class PaymentService {
 
       // Wait for payment completion (with timeout)
       return await _waitForPaymentCompletion();
-      
     } catch (e) {
       if (kDebugMode) {
         debugPrint('[PaymentService] Error processing payment: $e');
       }
-      
+
       return PaymentResult(
         success: false,
         errorMessage: 'Failed to initiate payment: $e',
@@ -131,9 +125,9 @@ class PaymentService {
   Future<PaymentResult> _waitForPaymentCompletion() async {
     const maxWaitTime = Duration(minutes: 10); // 10 minutes timeout
     const checkInterval = Duration(milliseconds: 500);
-    
+
     final startTime = DateTime.now();
-    
+
     while (_currentPaymentResult == null) {
       if (DateTime.now().difference(startTime) > maxWaitTime) {
         if (kDebugMode) {
@@ -145,10 +139,10 @@ class PaymentService {
           errorDetails: {'reason': 'timeout'},
         );
       }
-      
+
       await Future.delayed(checkInterval);
     }
-    
+
     return _currentPaymentResult!;
   }
 
@@ -171,17 +165,16 @@ class PaymentService {
 
   void _handlePaymentError(PaymentFailureResponse response) {
     if (kDebugMode) {
-      debugPrint('[PaymentService] Payment error: ${response.code} - ${response.message}');
+      debugPrint(
+        '[PaymentService] Payment error: ${response.code} - ${response.message}',
+      );
       debugPrint('[PaymentService] Error details: ${response.error}');
     }
 
     _currentPaymentResult = PaymentResult(
       success: false,
       errorMessage: response.message ?? 'Payment failed',
-      errorDetails: {
-        'code': response.code,
-        'error': response.error,
-      },
+      errorDetails: {'code': response.code, 'error': response.error},
     );
 
     _onPaymentComplete?.call(_currentPaymentResult!);
@@ -189,7 +182,9 @@ class PaymentService {
 
   void _handleExternalWallet(ExternalWalletResponse response) {
     if (kDebugMode) {
-      debugPrint('[PaymentService] External wallet selected: ${response.walletName}');
+      debugPrint(
+        '[PaymentService] External wallet selected: ${response.walletName}',
+      );
     }
 
     // For now, treat external wallet as cancellation

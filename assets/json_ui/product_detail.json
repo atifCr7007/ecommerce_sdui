@@ -7,11 +7,25 @@
     "backgroundColor": "#FFFFFF",
     "textColor": "#212121"
   },
+  "floatingActionButton": {
+    "type": "fab",
+    "properties": {
+      "icon": "shopping_cart",
+      "backgroundColor": "#2196F3",
+      "foregroundColor": "#FFFFFF",
+      "tooltip": "Go to Cart",
+      "onPressed": {
+        "action": "navigate",
+        "route": "/cart"
+      }
+    }
+  },
   "components": [
     {
       "type": "scrollview",
       "properties": {
-        "scrollDirection": "vertical"
+        "scrollDirection": "vertical",
+        "physics": "alwaysScrollable"
       },
       "children": [
         {
@@ -25,16 +39,25 @@
               "type": "container",
               "properties": {
                 "height": 300,
-                "backgroundColor": "#F5F5F5"
+                "backgroundColor": "#F5F5F5",
+                "margin": {
+                  "horizontal": 8
+                }
               },
               "children": [
                 {
                   "type": "carousel",
                   "id": "product_images",
                   "properties": {
-                    "images": [],
+                    "images": [
+                      "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop",
+                      "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=400&fit=crop",
+                      "https://images.unsplash.com/photo-1583394838336-acd977736f90?w=400&h=400&fit=crop"
+                    ],
                     "showIndicators": true,
-                    "height": 300
+                    "showOverlay": false,
+                    "height": 280,
+                    "fit": "cover"
                   }
                 }
               ]
@@ -312,6 +335,12 @@
                         "title": "",
                         "isHorizontal": true,
                         "limit": 5
+                      }
+                    },
+                    {
+                      "type": "sizedbox",
+                      "properties": {
+                        "height": 32
                       }
                     }
                   ]

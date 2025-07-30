@@ -19,12 +19,14 @@ class OrderService {
   }) async {
     try {
       if (kDebugMode) {
-        debugPrint('[OrderService] Creating order from cart with ${cart.items.length} items');
+        debugPrint(
+          '[OrderService] Creating order from cart with ${cart.items.length} items',
+        );
       }
 
       // Generate unique order ID
       final orderId = await _generateOrderId();
-      
+
       // Calculate amounts
       final subtotal = cart.subtotalAmount;
       final tax = subtotal * 0.18; // 18% GST
@@ -42,8 +44,8 @@ class OrderService {
         subtotalAmount: subtotal,
         taxAmount: tax,
         shippingAmount: shipping,
-        paymentStatus: paymentResult.success 
-            ? PaymentStatus.completed 
+        paymentStatus: paymentResult.success
+            ? PaymentStatus.completed
             : PaymentStatus.failed,
         orderStatus: OrderStatus.placed,
         createdAt: DateTime.now(),
@@ -83,7 +85,7 @@ class OrderService {
     try {
       final prefs = await SharedPreferences.getInstance();
       final ordersJson = prefs.getStringList(_ordersKey) ?? [];
-      
+
       final orders = ordersJson
           .map((orderJson) => Order.fromJson(jsonDecode(orderJson)))
           .toList();
@@ -125,10 +127,12 @@ class OrderService {
     try {
       final orders = await getOrders();
       final orderIndex = orders.indexWhere((order) => order.id == orderId);
-      
+
       if (orderIndex == -1) {
         if (kDebugMode) {
-          debugPrint('[OrderService] Order not found for status update: $orderId');
+          debugPrint(
+            '[OrderService] Order not found for status update: $orderId',
+          );
         }
         return false;
       }
@@ -143,7 +147,9 @@ class OrderService {
       await _saveAllOrders(orders);
 
       if (kDebugMode) {
-        debugPrint('[OrderService] Order status updated: $orderId -> ${newStatus.name}');
+        debugPrint(
+          '[OrderService] Order status updated: $orderId -> ${newStatus.name}',
+        );
       }
 
       return true;
@@ -156,14 +162,19 @@ class OrderService {
   }
 
   /// Update payment status
-  Future<bool> updatePaymentStatus(String orderId, PaymentStatus newStatus) async {
+  Future<bool> updatePaymentStatus(
+    String orderId,
+    PaymentStatus newStatus,
+  ) async {
     try {
       final orders = await getOrders();
       final orderIndex = orders.indexWhere((order) => order.id == orderId);
-      
+
       if (orderIndex == -1) {
         if (kDebugMode) {
-          debugPrint('[OrderService] Order not found for payment status update: $orderId');
+          debugPrint(
+            '[OrderService] Order not found for payment status update: $orderId',
+          );
         }
         return false;
       }
@@ -178,7 +189,9 @@ class OrderService {
       await _saveAllOrders(orders);
 
       if (kDebugMode) {
-        debugPrint('[OrderService] Payment status updated: $orderId -> ${newStatus.name}');
+        debugPrint(
+          '[OrderService] Payment status updated: $orderId -> ${newStatus.name}',
+        );
       }
 
       return true;
@@ -208,7 +221,7 @@ class OrderService {
       final prefs = await SharedPreferences.getInstance();
       await prefs.remove(_ordersKey);
       await prefs.remove(_orderCounterKey);
-      
+
       if (kDebugMode) {
         debugPrint('[OrderService] All orders cleared');
       }
@@ -233,7 +246,7 @@ class OrderService {
       final ordersJson = orders
           .map((order) => jsonEncode(order.toJson()))
           .toList();
-      
+
       await prefs.setStringList(_ordersKey, ordersJson);
     } catch (e) {
       if (kDebugMode) {
@@ -249,9 +262,9 @@ class OrderService {
       final prefs = await SharedPreferences.getInstance();
       final counter = prefs.getInt(_orderCounterKey) ?? 1000;
       final newCounter = counter + 1;
-      
+
       await prefs.setInt(_orderCounterKey, newCounter);
-      
+
       final timestamp = DateTime.now().millisecondsSinceEpoch;
       return 'ORD${newCounter}_$timestamp';
     } catch (e) {
@@ -265,13 +278,15 @@ class OrderService {
   Future<Map<String, dynamic>> getOrderStatistics() async {
     try {
       final orders = await getOrders();
-      
+
       final totalOrders = orders.length;
-      final completedOrders = orders.where((o) => o.paymentStatus == PaymentStatus.completed).length;
+      final completedOrders = orders
+          .where((o) => o.paymentStatus == PaymentStatus.completed)
+          .length;
       final totalRevenue = orders
           .where((o) => o.paymentStatus == PaymentStatus.completed)
           .fold(0.0, (sum, order) => sum + order.totalAmount);
-      
+
       return {
         'total_orders': totalOrders,
         'completed_orders': completedOrders,

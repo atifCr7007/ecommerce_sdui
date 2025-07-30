@@ -79,6 +79,18 @@ class _BookmarksViewState extends State<BookmarksView> {
         );
       }
 
+      if (kDebugMode) {
+        debugPrint('[BookmarksView] ===== BOOKMARKS JSON UI =====');
+        debugPrint(
+          '[BookmarksView] JSON Content: ${jsonString.substring(0, 500)}...',
+        );
+        debugPrint('[BookmarksView] Screen ID: ${jsonData['screenId']}');
+        debugPrint(
+          '[BookmarksView] Components Count: ${jsonData['components']?.length ?? 0}',
+        );
+        debugPrint('[BookmarksView] ===========================');
+      }
+
       // Create UI screen model
       UIScreen bookmarksScreen;
       try {

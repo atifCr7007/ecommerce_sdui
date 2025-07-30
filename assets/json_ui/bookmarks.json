@@ -9,45 +9,39 @@
   },
   "components": [
     {
-      "type": "scrollview",
+      "type": "column",
       "properties": {
-        "scrollDirection": "vertical"
+        "mainAxisAlignment": "start",
+        "crossAxisAlignment": "stretch"
       },
       "children": [
         {
-          "type": "column",
+          "type": "padding",
           "properties": {
-            "mainAxisAlignment": "start",
-            "crossAxisAlignment": "stretch"
+            "padding": {
+              "all": 16
+            }
           },
           "children": [
             {
-              "type": "padding",
+              "type": "row",
               "properties": {
-                "padding": {
-                  "all": 16
-                }
+                "mainAxisAlignment": "spacebetween",
+                "crossAxisAlignment": "center"
               },
               "children": [
                 {
-                  "type": "row",
+                  "type": "text",
                   "properties": {
-                    "mainAxisAlignment": "spacebetween",
-                    "crossAxisAlignment": "center"
-                  },
-                  "children": [
-                    {
-                      "type": "text",
-                      "properties": {
-                        "text": "My Bookmarks",
-                        "fontSize": 24,
-                        "fontWeight": "bold",
-                        "color": "#212121"
-                      }
-                    },
-                    {
-                      "type": "text",
-                      "id": "bookmarks_count",
+                    "text": "My Bookmarks",
+                    "fontSize": 24,
+                    "fontWeight": "bold",
+                    "color": "#212121"
+                  }
+                },
+                {
+                  "type": "text",
+                  "id": "bookmarks_count",
                       "properties": {
                         "text": "0 items",
                         "fontSize": 14,
@@ -59,21 +53,35 @@
               ]
             },
             {
-              "type": "container",
-              "id": "bookmarks_grid_container",
-              "properties": {
-                "minHeight": 200
-              },
+              "type": "expanded",
               "children": [
                 {
-                  "type": "bookmarks_grid",
-                  "id": "bookmarks_grid"
-                }
-              ]
-            },
-            {
-              "type": "container",
-              "id": "empty_bookmarks_state",
+                  "type": "scrollview",
+                  "properties": {
+                    "scrollDirection": "vertical"
+                  },
+                  "children": [
+                    {
+                      "type": "container",
+                      "id": "bookmarks_grid_container",
+                      "properties": {
+                        "minHeight": 200,
+                        "padding": {
+                          "left": 16,
+                          "right": 16,
+                          "bottom": 16
+                        }
+                      },
+                      "children": [
+                        {
+                          "type": "bookmarks_grid",
+                          "id": "bookmarks_grid"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "container",
+                      "id": "empty_bookmarks_state",
               "properties": {
                 "padding": {
                   "all": 32
@@ -148,79 +156,78 @@
                   ]
                 }
               ]
+            }
+          ]
+        },
+        {
+          "type": "container",
+          "id": "bookmarks_actions",
+          "properties": {
+            "margin": {
+              "left": 16,
+              "right": 16,
+              "bottom": 16
             },
+            "padding": {
+              "all": 12
+            },
+            "backgroundColor": "#FFFFFF",
+            "borderRadius": 28,
+            "elevation": 8,
+            "shadowColor": "#000000",
+            "shadowOpacity": 0.15,
+            "shadowOffset": {
+              "x": 0,
+              "y": 4
+            },
+            "shadowBlurRadius": 12
+          },
+          "children": [
             {
-              "type": "container",
-              "id": "bookmarks_actions",
+              "type": "row",
               "properties": {
-                "margin": {
-                  "all": 16
-                },
-                "padding": {
-                  "all": 16
-                },
-                "backgroundColor": "#F5F5F5",
-                "borderRadius": 8
+                "mainAxisAlignment": "spaceevenly",
+                "crossAxisAlignment": "center"
               },
               "children": [
                 {
-                  "type": "column",
-                  "children": [
-                    {
-                      "type": "text",
-                      "properties": {
-                        "text": "Bookmark Actions",
-                        "fontSize": 16,
-                        "fontWeight": "w600",
-                        "color": "#212121"
-                      }
-                    },
-                    {
-                      "type": "sizedbox",
-                      "properties": {
-                        "height": 12
-                      }
-                    },
-                    {
-                      "type": "row",
-                      "properties": {
-                        "mainAxisAlignment": "spaceevenly"
-                      },
-                      "children": [
-                        {
-                          "type": "button",
-                          "id": "clear_bookmarks_button",
-                          "properties": {
-                            "text": "Clear All",
-                            "backgroundColor": "#FF5722",
-                            "textColor": "#FFFFFF",
-                            "height": 40,
-                            "width": 120
-                          },
-                          "action": {
-                            "type": "clear_bookmarks"
-                          }
-                        },
-                        {
-                          "type": "button",
-                          "id": "share_bookmarks_button",
-                          "properties": {
-                            "text": "Share List",
-                            "backgroundColor": "#4CAF50",
-                            "textColor": "#FFFFFF",
-                            "height": 40,
-                            "width": 120
-                          },
-                          "action": {
-                            "type": "share_bookmarks"
-                          }
-                        }
-                      ]
-                    }
-                  ]
+                  "type": "button",
+                  "id": "clear_bookmarks_button",
+                  "properties": {
+                    "text": "Clear All",
+                    "backgroundColor": "#FF5722",
+                    "textColor": "#FFFFFF",
+                    "height": 48,
+                    "borderRadius": 24,
+                    "elevation": 2,
+                    "fontSize": 14,
+                    "fontWeight": "w600"
+                  },
+                  "action": {
+                    "type": "clear_bookmarks"
+                  }
+                },
+                {
+                  "type": "button",
+                  "id": "share_bookmarks_button",
+                  "properties": {
+                    "text": "Share List",
+                    "backgroundColor": "#4CAF50",
+                    "textColor": "#FFFFFF",
+                    "height": 48,
+                    "borderRadius": 24,
+                    "elevation": 2,
+                    "fontSize": 14,
+                    "fontWeight": "w600"
+                  },
+                  "action": {
+                    "type": "share_bookmarks"
+                  }
                 }
               ]
             }
+          ]
+        }
           ]
         }
       ]

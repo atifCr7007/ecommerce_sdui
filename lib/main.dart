@@ -13,6 +13,7 @@ import 'views/search_view.dart';
 import 'views/category_view.dart';
 import 'views/cart_view.dart';
 import 'views/bookmarks_view.dart';
+import 'views/orders_view.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -90,7 +91,7 @@ class _MainAppShellState extends State<MainAppShell> {
   final List<Widget> _pages = [
     const HomeView(),
     const CartView(),
-    const PlaceholderPage(title: 'My Orders'),
+    const OrdersView(),
     const BookmarksView(),
   ];
 
@@ -153,36 +154,120 @@ class _MainAppShellState extends State<MainAppShell> {
     );
   }
 
+  AppBar _buildAppBar(BuildContext context) {
+    switch (_currentIndex) {
+      case 0: // Home
+        return AppBar(
+          backgroundColor: Colors.white,
+          title: const Text(
+            'OneMart',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          centerTitle: true,
+          elevation: 0,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.search, color: Colors.black),
+              onPressed: () {
+                Navigator.pushNamed(context, '/search');
+              },
+            ),
+            IconButton(
+              icon: const Icon(
+                Icons.notifications_outlined,
+                color: Colors.black,
+              ),
+              onPressed: () {
+                // Handle notifications
+              },
+            ),
+          ],
+        );
+      case 1: // Cart
+        return AppBar(
+          backgroundColor: Colors.white,
+          title: const Text(
+            'Cart',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          centerTitle: true,
+          elevation: 0,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.delete_outline, color: Colors.black),
+              onPressed: () {
+                final cartController = Get.find<CartController>();
+                cartController.clearCart();
+              },
+            ),
+          ],
+        );
+      case 2: // Orders
+        return AppBar(
+          backgroundColor: Colors.white,
+          title: const Text(
+            'My Orders',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          centerTitle: true,
+          elevation: 0,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.filter_list, color: Colors.black),
+              onPressed: () {
+                // Handle order filtering
+              },
+            ),
+          ],
+        );
+      case 3: // Bookmarks
+        return AppBar(
+          backgroundColor: Colors.white,
+          title: const Text(
+            'Bookmarks',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          centerTitle: true,
+          elevation: 0,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.share, color: Colors.black),
+              onPressed: () {
+                // Handle sharing bookmarks
+              },
+            ),
+          ],
+        );
+      default:
+        return AppBar(
+          backgroundColor: Colors.white,
+          title: const Text('OneMart'),
+          centerTitle: true,
+          elevation: 0,
+        );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: const Text(
-          'OneMart',
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        centerTitle: true,
-        elevation: 0,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search, color: Colors.black),
-            onPressed: () {
-              Navigator.pushNamed(context, '/search');
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.notifications_outlined, color: Colors.black),
-            onPressed: () {
-              // Handle notifications
-            },
-          ),
-        ],
-      ),
+      appBar: _buildAppBar(context),
       body: IndexedStack(index: _currentIndex, children: _pages),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
