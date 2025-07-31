@@ -44,6 +44,9 @@ class _CategoryTabsWidgetState extends State<CategoryTabsWidget> {
   @override
   void initState() {
     super.initState();
+    debugPrint(
+      '[CategoryTabsWidget] Initializing with ${widget.tabs.length} tabs',
+    );
     selectedTabId = widget.defaultTab.isNotEmpty
         ? widget.defaultTab
         : widget.tabs.first.id;

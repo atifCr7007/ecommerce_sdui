@@ -40,7 +40,9 @@ class JsonUIParser {
   }
 
   static Widget parseComponent(UIComponent component, BuildContext context) {
-    switch (component.type.toLowerCase()) {
+    final componentType = component.type.toLowerCase().trim();
+
+    switch (componentType) {
       case 'column':
         return _buildColumn(component, context);
       case 'row':
@@ -312,7 +314,18 @@ class JsonUIParser {
     UIComponent component,
     BuildContext context,
   ) {
-    return WidgetMapper.buildCategoryTabs(component, context);
+    try {
+      return WidgetMapper.buildCategoryTabs(component, context);
+    } catch (e) {
+      debugPrint('[JsonUIParser] Error building CategoryTabs: $e');
+      return Container(
+        padding: const EdgeInsets.all(8),
+        child: Text(
+          'Error loading CategoryTabs: $e',
+          style: const TextStyle(color: Colors.red),
+        ),
+      );
+    }
   }
 
   static Widget _buildBanner(UIComponent component, BuildContext context) {
@@ -725,7 +738,7 @@ class JsonUIParser {
       case 'baseline':
         return CrossAxisAlignment.baseline;
       default:
-        return CrossAxisAlignment.center;
+        return CrossAxisAlignment.start;
     }
   }
 
@@ -988,39 +1001,52 @@ class JsonUIParser {
     // Add cart badge if showBadge is true and icon is shopping_cart
     if (showBadge && iconName.toLowerCase() == 'shopping_cart') {
       fabChild = Obx(() {
-        final cartController = Get.find<CartController>();
-        final itemCount = cartController.totalQuantity;
+        try {
+          // Check if CartController is registered before accessing it
+          if (!Get.isRegistered<CartController>()) {
+            debugPrint(
+              'CartController not registered yet, showing icon without badge',
+            );
+            return Icon(icon);
+          }
 
-        return Stack(
-          children: [
-            Icon(icon),
-            if (itemCount > 0)
-              Positioned(
-                right: 0,
-                top: 0,
-                child: Container(
-                  padding: const EdgeInsets.all(2),
-                  decoration: BoxDecoration(
-                    color: Colors.red,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  constraints: const BoxConstraints(
-                    minWidth: 16,
-                    minHeight: 16,
-                  ),
-                  child: Text(
-                    itemCount > 99 ? '99+' : itemCount.toString(),
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
+          final cartController = Get.find<CartController>();
+          final itemCount = cartController.totalQuantity;
+
+          return Stack(
+            children: [
+              Icon(icon),
+              if (itemCount > 0)
+                Positioned(
+                  right: 0,
+                  top: 0,
+                  child: Container(
+                    padding: const EdgeInsets.all(2),
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                    textAlign: TextAlign.center,
+                    constraints: const BoxConstraints(
+                      minWidth: 16,
+                      minHeight: 16,
+                    ),
+                    child: Text(
+                      itemCount > 99 ? '99+' : itemCount.toString(),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 ),
-              ),
-          ],
-        );
+            ],
+          );
+        } catch (e) {
+          debugPrint('Error getting cart count for FAB badge: $e');
+          return Icon(icon); // Fallback to icon without badge
+        }
       });
     }
 
@@ -1037,58 +1063,87 @@ class JsonUIParser {
     Map<String, dynamic>? action,
     BuildContext context,
   ) {
-    if (action == null) return;
+    if (action == null) {
+      debugPrint('FAB action is null');
+      return;
+    }
 
-    final actionType = action['action'] as String?;
-    switch (actionType?.toLowerCase()) {
-      case 'navigate':
-        final route = action['route'] as String?;
-        if (route != null) {
-          _navigateToRoute(route, context);
-        }
-        break;
-      case 'callback':
-        // Handle callback actions if needed
-        break;
-      default:
-        break;
+    try {
+      final actionType = action['action'] as String?;
+      debugPrint('FAB action type: $actionType');
+
+      switch (actionType?.toLowerCase()) {
+        case 'navigate':
+          final route = action['route'] as String?;
+          debugPrint('FAB navigate to route: $route');
+          if (route != null) {
+            _navigateToRoute(route, context);
+          } else {
+            debugPrint('FAB route is null');
+          }
+          break;
+        case 'callback':
+          // Handle callback actions if needed
+          debugPrint('FAB callback action');
+          break;
+        default:
+          debugPrint('Unknown FAB action type: $actionType');
+          break;
+      }
+    } catch (e) {
+      debugPrint('Error handling FAB action: $e');
     }
   }
 
   static void _navigateToRoute(String route, BuildContext context) {
-    switch (route.toLowerCase()) {
-      case '/cart':
-        // Navigate directly to cart page
-        Get.toNamed('/cart');
-        break;
-      case '/home':
-        Navigator.of(context).pop();
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          _switchToTab(context, 0);
-        });
-        break;
-      case '/orders':
-        Navigator.of(context).pop();
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          _switchToTab(context, 2);
-        });
-        break;
-      case '/bookmarks':
-        Navigator.of(context).pop();
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          _switchToTab(context, 3);
-        });
-        break;
-      default:
-        // Handle other routes or use Navigator
-        Navigator.of(context).pushNamed(route);
-        break;
+    try {
+      debugPrint('Navigating to route: $route');
+
+      switch (route.toLowerCase()) {
+        case '/cart':
+          // Navigate directly to cart page
+          debugPrint('Navigating to cart page');
+          Get.toNamed('/cart');
+          break;
+        case '/home':
+          debugPrint('Navigating to home');
+          Navigator.of(context).pop();
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            _switchToTab(context, 0);
+          });
+          break;
+        case '/orders':
+          debugPrint('Navigating to orders');
+          Navigator.of(context).pop();
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            _switchToTab(context, 2);
+          });
+          break;
+        case '/bookmarks':
+          debugPrint('Navigating to bookmarks');
+          Navigator.of(context).pop();
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            _switchToTab(context, 3);
+          });
+          break;
+        default:
+          // Handle other routes or use Navigator
+          debugPrint('Using Navigator.pushNamed for route: $route');
+          Navigator.of(context).pushNamed(route);
+          break;
+      }
+    } catch (e) {
+      debugPrint('Error navigating to route $route: $e');
     }
   }
 
   static void _switchToTab(BuildContext context, int tabIndex) {
     // This is a simple approach - we'll use a global key or event system
     // For now, let's use GetX to publish an event
-    Get.find<CartController>().update(); // Trigger update to refresh UI
+    try {
+      Get.find<CartController>().update(); // Trigger update to refresh UI
+    } catch (e) {
+      debugPrint('Error switching tab: $e');
+    }
   }
 }

@@ -1,0 +1,107 @@
+{
+  "screen": {
+    "id": "checkout_screen",
+    "title": "Checkout",
+    "backgroundColor": "#FFFFFF",
+    "components": [
+      {
+        "type": "scroll_view",
+        "id": "checkout_scroll",
+        "properties": {
+          "padding": {
+            "top": 16,
+            "bottom": 100,
+            "left": 16,
+            "right": 16
+          }
+        },
+        "children": [
+          {
+            "type": "column",
+            "id": "checkout_column",
+            "properties": {
+              "crossAxisAlignment": "stretch",
+              "spacing": 24
+            },
+            "children": [
+              {
+                "type": "checkout_delivery_section",
+                "id": "delivery_section",
+                "properties": {
+                  "title": "Delivery Details",
+                  "backgroundColor": "#FFFFFF",
+                  "borderRadius": 12,
+                  "elevation": 2,
+                  "padding": {
+                    "all": 16
+                  }
+                }
+              },
+              {
+                "type": "checkout_payment_section",
+                "id": "payment_section",
+                "properties": {
+                  "title": "Payment Details",
+                  "backgroundColor": "#FFFFFF",
+                  "borderRadius": 12,
+                  "elevation": 2,
+                  "padding": {
+                    "all": 16
+                  }
+                }
+              },
+              {
+                "type": "checkout_coupon_section",
+                "id": "coupon_section",
+                "properties": {
+                  "title": "Coupon Code",
+                  "backgroundColor": "#FFFFFF",
+                  "borderRadius": 12,
+                  "elevation": 2,
+                  "padding": {
+                    "all": 16
+                  }
+                }
+              },
+              {
+                "type": "checkout_order_summary",
+                "id": "order_summary",
+                "properties": {
+                  "title": "Order Summary",
+                  "backgroundColor": "#FFFFFF",
+                  "borderRadius": 12,
+                  "elevation": 2,
+                  "padding": {
+                    "all": 16
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "checkout_bottom_bar",
+        "id": "checkout_bottom_bar",
+        "properties": {
+          "backgroundColor": "#FFFFFF",
+          "elevation": 8,
+          "padding": {
+            "all": 16
+          },
+          "buttonText": "Place Order",
+          "buttonColor": "#8B5CF6",
+          "buttonTextColor": "#FFFFFF"
+        }
+      }
+    ]
+  },
+  "appBar": {
+    "title": "Checkout",
+    "backgroundColor": "#FFFFFF",
+    "titleColor": "#000000",
+    "elevation": 0,
+    "centerTitle": true,
+    "showBackButton": true
+  }
+}

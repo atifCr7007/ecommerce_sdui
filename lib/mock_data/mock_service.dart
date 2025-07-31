@@ -1,7 +1,10 @@
+import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:ecommerce_sdui/models/product.dart';
 import 'package:ecommerce_sdui/models/category.dart' as cat;
+import 'package:ecommerce_sdui/models/checkout.dart';
 import 'package:ecommerce_sdui/services/cart_service.dart';
 
 /// Mock data service that provides realistic data matching Medusa API structure.
@@ -20,6 +23,7 @@ class MockDataService {
   List<Product>? _cachedProducts;
   List<cat.ProductCategory>? _cachedCategories;
   final Map<String, Cart> _carts = {};
+  final Map<String, Order> _orders = {};
 
   /// Loads mock products from JSON file
   Future<List<Product>> getProducts({
@@ -199,11 +203,17 @@ class MockDataService {
         );
       } else {
         // Add new item
-        final unitPrice = product.variants?.first.prices?.first.amount ?? 2000;
+        // Find the selected variant to get color and size
+        final selectedVariant = product.variants?.firstWhere(
+          (variant) => variant.id == variantId,
+          orElse: () => product.variants!.first,
+        );
+
+        final unitPrice = selectedVariant?.prices?.first.amount ?? 2000;
         final total = unitPrice * quantity;
 
         debugPrint(
-          '[MockDataService] Adding new item: ${product.title}, quantity: $quantity, unitPrice: $unitPrice',
+          '[MockDataService] Adding new item: ${product.title}, quantity: $quantity, unitPrice: $unitPrice, color: ${selectedVariant?.color}, size: ${selectedVariant?.size}',
         );
 
         cart.items.add(
@@ -216,6 +226,8 @@ class MockDataService {
             quantity: quantity,
             unitPrice: unitPrice,
             total: total,
+            color: selectedVariant?.color,
+            size: selectedVariant?.size,
           ),
         );
       }
@@ -263,16 +275,129 @@ class MockDataService {
     }
   }
 
-  /// Loads mock products from hardcoded data
+  /// Updates the quantity of an item in the cart
+  Future<CartResponse> updateCartItemQuantity(
+    String cartId,
+    String itemId,
+    int quantity,
+  ) async {
+    try {
+      final cart = _carts[cartId] ?? _createEmptyCart(cartId);
+
+      final itemIndex = cart.items.indexWhere((item) => item.id == itemId);
+      if (itemIndex == -1) {
+        throw Exception('Item not found in cart');
+      }
+
+      if (quantity <= 0) {
+        // Remove item if quantity is 0 or negative
+        return removeCartItem(cartId, itemId);
+      }
+
+      final item = cart.items[itemIndex];
+      final newTotal = item.unitPrice * quantity;
+
+      final updatedItem = CartItem(
+        id: item.id,
+        variantId: item.variantId,
+        title: item.title,
+        description: item.description,
+        thumbnail: item.thumbnail,
+        quantity: quantity,
+        unitPrice: item.unitPrice,
+        total: newTotal,
+        color: item.color,
+        size: item.size,
+      );
+
+      cart.items[itemIndex] = updatedItem;
+
+      // Recalculate totals
+      final subtotal = cart.items.fold(0, (sum, item) => sum + item.total);
+      final updatedCart = Cart(
+        id: cart.id,
+        items: cart.items,
+        subtotal: subtotal,
+        total: subtotal,
+        currencyCode: cart.currencyCode,
+        createdAt: cart.createdAt,
+        updatedAt: DateTime.now(),
+      );
+
+      _carts[cartId] = updatedCart;
+
+      debugPrint(
+        '[MockDataService] Updated item quantity: ${item.title}, new quantity: $quantity',
+      );
+
+      return CartResponse(cart: updatedCart);
+    } catch (e) {
+      debugPrint('Error updating cart item quantity: $e');
+      throw Exception('Failed to update item quantity: $e');
+    }
+  }
+
+  /// Removes an item from the cart
+  Future<CartResponse> removeCartItem(String cartId, String itemId) async {
+    try {
+      final cart = _carts[cartId] ?? _createEmptyCart(cartId);
+
+      final itemIndex = cart.items.indexWhere((item) => item.id == itemId);
+      if (itemIndex == -1) {
+        throw Exception('Item not found in cart');
+      }
+
+      final removedItem = cart.items[itemIndex];
+      cart.items.removeAt(itemIndex);
+
+      // Recalculate totals
+      final subtotal = cart.items.fold(0, (sum, item) => sum + item.total);
+      final updatedCart = Cart(
+        id: cart.id,
+        items: cart.items,
+        subtotal: subtotal,
+        total: subtotal,
+        currencyCode: cart.currencyCode,
+        createdAt: cart.createdAt,
+        updatedAt: DateTime.now(),
+      );
+
+      _carts[cartId] = updatedCart;
+
+      debugPrint(
+        '[MockDataService] Removed item from cart: ${removedItem.title}',
+      );
+
+      return CartResponse(cart: updatedCart);
+    } catch (e) {
+      debugPrint('Error removing cart item: $e');
+      throw Exception('Failed to remove item: $e');
+    }
+  }
+
+  /// Loads mock products from JSON file
   Future<void> _loadMockProducts() async {
     try {
-      // For now, use hardcoded data instead of JSON files
-      // This ensures the app works while we fix the asset loading
-      _cachedProducts = _generateFallbackProducts(20);
-      debugPrint('Loaded ${_cachedProducts!.length} mock products');
+      // Try to load from JSON file first
+      final String jsonString = await rootBundle.loadString(
+        'lib/mock_data/products.json',
+      );
+      final Map<String, dynamic> jsonData = json.decode(jsonString);
+      final List<dynamic> productsJson = jsonData['products'] as List<dynamic>;
+
+      _cachedProducts = productsJson
+          .map(
+            (productJson) =>
+                Product.fromJson(productJson as Map<String, dynamic>),
+          )
+          .toList();
+
+      debugPrint('Loaded ${_cachedProducts!.length} mock products from JSON');
     } catch (e) {
-      debugPrint('Failed to load mock products, generating fallback data: $e');
-      _cachedProducts = _generateFallbackProducts(10);
+      debugPrint(
+        'Failed to load mock products from JSON, generating fallback data: $e',
+      );
+      _cachedProducts = _generateFallbackProducts(20);
     }
   }
 
@@ -391,20 +516,11 @@ class MockDataService {
           url: _getCategoryImageUrl(category, productNumber),
         ),
       ],
-      variants: [
-        ProductVariant(
-          id: '${productId}_variant_1',
-          title: 'Default Variant',
-          prices: [
-            ProductVariantPrice(
-              id: '${productId}_price_1',
-              currencyCode: 'INR',
-              amount:
-                  99900 + (productNumber.abs() % 500000), // ₹999 to ₹5999 range
-            ),
-          ],
-        ),
-      ],
+      variants: _generateVariantsForCategory(
+        productId,
+        category,
+        productNumber,
+      ),
       categories: [
         ProductCategory(
           id: categoryId,
@@ -413,6 +529,131 @@ class MockDataService {
         ),
       ],
     );
+  }
+
+  /// Generates variants based on product category
+  List<ProductVariant> _generateVariantsForCategory(
+    String productId,
+    String category,
+    int productNumber,
+  ) {
+    final basePrice =
+        99900 + (productNumber.abs() % 500000); // ₹999 to ₹5999 range
+
+    switch (category.toLowerCase()) {
+      case 'electronics':
+        // Electronics: Color variants
+        return [
+          ProductVariant(
+            id: '${productId}_variant_black',
+            title: 'Black',
+            color: 'Black',
+            prices: [
+              ProductVariantPrice(
+                id: '${productId}_price_black',
+                currencyCode: 'INR',
+                amount: basePrice,
+              ),
+            ],
+          ),
+          ProductVariant(
+            id: '${productId}_variant_white',
+            title: 'White',
+            color: 'White',
+            prices: [
+              ProductVariantPrice(
+                id: '${productId}_price_white',
+                currencyCode: 'INR',
+                amount: basePrice,
+              ),
+            ],
+          ),
+          ProductVariant(
+            id: '${productId}_variant_silver',
+            title: 'Silver',
+            color: 'Silver',
+            prices: [
+              ProductVariantPrice(
+                id: '${productId}_price_silver',
+                currencyCode: 'INR',
+                amount: basePrice + 20000, // ₹200 more for silver
+              ),
+            ],
+          ),
+        ];
+
+      case 'clothing':
+        // Clothing: Size and color combinations
+        final variants = <ProductVariant>[];
+        final colors = ['Black', 'White', 'Blue', 'Red'];
+        final sizes = ['S', 'M', 'L', 'XL'];
+
+        for (final color in colors) {
+          for (final size in sizes) {
+            variants.add(
+              ProductVariant(
+                id: '${productId}_variant_${color.toLowerCase()}_${size.toLowerCase()}',
+                title: '$size - $color',
+                color: color,
+                size: size,
+                prices: [
+                  ProductVariantPrice(
+                    id: '${productId}_price_${color.toLowerCase()}_${size.toLowerCase()}',
+                    currencyCode: 'INR',
+                    amount: basePrice,
+                  ),
+                ],
+              ),
+            );
+          }
+        }
+        return variants;
+
+      case 'sports':
+        // Sports (shoes): Size and color combinations
+        final variants = <ProductVariant>[];
+        final colors = ['Black', 'White', 'Red', 'Blue'];
+        final sizes = ['7', '8', '9', '10', '11'];
+
+        for (final color in colors) {
+          for (final size in sizes) {
+            variants.add(
+              ProductVariant(
+                id: '${productId}_variant_${color.toLowerCase()}_size$size',
+                title: 'Size $size - $color',
+                color: color,
+                size: size,
+                prices: [
+                  ProductVariantPrice(
+                    id: '${productId}_price_${color.toLowerCase()}_size$size',
+                    currencyCode: 'INR',
+                    amount:
+                        basePrice +
+                        (color == 'Red' ? 5000 : 0), // Red costs ₹50 more
+                  ),
+                ],
+              ),
+            );
+          }
+        }
+        return variants;
+
+      default:
+        // Default: Single variant
+        return [
+          ProductVariant(
+            id: '${productId}_variant_1',
+            title: 'Default Variant',
+            prices: [
+              ProductVariantPrice(
+                id: '${productId}_price_1',
+                currencyCode: 'INR',
+                amount: basePrice,
+              ),
+            ],
+          ),
+        ];
+    }
   }
 
   /// Generates fallback categories
@@ -493,10 +734,78 @@ class MockDataService {
     return 'cart_${DateTime.now().millisecondsSinceEpoch}_${_random.nextInt(1000)}';
   }
 
+  /// Creates a new order
+  Future<OrderResponse> createOrder(Order order) async {
+    try {
+      _orders[order.id] = order;
+      debugPrint('[MockDataService] Order created: ${order.id}');
+      return OrderResponse(order: order, message: 'Order created successfully');
+    } catch (e) {
+      debugPrint('Error creating order: $e');
+      throw Exception('Failed to create order: $e');
+    }
+  }
+
+  /// Gets all orders for a user
+  Future<List<Order>> getOrders() async {
+    try {
+      final orders = _orders.values.toList();
+      // Sort by creation date (newest first)
+      orders.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+      debugPrint('[MockDataService] Retrieved ${orders.length} orders');
+      return orders;
+    } catch (e) {
+      debugPrint('Error getting orders: $e');
+      throw Exception('Failed to get orders: $e');
+    }
+  }
+
+  /// Gets a specific order by ID
+  Future<Order?> getOrder(String orderId) async {
+    try {
+      final order = _orders[orderId];
+      debugPrint('[MockDataService] Retrieved order: $orderId');
+      return order;
+    } catch (e) {
+      debugPrint('Error getting order: $e');
+      throw Exception('Failed to get order: $e');
+    }
+  }
+
+  /// Updates order status
+  Future<OrderResponse> updateOrderStatus(
+    String orderId,
+    OrderStatus status,
+  ) async {
+    try {
+      final order = _orders[orderId];
+      if (order == null) {
+        throw Exception('Order not found');
+      }
+
+      final updatedOrder = order.copyWith(
+        status: status,
+        updatedAt: DateTime.now(),
+      );
+
+      _orders[orderId] = updatedOrder;
+      debugPrint('[MockDataService] Order status updated: $orderId -> $status');
+
+      return OrderResponse(
+        order: updatedOrder,
+        message: 'Order status updated successfully',
+      );
+    } catch (e) {
+      debugPrint('Error updating order status: $e');
+      throw Exception('Failed to update order status: $e');
+    }
+  }
+
   /// Clears all cached data
   void clearCache() {
     _cachedProducts = null;
     _cachedCategories = null;
     _carts.clear();
+    _orders.clear();
   }
 }

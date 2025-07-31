@@ -246,8 +246,12 @@ class CartController extends GetxController {
       error.value = null;
 
       if (AppConfig.useMockData) {
-        // For mock data, we need to implement this in MockDataService
-        await loadCart(); // Reload for now
+        final response = await _mockDataService.updateCartItemQuantity(
+          cartId.value,
+          lineItemId,
+          quantity,
+        );
+        cart.value = response.cart;
       } else {
         final response = await _cartService.updateCartItem(
           cartId.value,
@@ -275,8 +279,11 @@ class CartController extends GetxController {
       error.value = null;
 
       if (AppConfig.useMockData) {
-        // For mock data, we need to implement this in MockDataService
-        await loadCart(); // Reload for now
+        final response = await _mockDataService.removeCartItem(
+          cartId.value,
+          lineItemId,
+        );
+        cart.value = response.cart;
       } else {
         final response = await _cartService.removeFromCart(
           cartId.value,

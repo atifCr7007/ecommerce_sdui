@@ -118,6 +118,8 @@ ProductVariant _$ProductVariantFromJson(Map<String, dynamic> json) =>
       length: (json['length'] as num?)?.toInt(),
       height: (json['height'] as num?)?.toInt(),
       width: (json['width'] as num?)?.toInt(),
+      color: json['color'] as String?,
+      size: json['size'] as String?,
       prices: (json['prices'] as List<dynamic>?)
           ?.map((e) => ProductVariantPrice.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -142,6 +144,8 @@ Map<String, dynamic> _$ProductVariantToJson(ProductVariant instance) =>
       'length': instance.length,
       'height': instance.height,
       'width': instance.width,
+      'color': instance.color,
+      'size': instance.size,
       'prices': instance.prices,
     };
 

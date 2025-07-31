@@ -413,12 +413,157 @@
       "variants": [
         {
           "id": "var_sneakers_001",
-          "title": "Size 10 - White",
+          "title": "Size 7 - White",
+          "color": "White",
+          "size": "7",
           "prices": [
             {
               "id": "price_sneakers_001",
-              "currency_code": "USD",
-              "amount": 7999
+              "currency_code": "INR",
+              "amount": 799900
+            }
+          ]
+        },
+        {
+          "id": "var_sneakers_002",
+          "title": "Size 8 - White",
+          "color": "White",
+          "size": "8",
+          "prices": [
+            {
+              "id": "price_sneakers_002",
+              "currency_code": "INR",
+              "amount": 799900
+            }
+          ]
+        },
+        {
+          "id": "var_sneakers_003",
+          "title": "Size 9 - White",
+          "color": "White",
+          "size": "9",
+          "prices": [
+            {
+              "id": "price_sneakers_003",
+              "currency_code": "INR",
+              "amount": 799900
+            }
+          ]
+        },
+        {
+          "id": "var_sneakers_004",
+          "title": "Size 10 - White",
+          "color": "White",
+          "size": "10",
+          "prices": [
+            {
+              "id": "price_sneakers_004",
+              "currency_code": "INR",
+              "amount": 799900
+            }
+          ]
+        },
+        {
+          "id": "var_sneakers_005",
+          "title": "Size 7 - Black",
+          "color": "Black",
+          "size": "7",
+          "prices": [
+            {
+              "id": "price_sneakers_005",
+              "currency_code": "INR",
+              "amount": 799900
+            }
+          ]
+        },
+        {
+          "id": "var_sneakers_006",
+          "title": "Size 8 - Black",
+          "color": "Black",
+          "size": "8",
+          "prices": [
+            {
+              "id": "price_sneakers_006",
+              "currency_code": "INR",
+              "amount": 799900
+            }
+          ]
+        },
+        {
+          "id": "var_sneakers_007",
+          "title": "Size 9 - Black",
+          "color": "Black",
+          "size": "9",
+          "prices": [
+            {
+              "id": "price_sneakers_007",
+              "currency_code": "INR",
+              "amount": 799900
+            }
+          ]
+        },
+        {
+          "id": "var_sneakers_008",
+          "title": "Size 10 - Black",
+          "color": "Black",
+          "size": "10",
+          "prices": [
+            {
+              "id": "price_sneakers_008",
+              "currency_code": "INR",
+              "amount": 799900
+            }
+          ]
+        },
+        {
+          "id": "var_sneakers_009",
+          "title": "Size 7 - Red",
+          "color": "Red",
+          "size": "7",
+          "prices": [
+            {
+              "id": "price_sneakers_009",
+              "currency_code": "INR",
+              "amount": 849900
+            }
+          ]
+        },
+        {
+          "id": "var_sneakers_010",
+          "title": "Size 8 - Red",
+          "color": "Red",
+          "size": "8",
+          "prices": [
+            {
+              "id": "price_sneakers_010",
+              "currency_code": "INR",
+              "amount": 849900
+            }
+          ]
+        },
+        {
+          "id": "var_sneakers_011",
+          "title": "Size 9 - Red",
+          "color": "Red",
+          "size": "9",
+          "prices": [
+            {
+              "id": "price_sneakers_011",
+              "currency_code": "INR",
+              "amount": 849900
+            }
+          ]
+        },
+        {
+          "id": "var_sneakers_012",
+          "title": "Size 10 - Red",
+          "color": "Red",
+          "size": "10",
+          "prices": [
+            {
+              "id": "price_sneakers_012",
+              "currency_code": "INR",
+              "amount": 849900
             }
           ]
         }

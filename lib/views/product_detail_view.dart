@@ -247,6 +247,9 @@ class ProductDetailJsonParser {
         return _buildQuantityButton(component, context, controller, true);
       case 'favorite_button':
         return _buildFavoriteButton(component, context, controller);
+      case 'product_variants':
+      case 'variant_selector':
+        return _buildProductVariants(component, context, controller);
       default:
         // For components with children, parse them recursively
         if (component.children != null && component.children!.isNotEmpty) {
@@ -475,7 +478,9 @@ class ProductDetailJsonParser {
         width: (component.properties['width'] as num?)?.toDouble() ?? 48,
         height: (component.properties['height'] as num?)?.toDouble() ?? 48,
         child: OutlinedButton(
-          onPressed: () => controller.toggleFavorite(),
+          onPressed: controller.product.value != null
+              ? () => controller.toggleFavorite()
+              : null, // Disable button if product is not loaded
           style: OutlinedButton.styleFrom(
             backgroundColor: _parseColor(
               component.properties['backgroundColor'],
@@ -641,5 +646,151 @@ class ProductDetailJsonParser {
         Navigator.of(context).pushNamed(route);
         break;
     }
+  }
+
+  static Widget _buildProductVariants(
+    UIComponent component,
+    BuildContext context,
+    ProductDetailController controller,
+  ) {
+    final properties = component.properties;
+    final title = properties['title'] as String? ?? 'Select Options';
+    final showColors = properties['showColors'] as bool? ?? true;
+    final showSizes = properties['showSizes'] as bool? ?? true;
+
+    return Obx(() {
+      final product = controller.product.value;
+
+      if (product == null ||
+          product.variants == null ||
+          product.variants!.isEmpty) {
+        return const SizedBox.shrink();
+      }
+
+      // Extract unique colors and sizes from variants
+      final colors = <String>{};
+      final sizes = <String>{};
+
+      for (final variant in product.variants!) {
+        if (variant.color != null && variant.color!.isNotEmpty) {
+          colors.add(variant.color!);
+        }
+        if (variant.size != null && variant.size!.isNotEmpty) {
+          sizes.add(variant.size!);
+        }
+      }
+
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: Color(0xFF212121),
+            ),
+          ),
+          const SizedBox(height: 12),
+
+          // Color selection
+          if (showColors && colors.isNotEmpty) ...[
+            const Text(
+              'Color',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: Color(0xFF757575),
+              ),
+            ),
+            const SizedBox(height: 8),
+            Wrap(
+              spacing: 8,
+              children: colors.map((color) {
+                final isSelected = controller.selectedColor.value == color;
+                return GestureDetector(
+                  onTap: () => controller.selectColor(color),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
+                    decoration: BoxDecoration(
+                      color: isSelected
+                          ? const Color(0xFF9C27B0)
+                          : Colors.grey[200],
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: isSelected
+                            ? const Color(0xFF9C27B0)
+                            : Colors.grey[300]!,
+                      ),
+                    ),
+                    child: Text(
+                      color,
+                      style: TextStyle(
+                        color: isSelected ? Colors.white : Colors.black87,
+                        fontWeight: isSelected
+                            ? FontWeight.w600
+                            : FontWeight.normal,
+                      ),
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+            const SizedBox(height: 16),
+          ],
+
+          // Size selection
+          if (showSizes && sizes.isNotEmpty) ...[
+            const Text(
+              'Size',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: Color(0xFF757575),
+              ),
+            ),
+            const SizedBox(height: 8),
+            Wrap(
+              spacing: 8,
+              children: sizes.map((size) {
+                final isSelected = controller.selectedSize.value == size;
+                return GestureDetector(
+                  onTap: () => controller.selectSize(size),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
+                    decoration: BoxDecoration(
+                      color: isSelected
+                          ? const Color(0xFF9C27B0)
+                          : Colors.grey[200],
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: isSelected
+                            ? const Color(0xFF9C27B0)
+                            : Colors.grey[300]!,
+                      ),
+                    ),
+                    child: Text(
+                      size,
+                      style: TextStyle(
+                        color: isSelected ? Colors.white : Colors.black87,
+                        fontWeight: isSelected
+                            ? FontWeight.w600
+                            : FontWeight.normal,
+                      ),
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+          ],
+        ],
+      );
+    });
   }
 }

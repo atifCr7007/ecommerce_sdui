@@ -108,18 +108,27 @@ class ProductDetailController extends GetxController {
   // Favorite management
   Future<void> toggleFavorite() async {
     final currentProduct = product.value;
-    if (currentProduct == null) return;
+    if (currentProduct == null) {
+      debugPrint('Cannot toggle favorite: product is null');
+      return;
+    }
 
     try {
+      // Check if FavoritesController is registered
+      if (!Get.isRegistered<FavoritesController>()) {
+        debugPrint('FavoritesController not registered');
+        return;
+      }
+
       final favoritesController = Get.find<FavoritesController>();
       final newStatus = await favoritesController.toggleFavorite(
         currentProduct,
       );
       isFavorite.value = newStatus;
+      debugPrint('Favorite status updated to: $newStatus');
     } catch (e) {
       debugPrint('Error toggling favorite: $e');
-      // Revert the UI state if there was an error
-      isFavorite.value = !isFavorite.value;
+      // Don't revert the UI state, just log the error
     }
   }
 
@@ -333,17 +342,40 @@ Shop now: $productUrl
   // Initialize variant selection when product is loaded
   void _initializeVariantSelection() {
     final currentProduct = product.value;
+    debugPrint(
+      '[ProductDetailController] Initializing variant selection for product: ${currentProduct?.id}',
+    );
+
     if (currentProduct?.variants == null || currentProduct!.variants!.isEmpty) {
+      debugPrint('[ProductDetailController] No variants found for product');
       return;
+    }
+
+    debugPrint(
+      '[ProductDetailController] Found ${currentProduct.variants!.length} variants',
+    );
+
+    // Debug: Print all variants
+    for (int i = 0; i < currentProduct.variants!.length; i++) {
+      final variant = currentProduct.variants![i];
+      debugPrint(
+        '[ProductDetailController] Variant $i: ${variant.title}, Color: ${variant.color}, Size: ${variant.size}',
+      );
     }
 
     // Set default selections to first available options
     final firstVariant = currentProduct.variants!.first;
     if (firstVariant.color != null && selectedColor.value.isEmpty) {
       selectedColor.value = firstVariant.color!;
+      debugPrint(
+        '[ProductDetailController] Set default color: ${firstVariant.color}',
+      );
     }
     if (firstVariant.size != null && selectedSize.value.isEmpty) {
       selectedSize.value = firstVariant.size!;
+      debugPrint(
+        '[ProductDetailController] Set default size: ${firstVariant.size}',
+      );
     }
 
     _updateSelectedVariant();

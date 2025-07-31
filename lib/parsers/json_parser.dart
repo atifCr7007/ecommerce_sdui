@@ -28,6 +28,8 @@ class JsonUIParser {
         return _buildCarousel(component, context);
       case 'tabbar':
         return _buildTabBar(component, context);
+      case 'categorytabs':
+        return _buildCategoryTabs(component, context);
       case 'productlist':
         return _buildProductList(component, context);
       case 'banner':
@@ -170,6 +172,13 @@ class JsonUIParser {
 
   static Widget _buildTabBar(UIComponent component, BuildContext context) {
     return WidgetMapper.buildTabBar(component, context);
+  }
+
+  static Widget _buildCategoryTabs(
+    UIComponent component,
+    BuildContext context,
+  ) {
+    return WidgetMapper.buildCategoryTabs(component, context);
   }
 
   static Widget _buildProductList(UIComponent component, BuildContext context) {

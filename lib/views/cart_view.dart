@@ -297,6 +297,57 @@ class _CartViewState extends State<CartView> {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ],
+                  // Color and Size information
+                  if (item.color != null || item.size != null) ...[
+                    const SizedBox(height: 6),
+                    Row(
+                      children: [
+                        if (item.color != null) ...[
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 4,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.grey[100],
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: Colors.grey[300]!),
+                            ),
+                            child: Text(
+                              'Color: ${item.color}',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey[700],
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                          if (item.size != null) const SizedBox(width: 8),
+                        ],
+                        if (item.size != null) ...[
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 4,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.grey[100],
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: Colors.grey[300]!),
+                            ),
+                            child: Text(
+                              'Size: ${item.size}',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey[700],
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ],
                   const SizedBox(height: 8),
                   Text(
                     item.formattedUnitPrice,
@@ -521,176 +572,7 @@ class _CartViewState extends State<CartView> {
       );
     }
 
-    // Show customer information dialog
-    _showCustomerInfoDialog(cart);
-  }
-
-  void _showCustomerInfoDialog(Cart cart) {
-    final nameController = TextEditingController();
-    final emailController = TextEditingController();
-    final phoneController = TextEditingController();
-    final formKey = GlobalKey<FormState>();
-
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => AlertDialog(
-        title: const Text(
-          'Customer Information',
-          style: TextStyle(fontWeight: FontWeight.w600),
-        ),
-        content: Form(
-          key: formKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Order summary
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Colors.blue.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Items: ${cart.items.length}'),
-                        Text(
-                          cart.formattedTotal,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.blue,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 16),
-
-              // Customer name
-              TextFormField(
-                controller: nameController,
-                decoration: const InputDecoration(
-                  labelText: 'Full Name *',
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.person),
-                ),
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return 'Please enter your full name';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 12),
-
-              // Customer email
-              TextFormField(
-                controller: emailController,
-                keyboardType: TextInputType.emailAddress,
-                decoration: const InputDecoration(
-                  labelText: 'Email Address *',
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.email),
-                ),
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return 'Please enter your email address';
-                  }
-                  if (!GetUtils.isEmail(value.trim())) {
-                    return 'Please enter a valid email address';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 12),
-
-              // Customer phone
-              TextFormField(
-                controller: phoneController,
-                keyboardType: TextInputType.phone,
-                decoration: const InputDecoration(
-                  labelText: 'Phone Number *',
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.phone),
-                  hintText: '+91 XXXXXXXXXX',
-                ),
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return 'Please enter your phone number';
-                  }
-                  if (value.trim().length < 10) {
-                    return 'Please enter a valid phone number';
-                  }
-                  return null;
-                },
-              ),
-            ],
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel'),
-          ),
-          Obx(
-            () => ElevatedButton(
-              onPressed: _cartController.isProcessingPayment.value
-                  ? null
-                  : () {
-                      if (formKey.currentState!.validate()) {
-                        Navigator.of(context).pop();
-                        _processPayment(
-                          cart: cart,
-                          customerName: nameController.text.trim(),
-                          customerEmail: emailController.text.trim(),
-                          customerPhone: phoneController.text.trim(),
-                        );
-                      }
-                    },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
-                foregroundColor: Colors.white,
-              ),
-              child: _cartController.isProcessingPayment.value
-                  ? const SizedBox(
-                      width: 16,
-                      height: 16,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                      ),
-                    )
-                  : const Text('Proceed to Payment'),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _processPayment({
-    required Cart cart,
-    required String customerName,
-    required String customerEmail,
-    required String customerPhone,
-  }) async {
-    if (kDebugMode) {
-      debugPrint('[CartView] Processing payment for $customerName');
-    }
-
-    final success = await _cartController.processPayment(
-      customerName: customerName,
-      customerEmail: customerEmail,
-      customerPhone: customerPhone,
-    );
-
-    if (kDebugMode) {
-      debugPrint('[CartView] Payment result: $success');
-    }
+    // Navigate to checkout page
+    Get.toNamed('/checkout');
   }
 }

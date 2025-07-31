@@ -7,11 +7,13 @@ import 'controllers/category_controller.dart';
 import 'controllers/cart_controller.dart';
 import 'controllers/favorites_controller.dart';
 import 'utils/theme_manager.dart';
+import 'controllers/orders_controller.dart';
 import 'views/home_view.dart';
 import 'views/product_detail_view.dart';
 import 'views/search_view.dart';
 
 import 'views/cart_view.dart';
+import 'views/checkout_view.dart';
 import 'views/bookmarks_view.dart';
 import 'views/orders_view.dart';
 
@@ -36,6 +38,7 @@ class OneMartApp extends StatelessWidget {
     Get.put(ProductDetailController());
     Get.put(ProductSearchController());
     Get.put(CategoryController());
+    Get.put(OrdersController());
 
     return GetMaterialApp(
       title: 'OneMart - Server Driven UI',
@@ -53,6 +56,8 @@ class OneMartApp extends StatelessWidget {
           name: '/search',
           page: () => SearchView(initialQuery: Get.parameters['query']),
         ),
+        GetPage(name: '/cart', page: () => const CartView()),
+        GetPage(name: '/checkout', page: () => const CheckoutView()),
         GetPage(
           name: '/flash-sale',
           page: () => const PlaceholderPage(title: 'Flash Sale'),
@@ -200,15 +205,6 @@ class _MainAppShellState extends State<MainAppShell> {
           ),
           centerTitle: true,
           elevation: 0,
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.delete_outline, color: Colors.black),
-              onPressed: () {
-                final cartController = Get.find<CartController>();
-                cartController.clearCart();
-              },
-            ),
-          ],
         );
       case 2: // Orders
         return AppBar(
