@@ -9,7 +9,9 @@ import '../parsers/json_parser.dart';
 import '../utils/debug_logger.dart';
 
 class HomeView extends StatefulWidget {
-  const HomeView({super.key});
+  final String? shopId;
+
+  const HomeView({super.key, this.shopId});
 
   @override
   State<HomeView> createState() => _HomeViewState();
@@ -19,10 +21,16 @@ class _HomeViewState extends State<HomeView> {
   UIScreen? _homeScreen;
   bool _isLoading = true;
   String? _error;
+  String? _selectedShopId;
 
   @override
   void initState() {
     super.initState();
+    // Get shop ID from widget parameter or route parameters
+    _selectedShopId = widget.shopId ?? Get.parameters['shopId'];
+    if (_selectedShopId != null) {
+      DebugLogger.jsonParsing('HomeView initialized with shop ID: $_selectedShopId');
+    }
     _loadHomeScreen();
   }
 

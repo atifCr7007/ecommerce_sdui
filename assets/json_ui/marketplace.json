@@ -1,13 +1,16 @@
 {
   "screen": {
-    "id": "marketplace_screen",
+    "screenId": "marketplace_screen",
     "title": "Marketplace",
-    "backgroundColor": "#FFFFFF",
+    "theme": {
+      "backgroundColor": "#FFFFFF"
+    },
     "components": [
       {
         "type": "scroll_view",
         "id": "marketplace_scroll",
         "properties": {
+          "scrollDirection": "vertical",
           "padding": {
             "top": 16,
             "bottom": 16,
@@ -21,6 +24,7 @@
             "id": "marketplace_column",
             "properties": {
               "crossAxisAlignment": "stretch",
+              "mainAxisSize": "min",
               "spacing": 24
             },
             "children": [
@@ -94,26 +98,6 @@
             ]
           }
         ]
-      }
-    ]
-  },
-  "appBar": {
-    "title": "Marketplace",
-    "backgroundColor": "#FFFFFF",
-    "titleColor": "#000000",
-    "elevation": 0,
-    "centerTitle": true,
-    "showBackButton": false,
-    "actions": [
-      {
-        "type": "icon_button",
-        "icon": "search",
-        "action": "search_shops"
-      },
-      {
-        "type": "icon_button", 
-        "icon": "filter_list",
-        "action": "show_filters"
       }
     ]
   }

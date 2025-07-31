@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ecommerce_sdui/models/shop.dart';
-import 'package:ecommerce_sdui/models/product.dart';
 import 'package:ecommerce_sdui/mock_data/mock_service.dart';
 import 'package:ecommerce_sdui/config/app_config.dart';
 
@@ -137,10 +136,11 @@ class MarketplaceController extends GetxController {
     await loadMarketplace();
   }
 
-  /// Navigate to shop
+  /// Navigate to shop - redirects to home view with shop context
   void navigateToShop(String shopId) {
-    debugPrint('[MarketplaceController] Navigating to shop: $shopId');
-    Get.toNamed('/shop/$shopId');
+    debugPrint('[MarketplaceController] Navigating to home view with shop: $shopId');
+    // Navigate to home view and pass the shop ID as a parameter
+    Get.toNamed('/home', parameters: {'shopId': shopId});
   }
 
   /// Get shops by category

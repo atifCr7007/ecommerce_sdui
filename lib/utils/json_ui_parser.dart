@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../models/ui_models.dart';
+import '../models/shop.dart';
 import '../utils/widget_mapper.dart';
 import '../widgets/orders_list_widget.dart';
 import '../widgets/order_statistics_widget.dart';
 import '../controllers/cart_controller.dart';
 import '../controllers/product_detail_controller.dart';
+import '../controllers/marketplace_controller.dart';
 
 class JsonUIParser {
   static Widget parseScreen(UIScreen screen, BuildContext context) {
@@ -80,6 +82,7 @@ class JsonUIParser {
       case 'divider':
         return _buildDivider(component, context);
       case 'scrollview':
+      case 'scroll_view':
         return _buildScrollView(component, context);
       case 'expanded':
         return _buildExpanded(component, context);
@@ -91,6 +94,16 @@ class JsonUIParser {
         return _buildCenter(component, context);
       case 'sizedbox':
         return _buildSizedBox(component, context);
+      case 'marketplace_header':
+        return _buildMarketplaceHeader(component, context);
+      case 'marketplace_search':
+        return _buildMarketplaceSearch(component, context);
+      case 'marketplace_categories':
+        return _buildMarketplaceCategories(component, context);
+      case 'marketplace_featured_shops':
+        return _buildMarketplaceFeaturedShops(component, context);
+      case 'marketplace_all_shops':
+        return _buildMarketplaceAllShops(component, context);
       default:
         return Container(
           padding: const EdgeInsets.all(8),
@@ -116,6 +129,9 @@ class JsonUIParser {
       crossAxisAlignment: _getCrossAxisAlignment(
         component.properties['crossAxisAlignment'] as String?,
       ),
+      mainAxisSize: _getMainAxisSize(
+        component.properties['mainAxisSize'] as String?,
+      ),
       children: children,
     );
   }
@@ -133,6 +149,9 @@ class JsonUIParser {
       ),
       crossAxisAlignment: _getCrossAxisAlignment(
         component.properties['crossAxisAlignment'] as String?,
+      ),
+      mainAxisSize: _getMainAxisSize(
+        component.properties['mainAxisSize'] as String?,
       ),
       children: children,
     );
@@ -368,13 +387,70 @@ class JsonUIParser {
   }
 
   static Widget _buildScrollView(UIComponent component, BuildContext context) {
+    final properties = component.properties;
     final children =
         component.children
             ?.map((child) => parseComponent(child, context))
             .toList() ??
         [];
 
-    return SingleChildScrollView(child: Column(children: children));
+    // Parse padding from properties
+    EdgeInsets? padding;
+    if (properties['padding'] != null) {
+      final paddingMap = properties['padding'] as Map<String, dynamic>;
+      if (paddingMap.containsKey('all')) {
+        padding = EdgeInsets.all(_parseDouble(paddingMap['all']) ?? 0.0);
+      } else if (paddingMap.containsKey('horizontal') || paddingMap.containsKey('vertical')) {
+        padding = EdgeInsets.symmetric(
+          horizontal: _parseDouble(paddingMap['horizontal']) ?? 0.0,
+          vertical: _parseDouble(paddingMap['vertical']) ?? 0.0,
+        );
+      } else {
+        padding = EdgeInsets.only(
+          top: _parseDouble(paddingMap['top']) ?? 0.0,
+          bottom: _parseDouble(paddingMap['bottom']) ?? 0.0,
+          left: _parseDouble(paddingMap['left']) ?? 0.0,
+          right: _parseDouble(paddingMap['right']) ?? 0.0,
+        );
+      }
+    }
+
+    // Parse scroll direction
+    final scrollDirection = properties['scrollDirection'] == 'horizontal'
+        ? Axis.horizontal
+        : Axis.vertical;
+
+    Widget scrollContent;
+    if (children.length == 1) {
+      // If there's only one child, use it directly
+      scrollContent = children.first;
+    } else {
+      // If there are multiple children, wrap them in a Column or Row
+      if (scrollDirection == Axis.horizontal) {
+        scrollContent = Row(
+          mainAxisSize: MainAxisSize.min,
+          children: children,
+        );
+      } else {
+        scrollContent = Column(
+          mainAxisSize: MainAxisSize.min,
+          children: children,
+        );
+      }
+    }
+
+    // Apply padding if specified
+    if (padding != null) {
+      scrollContent = Padding(
+        padding: padding,
+        child: scrollContent,
+      );
+    }
+
+    return SingleChildScrollView(
+      scrollDirection: scrollDirection,
+      child: scrollContent,
+    );
   }
 
   static Widget _buildExpanded(UIComponent component, BuildContext context) {
@@ -739,6 +815,17 @@ class JsonUIParser {
         return CrossAxisAlignment.baseline;
       default:
         return CrossAxisAlignment.start;
+    }
+  }
+
+  static MainAxisSize _getMainAxisSize(String? size) {
+    switch (size?.toLowerCase()) {
+      case 'min':
+        return MainAxisSize.min;
+      case 'max':
+        return MainAxisSize.max;
+      default:
+        return MainAxisSize.max;
     }
   }
 
@@ -1145,5 +1232,474 @@ class JsonUIParser {
     } catch (e) {
       debugPrint('Error switching tab: $e');
     }
+  }
+
+  // Marketplace-specific component builders
+  static Widget _buildMarketplaceHeader(UIComponent component, BuildContext context) {
+    final properties = component.properties;
+    final title = properties['title'] as String? ?? 'Marketplace';
+    final subtitle = properties['subtitle'] as String? ?? '';
+    final backgroundColor = properties['backgroundColor'] as String? ?? '#F8F9FA';
+    final borderRadius = (properties['borderRadius'] as num?)?.toDouble() ?? 12.0;
+    final padding = properties['padding'] as Map<String, dynamic>? ?? {};
+
+    return Container(
+      padding: _parsePadding(padding),
+      decoration: BoxDecoration(
+        color: _parseColor(backgroundColor),
+        borderRadius: BorderRadius.circular(borderRadius),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          if (subtitle.isNotEmpty) ...[
+            const SizedBox(height: 8),
+            Text(
+              subtitle,
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.grey[600],
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  static Widget _buildMarketplaceSearch(UIComponent component, BuildContext context) {
+    final properties = component.properties;
+    final placeholder = properties['placeholder'] as String? ?? 'Search...';
+    final backgroundColor = properties['backgroundColor'] as String? ?? '#FFFFFF';
+    final borderRadius = (properties['borderRadius'] as num?)?.toDouble() ?? 25.0;
+    final elevation = (properties['elevation'] as num?)?.toDouble() ?? 2.0;
+    final padding = properties['padding'] as Map<String, dynamic>? ?? {};
+
+    return Container(
+      padding: _parsePadding(padding),
+      decoration: BoxDecoration(
+        color: _parseColor(backgroundColor),
+        borderRadius: BorderRadius.circular(borderRadius),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.1),
+            blurRadius: elevation,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: TextField(
+        onChanged: (value) {
+          try {
+            final controller = Get.find<MarketplaceController>();
+            controller.searchShops(value);
+          } catch (e) {
+            debugPrint('Error searching shops: $e');
+          }
+        },
+        decoration: InputDecoration(
+          hintText: placeholder,
+          prefixIcon: const Icon(Icons.search),
+          border: InputBorder.none,
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        ),
+      ),
+    );
+  }
+
+  static Widget _buildMarketplaceCategories(UIComponent component, BuildContext context) {
+    final properties = component.properties;
+    final title = properties['title'] as String? ?? 'Categories';
+    final showAll = properties['showAll'] as bool? ?? true;
+    final scrollDirection = properties['scrollDirection'] as String? ?? 'horizontal';
+    final itemSpacing = (properties['itemSpacing'] as num?)?.toDouble() ?? 12.0;
+    final padding = properties['padding'] as Map<String, dynamic>? ?? {};
+
+    return GetBuilder<MarketplaceController>(
+      builder: (controller) {
+        final categories = ShopCategory.values;
+
+        return Padding(
+          padding: _parsePadding(padding) ?? EdgeInsets.zero,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+              ),
+              const SizedBox(height: 12),
+              SizedBox(
+                height: 100,
+                child: ListView.builder(
+                  scrollDirection: scrollDirection == 'horizontal' ? Axis.horizontal : Axis.vertical,
+                  itemCount: categories.length + (showAll ? 1 : 0),
+                  itemBuilder: (context, index) {
+                    if (showAll && index == 0) {
+                      return _buildCategoryChip(
+                        'All Categories',
+                        '🏪',
+                        controller.selectedCategory.value == null,
+                        () => controller.filterByCategory(null),
+                        itemSpacing,
+                      );
+                    }
+
+                    final categoryIndex = showAll ? index - 1 : index;
+                    final category = categories[categoryIndex];
+                    return _buildCategoryChip(
+                      category.displayName,
+                      category.icon,
+                      controller.selectedCategory.value == category,
+                      () => controller.filterByCategory(category),
+                      itemSpacing,
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  static Widget _buildCategoryChip(
+    String label,
+    String icon,
+    bool isSelected,
+    VoidCallback onTap,
+    double spacing,
+  ) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: EdgeInsets.only(right: spacing),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: BoxDecoration(
+          color: isSelected ? Colors.blue : Colors.grey[200],
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              icon,
+              style: const TextStyle(fontSize: 24),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+                color: isSelected ? Colors.white : Colors.black87,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  static Widget _buildMarketplaceFeaturedShops(UIComponent component, BuildContext context) {
+    final properties = component.properties;
+    final title = properties['title'] as String? ?? 'Featured Shops';
+    final subtitle = properties['subtitle'] as String? ?? '';
+    final limit = (properties['limit'] as num?)?.toInt() ?? 5;
+    final scrollDirection = properties['scrollDirection'] as String? ?? 'horizontal';
+    final itemSpacing = (properties['itemSpacing'] as num?)?.toDouble() ?? 16.0;
+    final showRating = properties['showRating'] as bool? ?? true;
+    final showVerified = properties['showVerified'] as bool? ?? true;
+
+    return GetBuilder<MarketplaceController>(
+      builder: (controller) {
+        final featuredShops = controller.getFeaturedShops().take(limit).toList();
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                    ),
+                    if (subtitle.isNotEmpty) ...[
+                      const SizedBox(height: 4),
+                      Text(
+                        subtitle,
+                        style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                      ),
+                    ],
+                  ],
+                ),
+                TextButton(
+                  onPressed: () {
+                    // TODO: Navigate to all featured shops
+                  },
+                  child: const Text('See All'),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            SizedBox(
+              height: 200,
+              child: ListView.builder(
+                scrollDirection: scrollDirection == 'horizontal' ? Axis.horizontal : Axis.vertical,
+                itemCount: featuredShops.length,
+                itemBuilder: (context, index) {
+                  final shop = featuredShops[index];
+                  return _buildShopCard(
+                    shop,
+                    controller,
+                    isFeatured: true,
+                    spacing: itemSpacing,
+                    showRating: showRating,
+                    showVerified: showVerified,
+                  );
+                },
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  static Widget _buildMarketplaceAllShops(UIComponent component, BuildContext context) {
+    final properties = component.properties;
+    final title = properties['title'] as String? ?? 'All Shops';
+    final subtitle = properties['subtitle'] as String? ?? '';
+    final layout = properties['layout'] as String? ?? 'grid';
+    final columns = (properties['columns'] as num?)?.toInt() ?? 2;
+    final itemSpacing = (properties['itemSpacing'] as num?)?.toDouble() ?? 16.0;
+    final showRating = properties['showRating'] as bool? ?? true;
+    final showVerified = properties['showVerified'] as bool? ?? true;
+    final showCategory = properties['showCategory'] as bool? ?? true;
+
+    return GetBuilder<MarketplaceController>(
+      builder: (controller) {
+        final filteredShops = controller.filteredShops;
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '$title (${filteredShops.length})',
+                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                ),
+                if (subtitle.isNotEmpty) ...[
+                  const SizedBox(height: 4),
+                  Text(
+                    subtitle,
+                    style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                  ),
+                ],
+              ],
+            ),
+            const SizedBox(height: 12),
+            if (layout == 'grid')
+              GridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: columns,
+                  crossAxisSpacing: itemSpacing,
+                  mainAxisSpacing: itemSpacing,
+                  childAspectRatio: 0.8,
+                ),
+                itemCount: filteredShops.length,
+                itemBuilder: (context, index) {
+                  final shop = filteredShops[index];
+                  return _buildShopCard(
+                    shop,
+                    controller,
+                    isFeatured: false,
+                    spacing: 0,
+                    showRating: showRating,
+                    showVerified: showVerified,
+                    showCategory: showCategory,
+                  );
+                },
+              )
+            else
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: filteredShops.length,
+                itemBuilder: (context, index) {
+                  final shop = filteredShops[index];
+                  return Padding(
+                    padding: EdgeInsets.only(bottom: itemSpacing),
+                    child: _buildShopCard(
+                      shop,
+                      controller,
+                      isFeatured: false,
+                      spacing: 0,
+                      showRating: showRating,
+                      showVerified: showVerified,
+                      showCategory: showCategory,
+                    ),
+                  );
+                },
+              ),
+          ],
+        );
+      },
+    );
+  }
+
+  static Widget _buildShopCard(
+    Shop shop,
+    MarketplaceController controller, {
+    bool isFeatured = false,
+    double spacing = 16.0,
+    bool showRating = true,
+    bool showVerified = true,
+    bool showCategory = false,
+  }) {
+    return GestureDetector(
+      onTap: () => controller.navigateToShop(shop.id),
+      child: Container(
+        margin: EdgeInsets.only(right: isFeatured ? spacing : 0),
+        width: isFeatured ? 160 : null,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.1),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Shop logo/image
+            Container(
+              height: isFeatured ? 80 : 120,
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+              ),
+              child: Stack(
+                children: [
+                  Center(
+                    child: shop.logo.isNotEmpty
+                        ? Image.network(
+                            shop.logo,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) =>
+                                const Icon(Icons.store, size: 40, color: Colors.grey),
+                          )
+                        : const Icon(Icons.store, size: 40, color: Colors.grey),
+                  ),
+                  if (showVerified && shop.isVerified)
+                    Positioned(
+                      top: 8,
+                      right: 8,
+                      child: Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: const BoxDecoration(
+                          color: Colors.blue,
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.verified,
+                          color: Colors.white,
+                          size: 16,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Shop name
+                    Text(
+                      shop.name,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 4),
+
+                    // Category
+                    if (showCategory)
+                      Text(
+                        controller.getCategoryDisplayName(shop.category),
+                        style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                      ),
+                    if (showCategory) const SizedBox(height: 8),
+
+                    // Rating
+                    if (showRating)
+                      Row(
+                        children: [
+                          const Icon(Icons.star, color: Colors.amber, size: 16),
+                          const SizedBox(width: 4),
+                          Text(
+                            shop.rating.toStringAsFixed(1),
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            '(${shop.reviewCount})',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey[600],
+                            ),
+                          ),
+                        ],
+                      ),
+
+                    if (!isFeatured && !showCategory) ...[
+                      const SizedBox(height: 8),
+                      // Description
+                      Text(
+                        shop.description,
+                        style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

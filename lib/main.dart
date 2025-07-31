@@ -50,7 +50,10 @@ class OneMartApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: const MainAppShell(),
       getPages: [
-        GetPage(name: '/home', page: () => const MainAppShell()),
+        GetPage(
+          name: '/home',
+          page: () => HomeView(shopId: Get.parameters['shopId']),
+        ),
         GetPage(
           name: '/product-detail',
           page: () =>
@@ -113,11 +116,6 @@ class _MainAppShellState extends State<MainAppShell> {
     final cartController = Get.find<CartController>();
 
     return [
-      const BottomNavigationBarItem(
-        icon: Icon(Icons.home_outlined),
-        activeIcon: Icon(Icons.home),
-        label: 'Home',
-      ),
       const BottomNavigationBarItem(
         icon: Icon(Icons.store_outlined),
         activeIcon: Icon(Icons.store),
