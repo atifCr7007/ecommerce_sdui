@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:ecommerce_sdui/models/product.dart';
 import 'package:ecommerce_sdui/models/category.dart' as cat;
 import 'package:ecommerce_sdui/models/checkout.dart';
+import 'package:ecommerce_sdui/models/shop.dart';
 import 'package:ecommerce_sdui/services/cart_service.dart';
 
 /// Mock data service that provides realistic data matching Medusa API structure.
@@ -22,8 +23,10 @@ class MockDataService {
   final Random _random = Random();
   List<Product>? _cachedProducts;
   List<cat.ProductCategory>? _cachedCategories;
+  List<Shop>? _cachedShops;
   final Map<String, Cart> _carts = {};
   final Map<String, Order> _orders = {};
+  final Map<String, List<Product>> _shopProducts = {};
 
   /// Loads mock products from JSON file
   Future<List<Product>> getProducts({
@@ -801,11 +804,228 @@ class MockDataService {
     }
   }
 
+  /// Gets marketplace with all shops
+  Future<MarketplaceResponse> getMarketplace() async {
+    try {
+      if (_cachedShops == null) {
+        _cachedShops = await _generateMockShops();
+      }
+
+      debugPrint('[MockDataService] Retrieved ${_cachedShops!.length} shops');
+      return MarketplaceResponse(
+        shops: _cachedShops!,
+        totalShops: _cachedShops!.length,
+        message: 'Marketplace loaded successfully',
+      );
+    } catch (e) {
+      debugPrint('Error getting marketplace: $e');
+      throw Exception('Failed to get marketplace: $e');
+    }
+  }
+
+  /// Gets specific shop with products
+  Future<ShopResponse> getShop(String shopId) async {
+    try {
+      if (_cachedShops == null) {
+        _cachedShops = await _generateMockShops();
+      }
+
+      final shop = _cachedShops!.firstWhere(
+        (s) => s.id == shopId,
+        orElse: () => throw Exception('Shop not found'),
+      );
+
+      // Get or generate products for this shop
+      if (!_shopProducts.containsKey(shopId)) {
+        _shopProducts[shopId] = await _generateShopProducts(shop);
+      }
+
+      final products = _shopProducts[shopId]!;
+      final featuredProducts = products
+          .where((p) => shop.featuredProductIds.contains(p.id))
+          .toList();
+
+      final shopWithProducts = ShopWithProducts(
+        shop: shop,
+        products: products,
+        featuredProducts: featuredProducts,
+      );
+
+      debugPrint(
+        '[MockDataService] Retrieved shop: ${shop.name} with ${products.length} products',
+      );
+      return ShopResponse(
+        shopWithProducts: shopWithProducts,
+        message: 'Shop loaded successfully',
+      );
+    } catch (e) {
+      debugPrint('Error getting shop: $e');
+      throw Exception('Failed to get shop: $e');
+    }
+  }
+
+  /// Generates mock shops
+  Future<List<Shop>> _generateMockShops() async {
+    final shops = <Shop>[];
+    final categories = [
+      'electronics',
+      'clothing',
+      'books',
+      'home_garden',
+      'sports',
+    ];
+    final shopNames = [
+      'TechHub Electronics',
+      'Fashion Forward',
+      'BookWorm Paradise',
+      'Home Sweet Home',
+      'SportZone',
+      'Gadget Galaxy',
+      'Style Studio',
+      'Literary Lounge',
+      'Garden Grove',
+      'Fitness First',
+      'Digital Dreams',
+      'Trendy Threads',
+      'Page Turner',
+      'Cozy Corner',
+      'Active Life',
+    ];
+
+    for (int i = 0; i < shopNames.length; i++) {
+      final category = categories[i % categories.length];
+      final rating = 3.5 + (_random.nextDouble() * 1.5); // 3.5 to 5.0
+      final reviewCount = 50 + _random.nextInt(500); // 50 to 550 reviews
+
+      shops.add(
+        Shop(
+          id: 'shop_${i + 1}',
+          name: shopNames[i],
+          description: _getShopDescription(category),
+          logo: 'https://picsum.photos/200/200?random=${i + 100}',
+          bannerImage: 'https://picsum.photos/800/300?random=${i + 200}',
+          rating: double.parse(rating.toStringAsFixed(1)),
+          reviewCount: reviewCount,
+          category: category,
+          isVerified: _random.nextBool(),
+          isActive: true,
+          featuredProductIds: [], // Will be populated when generating products
+          contact: ShopContact(
+            email:
+                '${shopNames[i].toLowerCase().replaceAll(' ', '')}@example.com',
+            phone:
+                '+1-${_random.nextInt(900) + 100}-${_random.nextInt(900) + 100}-${_random.nextInt(9000) + 1000}',
+            website:
+                'https://${shopNames[i].toLowerCase().replaceAll(' ', '')}.com',
+            address: ShopAddress(
+              street: '${_random.nextInt(9999) + 1} ${_getRandomStreetName()}',
+              city: _getRandomCity(),
+              state: _getRandomState(),
+              country: 'United States',
+              zipCode: '${_random.nextInt(90000) + 10000}',
+            ),
+          ),
+          createdAt: DateTime.now().subtract(
+            Duration(days: _random.nextInt(365)),
+          ),
+          updatedAt: DateTime.now(),
+        ),
+      );
+    }
+
+    return shops;
+  }
+
+  /// Generates products for a specific shop
+  Future<List<Product>> _generateShopProducts(Shop shop) async {
+    final allProducts = await getProducts();
+    final categoryProducts = allProducts
+        .where(
+          (p) =>
+              p.categories?.any(
+                (c) =>
+                    c.name.toLowerCase().contains(shop.category.toLowerCase()),
+              ) ??
+              false,
+        )
+        .toList();
+
+    // If no category match, take random products
+    if (categoryProducts.isEmpty) {
+      categoryProducts.addAll(allProducts.take(10));
+    }
+
+    // Take 8-15 products for each shop
+    final shopProductCount = 8 + _random.nextInt(8);
+    final shopProducts = categoryProducts.take(shopProductCount).toList();
+
+    // Update featured product IDs
+    final featuredCount = (shopProducts.length * 0.3).ceil().clamp(1, 4);
+    final featuredIds = shopProducts
+        .take(featuredCount)
+        .map((p) => p.id)
+        .toList();
+
+    // Update the shop's featured product IDs (this is a simplification for mock data)
+    shop.featuredProductIds.clear();
+    shop.featuredProductIds.addAll(featuredIds);
+
+    return shopProducts;
+  }
+
+  String _getShopDescription(String category) {
+    switch (category) {
+      case 'electronics':
+        return 'Your one-stop destination for the latest electronics and gadgets';
+      case 'clothing':
+        return 'Trendy fashion and clothing for all occasions';
+      case 'books':
+        return 'Discover amazing books and literary treasures';
+      case 'home_garden':
+        return 'Everything you need for your home and garden';
+      case 'sports':
+        return 'Sports equipment and fitness gear for active lifestyles';
+      default:
+        return 'Quality products and excellent service';
+    }
+  }
+
+  String _getRandomStreetName() {
+    final streets = [
+      'Main St',
+      'Oak Ave',
+      'Pine Rd',
+      'Elm Dr',
+      'Maple Ln',
+      'Cedar Blvd',
+    ];
+    return streets[_random.nextInt(streets.length)];
+  }
+
+  String _getRandomCity() {
+    final cities = [
+      'New York',
+      'Los Angeles',
+      'Chicago',
+      'Houston',
+      'Phoenix',
+      'Philadelphia',
+    ];
+    return cities[_random.nextInt(cities.length)];
+  }
+
+  String _getRandomState() {
+    final states = ['NY', 'CA', 'IL', 'TX', 'AZ', 'PA'];
+    return states[_random.nextInt(states.length)];
+  }
+
   /// Clears all cached data
   void clearCache() {
     _cachedProducts = null;
     _cachedCategories = null;
+    _cachedShops = null;
     _carts.clear();
     _orders.clear();
+    _shopProducts.clear();
   }
 }

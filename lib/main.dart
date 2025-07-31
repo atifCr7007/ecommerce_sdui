@@ -6,6 +6,7 @@ import 'controllers/search_controller.dart';
 import 'controllers/category_controller.dart';
 import 'controllers/cart_controller.dart';
 import 'controllers/favorites_controller.dart';
+import 'controllers/marketplace_controller.dart';
 import 'utils/theme_manager.dart';
 import 'controllers/orders_controller.dart';
 import 'views/home_view.dart';
@@ -14,6 +15,8 @@ import 'views/search_view.dart';
 
 import 'views/cart_view.dart';
 import 'views/checkout_view.dart';
+import 'views/marketplace_view.dart';
+import 'views/shop_view.dart';
 import 'views/bookmarks_view.dart';
 import 'views/orders_view.dart';
 
@@ -38,6 +41,7 @@ class OneMartApp extends StatelessWidget {
     Get.put(ProductDetailController());
     Get.put(ProductSearchController());
     Get.put(CategoryController());
+    Get.put(MarketplaceController());
     Get.put(OrdersController());
 
     return GetMaterialApp(
@@ -58,6 +62,11 @@ class OneMartApp extends StatelessWidget {
         ),
         GetPage(name: '/cart', page: () => const CartView()),
         GetPage(name: '/checkout', page: () => const CheckoutView()),
+        GetPage(name: '/marketplace', page: () => const MarketplaceView()),
+        GetPage(
+          name: '/shop/:shopId',
+          page: () => ShopView(shopId: Get.parameters['shopId'] ?? ''),
+        ),
         GetPage(
           name: '/flash-sale',
           page: () => const PlaceholderPage(title: 'Flash Sale'),
@@ -94,7 +103,7 @@ class _MainAppShellState extends State<MainAppShell> {
   int _currentIndex = 0;
 
   final List<Widget> _pages = [
-    const HomeView(),
+    const MarketplaceView(),
     const CartView(),
     const OrdersView(),
     const BookmarksView(),
@@ -108,6 +117,11 @@ class _MainAppShellState extends State<MainAppShell> {
         icon: Icon(Icons.home_outlined),
         activeIcon: Icon(Icons.home),
         label: 'Home',
+      ),
+      const BottomNavigationBarItem(
+        icon: Icon(Icons.store_outlined),
+        activeIcon: Icon(Icons.store),
+        label: 'Marketplace',
       ),
       BottomNavigationBarItem(
         icon: Obx(() => _buildCartIcon(cartController, false)),
