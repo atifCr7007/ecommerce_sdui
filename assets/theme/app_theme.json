@@ -1,23 +1,23 @@
 {
-  "themeId": "onemart_default",
-  "name": "Onemart Default Theme",
-  "version": "1.0.0",
+  "themeId": "onemart_purple_theme",
+  "name": "Onemart Purple Theme",
+  "version": "2.0.0",
   "colors": {
-    "primary": "#2196F3",
-    "primaryVariant": "#1976D2",
-    "secondary": "#FF5722",
-    "secondaryVariant": "#E64A19",
+    "primary": "#9C27B0",
+    "primaryVariant": "#7B1FA2",
+    "secondary": "#E1BEE7",
+    "secondaryVariant": "#CE93D8",
     "background": "#FFFFFF",
     "surface": "#FFFFFF",
     "error": "#F44336",
     "onPrimary": "#FFFFFF",
-    "onSecondary": "#FFFFFF",
+    "onSecondary": "#212121",
     "onBackground": "#212121",
     "onSurface": "#212121",
     "onError": "#FFFFFF",
     "success": "#4CAF50",
     "warning": "#FF9800",
-    "info": "#2196F3",
+    "info": "#9C27B0",
     "cardBackground": "#FAFAFA",
     "divider": "#E0E0E0",
     "shadow": "#000000",
@@ -115,14 +115,14 @@
   },
   "components": {
     "appBar": {
-      "backgroundColor": "#2196F3",
+      "backgroundColor": "#9C27B0",
       "foregroundColor": "#FFFFFF",
       "elevation": 4,
       "height": 56
     },
     "bottomNavigationBar": {
       "backgroundColor": "#FFFFFF",
-      "selectedItemColor": "#2196F3",
+      "selectedItemColor": "#9C27B0",
       "unselectedItemColor": "#757575",
       "elevation": 8,
       "height": 60
@@ -136,7 +136,7 @@
     },
     "button": {
       "primary": {
-        "backgroundColor": "#2196F3",
+        "backgroundColor": "#9C27B0",
         "foregroundColor": "#FFFFFF",
         "borderRadius": 8,
         "elevation": 2,
@@ -147,8 +147,8 @@
       },
       "secondary": {
         "backgroundColor": "transparent",
-        "foregroundColor": "#2196F3",
-        "borderColor": "#2196F3",
+        "foregroundColor": "#9C27B0",
+        "borderColor": "#9C27B0",
         "borderWidth": 1,
         "borderRadius": 8,
         "padding": {
@@ -160,7 +160,7 @@
     "textField": {
       "backgroundColor": "#FAFAFA",
       "borderColor": "#E0E0E0",
-      "focusedBorderColor": "#2196F3",
+      "focusedBorderColor": "#9C27B0",
       "borderRadius": 8,
       "padding": {
         "horizontal": 16,
@@ -168,7 +168,7 @@
       }
     },
     "carousel": {
-      "indicatorActiveColor": "#2196F3",
+      "indicatorActiveColor": "#9C27B0",
       "indicatorInactiveColor": "#E0E0E0",
       "borderRadius": 12,
       "autoPlayInterval": 3000
@@ -191,9 +191,9 @@
     },
     "tabBar": {
       "backgroundColor": "#FFFFFF",
-      "selectedLabelColor": "#2196F3",
+      "selectedLabelColor": "#9C27B0",
       "unselectedLabelColor": "#757575",
-      "indicatorColor": "#2196F3",
+      "indicatorColor": "#9C27B0",
       "indicatorWeight": 2
     }
   },

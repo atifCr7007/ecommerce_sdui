@@ -6,6 +6,7 @@ import 'package:share_plus/share_plus.dart';
 import '../models/product.dart';
 import '../controllers/home_controller.dart';
 import '../controllers/cart_controller.dart';
+import '../mock_data/mock_service.dart';
 import '../controllers/favorites_controller.dart';
 
 class ProductDetailController extends GetxController {
@@ -20,6 +21,11 @@ class ProductDetailController extends GetxController {
   final RxBool isFavorite = false.obs;
   final RxList<Product> relatedProducts = <Product>[].obs;
   final RxBool isAddingToCart = false.obs;
+
+  // Variant selection
+  final RxString selectedColor = ''.obs;
+  final RxString selectedSize = ''.obs;
+  final Rx<ProductVariant?> selectedVariant = Rx<ProductVariant?>(null);
 
   // Load product details
   Future<void> loadProduct(String productId) async {
@@ -53,6 +59,7 @@ class ProductDetailController extends GetxController {
         final productData = data['product'];
         if (productData != null) {
           product.value = Product.fromJson(productData);
+          _initializeVariantSelection();
         } else {
           throw Exception('Product not found');
         }
@@ -62,7 +69,8 @@ class ProductDetailController extends GetxController {
     } catch (e) {
       debugPrint('Error fetching product: $e');
       // Use mock data for demo purposes
-      product.value = _getMockProduct(productId);
+      product.value = await _getMockProduct(productId);
+      _initializeVariantSelection();
     }
   }
 
@@ -125,8 +133,11 @@ class ProductDetailController extends GetxController {
       // Get the cart controller
       final cartController = Get.find<CartController>();
 
-      // Get the first variant ID (in a real app, user would select variant)
-      final variantId = product.value!.variants?.first.id ?? product.value!.id;
+      // Get the selected variant ID or fallback to first variant
+      final variantId =
+          selectedVariant.value?.id ??
+          product.value!.variants?.first.id ??
+          product.value!.id;
 
       // Add to cart
       final success = await cartController.addToCart(
@@ -213,62 +224,129 @@ Shop now: $productUrl
     }
   }
 
-  // Mock data for demo purposes
-  Product _getMockProduct(String productId) {
-    return Product(
-      id: productId,
-      title: 'Premium Wireless Headphones',
-      description:
-          '''
-Experience crystal-clear audio with our premium wireless headphones. 
-Featuring advanced noise cancellation technology, 30-hour battery life, 
-and comfortable over-ear design perfect for long listening sessions.
+  // Mock data for demo purposes - loads actual product from mock data
+  Future<Product> _getMockProduct(String productId) async {
+    try {
+      // Use the mock data service to get the actual product
+      final mockService = MockDataService();
 
-Key Features:
-• Active Noise Cancellation
-• 30-hour battery life
-• Premium leather ear cushions
-• Bluetooth 5.0 connectivity
-• Quick charge: 15 min = 3 hours playback
-• Foldable design for easy storage
+      // Use the proper async method to get product by ID
+      final product = await mockService.getProductById(productId);
 
-Perfect for music lovers, professionals, and anyone who values high-quality audio.
-      '''
-              .trim(),
-      thumbnail:
-          'https://via.placeholder.com/400x400/2196F3/FFFFFF?text=Premium+Headphones',
-      images: [
-        ProductImage(
-          id: 'img_1',
-          url:
-              'https://via.placeholder.com/400x400/2196F3/FFFFFF?text=Premium+Headphones',
-        ),
-        ProductImage(
-          id: 'img_2',
-          url:
-              'https://via.placeholder.com/400x400/4CAF50/FFFFFF?text=Side+View',
-        ),
-        ProductImage(
-          id: 'img_3',
-          url:
-              'https://via.placeholder.com/400x400/FF9800/FFFFFF?text=Detail+View',
-        ),
-      ],
-      variants: [
-        ProductVariant(
-          id: 'variant_1',
-          title: 'Black - Standard',
-          prices: [
-            ProductVariantPrice(
-              id: 'price_1',
-              currencyCode: 'USD',
-              amount: 29999, // $299.99 in cents
-            ),
-          ],
-        ),
-      ],
-      categories: [ProductCategory(id: 'cat_electronics', name: 'Electronics')],
-    );
+      if (product != null) {
+        return product;
+      }
+
+      // If product not found, get the first available product
+      final products = await mockService.getProducts(limit: 1);
+      if (products.isNotEmpty) {
+        return products.first;
+      }
+
+      // If no products available, generate a fallback
+      throw Exception('No products available');
+    } catch (e) {
+      debugPrint('Error loading mock product: $e');
+      // Fallback to hardcoded product if mock service fails
+      return Product(
+        id: productId,
+        title: 'Premium Wireless Headphones',
+        description:
+            'High-quality wireless headphones with noise cancellation.',
+        thumbnail:
+            'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop&crop=center',
+        images: [
+          ProductImage(
+            id: 'img_1',
+            url:
+                'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop&crop=center',
+          ),
+        ],
+        variants: [
+          ProductVariant(
+            id: 'variant_1',
+            title: 'Black - Standard',
+            prices: [
+              ProductVariantPrice(
+                id: 'price_1',
+                currencyCode: 'INR',
+                amount: 2999900,
+              ),
+            ],
+          ),
+        ],
+        categories: [ProductCategory(id: 'electronics', name: 'Electronics')],
+      );
+    }
+  }
+
+  // Variant selection methods
+  void selectColor(String color) {
+    selectedColor.value = color;
+    _updateSelectedVariant();
+  }
+
+  void selectSize(String size) {
+    selectedSize.value = size;
+    _updateSelectedVariant();
+  }
+
+  void _updateSelectedVariant() {
+    final currentProduct = product.value;
+    if (currentProduct?.variants == null) return;
+
+    // Find variant that matches selected color and size
+    ProductVariant? matchingVariant;
+
+    for (final variant in currentProduct!.variants!) {
+      final colorMatches =
+          selectedColor.value.isEmpty || variant.color == selectedColor.value;
+      final sizeMatches =
+          selectedSize.value.isEmpty || variant.size == selectedSize.value;
+
+      if (colorMatches && sizeMatches) {
+        matchingVariant = variant;
+        break;
+      }
+    }
+
+    // If no exact match, try to find partial matches
+    if (matchingVariant == null) {
+      for (final variant in currentProduct.variants!) {
+        if (selectedColor.value.isNotEmpty &&
+            variant.color == selectedColor.value) {
+          matchingVariant = variant;
+          break;
+        }
+        if (selectedSize.value.isNotEmpty &&
+            variant.size == selectedSize.value) {
+          matchingVariant = variant;
+          break;
+        }
+      }
+    }
+
+    // Fallback to first variant if no match found
+    selectedVariant.value = matchingVariant ?? currentProduct.variants!.first;
+  }
+
+  // Initialize variant selection when product is loaded
+  void _initializeVariantSelection() {
+    final currentProduct = product.value;
+    if (currentProduct?.variants == null || currentProduct!.variants!.isEmpty) {
+      return;
+    }
+
+    // Set default selections to first available options
+    final firstVariant = currentProduct.variants!.first;
+    if (firstVariant.color != null && selectedColor.value.isEmpty) {
+      selectedColor.value = firstVariant.color!;
+    }
+    if (firstVariant.size != null && selectedSize.value.isEmpty) {
+      selectedSize.value = firstVariant.size!;
+    }
+
+    _updateSelectedVariant();
   }
 
   // Reset controller state
@@ -279,6 +357,9 @@ Perfect for music lovers, professionals, and anyone who values high-quality audi
     relatedProducts.clear();
     error.value = null;
     isLoading.value = false;
+    selectedColor.value = '';
+    selectedSize.value = '';
+    selectedVariant.value = null;
   }
 
   @override

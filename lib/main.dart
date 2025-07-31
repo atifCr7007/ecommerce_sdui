@@ -10,7 +10,7 @@ import 'utils/theme_manager.dart';
 import 'views/home_view.dart';
 import 'views/product_detail_view.dart';
 import 'views/search_view.dart';
-import 'views/category_view.dart';
+
 import 'views/cart_view.dart';
 import 'views/bookmarks_view.dart';
 import 'views/orders_view.dart';

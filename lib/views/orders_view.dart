@@ -121,17 +121,17 @@ class _OrdersViewState extends State<OrdersView> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('My Orders'),
-        centerTitle: true,
-        actions: [
-          IconButton(
-            onPressed: _loadOrdersScreen,
-            icon: const Icon(Icons.refresh),
-            tooltip: 'Refresh',
-          ),
-        ],
-      ),
+      // appBar: AppBar(
+      //   title: const Text('My Orders'),
+      //   centerTitle: true,
+      //   actions: [
+      //     IconButton(
+      //       onPressed: _loadOrdersScreen,
+      //       icon: const Icon(Icons.refresh),
+      //       tooltip: 'Refresh',
+      //     ),
+      //   ],
+      // ),
       body: RefreshIndicator(
         onRefresh: _loadOrdersScreen,
         child: _buildOrdersContent(),

@@ -634,8 +634,8 @@ class ProductDetailJsonParser {
   static void _navigateToRoute(String route, BuildContext context) {
     switch (route.toLowerCase()) {
       case '/cart':
-        // Navigate back to main app and switch to cart tab
-        Navigator.of(context).pop(); // Go back to main app
+        // Navigate directly to cart page
+        Get.toNamed('/cart');
         break;
       default:
         Navigator.of(context).pushNamed(route);

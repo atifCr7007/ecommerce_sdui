@@ -164,52 +164,52 @@ class _BookmarksViewState extends State<BookmarksView> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('My Bookmarks'),
-        centerTitle: true,
-        actions: [
-          Obx(() {
-            final favoritesController = Get.find<FavoritesController>();
-            if (favoritesController.hasFavorites) {
-              return PopupMenuButton<String>(
-                onSelected: (value) {
-                  switch (value) {
-                    case 'clear':
-                      _showClearBookmarksDialog(favoritesController);
-                      break;
-                    case 'share':
-                      _shareBookmarksList(favoritesController);
-                      break;
-                  }
-                },
-                itemBuilder: (context) => [
-                  const PopupMenuItem(
-                    value: 'share',
-                    child: Row(
-                      children: [
-                        Icon(Icons.share),
-                        SizedBox(width: 8),
-                        Text('Share List'),
-                      ],
-                    ),
-                  ),
-                  const PopupMenuItem(
-                    value: 'clear',
-                    child: Row(
-                      children: [
-                        Icon(Icons.clear_all, color: Colors.red),
-                        SizedBox(width: 8),
-                        Text('Clear All', style: TextStyle(color: Colors.red)),
-                      ],
-                    ),
-                  ),
-                ],
-              );
-            }
-            return const SizedBox.shrink();
-          }),
-        ],
-      ),
+      // appBar: AppBar(
+      //   title: const Text('My Bookmarks'),
+      //   centerTitle: true,
+      //   actions: [
+      //     Obx(() {
+      //       final favoritesController = Get.find<FavoritesController>();
+      //       if (favoritesController.hasFavorites) {
+      //         return PopupMenuButton<String>(
+      //           onSelected: (value) {
+      //             switch (value) {
+      //               case 'clear':
+      //                 _showClearBookmarksDialog(favoritesController);
+      //                 break;
+      //               case 'share':
+      //                 _shareBookmarksList(favoritesController);
+      //                 break;
+      //             }
+      //           },
+      //           itemBuilder: (context) => [
+      //             const PopupMenuItem(
+      //               value: 'share',
+      //               child: Row(
+      //                 children: [
+      //                   Icon(Icons.share),
+      //                   SizedBox(width: 8),
+      //                   Text('Share List'),
+      //                 ],
+      //               ),
+      //             ),
+      //             const PopupMenuItem(
+      //               value: 'clear',
+      //               child: Row(
+      //                 children: [
+      //                   Icon(Icons.clear_all, color: Colors.red),
+      //                   SizedBox(width: 8),
+      //                   Text('Clear All', style: TextStyle(color: Colors.red)),
+      //                 ],
+      //               ),
+      //             ),
+      //           ],
+      //         );
+      //       }
+      //       return const SizedBox.shrink();
+      //     }),
+      //   ],
+      // ),
       body: Obx(() {
         final favoritesController = Get.find<FavoritesController>();
 

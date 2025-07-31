@@ -5,6 +5,7 @@ import '../utils/widget_mapper.dart';
 import '../widgets/orders_list_widget.dart';
 import '../widgets/order_statistics_widget.dart';
 import '../controllers/cart_controller.dart';
+import '../controllers/product_detail_controller.dart';
 
 class JsonUIParser {
   static Widget parseScreen(UIScreen screen, BuildContext context) {
@@ -62,6 +63,10 @@ class JsonUIParser {
         return _buildBanner(component, context);
       case 'button':
         return _buildButton(component, context);
+      case 'icon':
+        return _buildIcon(component, context);
+      case 'variant_selector':
+        return _buildVariantSelector(component, context);
       case 'orders_list':
         return _buildOrdersList(component, context);
       case 'order_statistics':
@@ -427,6 +432,257 @@ class JsonUIParser {
     );
   }
 
+  static Widget _buildIcon(UIComponent component, BuildContext context) {
+    final properties = component.properties;
+    final iconName = properties['icon'] as String? ?? 'help';
+    final size = _parseDouble(properties['size']) ?? 24.0;
+    final colorHex = properties['color'] as String? ?? '#212121';
+
+    // Parse color
+    Color iconColor;
+    try {
+      iconColor = Color(int.parse(colorHex.replaceFirst('#', '0xFF')));
+    } catch (e) {
+      iconColor = Colors.grey;
+    }
+
+    // Map icon names to IconData
+    IconData iconData = _getIconData(iconName);
+
+    return Icon(iconData, size: size, color: iconColor);
+  }
+
+  static IconData _getIconData(String iconName) {
+    switch (iconName.toLowerCase()) {
+      case 'favorite':
+        return Icons.favorite;
+      case 'favorite_border':
+        return Icons.favorite_border;
+      case 'home':
+        return Icons.home;
+      case 'home_outlined':
+        return Icons.home_outlined;
+      case 'shopping_cart':
+        return Icons.shopping_cart;
+      case 'shopping_cart_outlined':
+        return Icons.shopping_cart_outlined;
+      case 'search':
+        return Icons.search;
+      case 'person':
+        return Icons.person;
+      case 'person_outline':
+        return Icons.person_outline;
+      case 'star':
+        return Icons.star;
+      case 'star_border':
+        return Icons.star_border;
+      case 'add':
+        return Icons.add;
+      case 'remove':
+        return Icons.remove;
+      case 'close':
+        return Icons.close;
+      case 'check':
+        return Icons.check;
+      case 'arrow_back':
+        return Icons.arrow_back;
+      case 'arrow_forward':
+        return Icons.arrow_forward;
+      case 'menu':
+        return Icons.menu;
+      case 'more_vert':
+        return Icons.more_vert;
+      case 'share':
+        return Icons.share;
+      case 'bookmark':
+        return Icons.bookmark;
+      case 'bookmark_outline':
+        return Icons.bookmark_outline;
+      case 'shopping_bag':
+        return Icons.shopping_bag;
+      case 'shopping_bag_outlined':
+        return Icons.shopping_bag_outlined;
+      case 'notifications':
+        return Icons.notifications;
+      case 'notifications_outlined':
+        return Icons.notifications_outlined;
+      case 'receipt_long':
+        return Icons.receipt_long;
+      case 'receipt_long_outlined':
+        return Icons.receipt_long_outlined;
+      case 'delete':
+        return Icons.delete;
+      case 'delete_outline':
+        return Icons.delete_outline;
+      case 'edit':
+        return Icons.edit;
+      case 'visibility':
+        return Icons.visibility;
+      case 'visibility_off':
+        return Icons.visibility_off;
+      case 'filter_list':
+        return Icons.filter_list;
+      case 'sort':
+        return Icons.sort;
+      case 'help':
+        return Icons.help;
+      case 'info':
+        return Icons.info;
+      case 'warning':
+        return Icons.warning;
+      case 'error':
+        return Icons.error;
+      case 'check_circle':
+        return Icons.check_circle;
+      case 'cancel':
+        return Icons.cancel;
+      default:
+        return Icons.help_outline;
+    }
+  }
+
+  static Widget _buildVariantSelector(
+    UIComponent component,
+    BuildContext context,
+  ) {
+    final properties = component.properties;
+    final title = properties['title'] as String? ?? 'Select Options';
+    final showColors = properties['showColors'] as bool? ?? true;
+    final showSizes = properties['showSizes'] as bool? ?? true;
+
+    return Obx(() {
+      final controller = Get.find<ProductDetailController>();
+      final product = controller.product.value;
+
+      if (product == null ||
+          product.variants == null ||
+          product.variants!.isEmpty) {
+        return const SizedBox.shrink();
+      }
+
+      // Extract unique colors and sizes from variants
+      final colors = <String>{};
+      final sizes = <String>{};
+
+      for (final variant in product.variants!) {
+        if (variant.color != null) colors.add(variant.color!);
+        if (variant.size != null) sizes.add(variant.size!);
+      }
+
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: Color(0xFF212121),
+            ),
+          ),
+          const SizedBox(height: 12),
+
+          // Color selection
+          if (showColors && colors.isNotEmpty) ...[
+            const Text(
+              'Color',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: Color(0xFF757575),
+              ),
+            ),
+            const SizedBox(height: 8),
+            Wrap(
+              spacing: 8,
+              children: colors.map((color) {
+                final isSelected = controller.selectedColor.value == color;
+                return GestureDetector(
+                  onTap: () => controller.selectColor(color),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
+                    decoration: BoxDecoration(
+                      color: isSelected
+                          ? const Color(0xFF9C27B0)
+                          : Colors.grey[200],
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: isSelected
+                            ? const Color(0xFF9C27B0)
+                            : Colors.grey[300]!,
+                      ),
+                    ),
+                    child: Text(
+                      color,
+                      style: TextStyle(
+                        color: isSelected ? Colors.white : Colors.black87,
+                        fontWeight: isSelected
+                            ? FontWeight.w600
+                            : FontWeight.normal,
+                      ),
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+            const SizedBox(height: 16),
+          ],
+
+          // Size selection
+          if (showSizes && sizes.isNotEmpty) ...[
+            const Text(
+              'Size',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: Color(0xFF757575),
+              ),
+            ),
+            const SizedBox(height: 8),
+            Wrap(
+              spacing: 8,
+              children: sizes.map((size) {
+                final isSelected = controller.selectedSize.value == size;
+                return GestureDetector(
+                  onTap: () => controller.selectSize(size),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
+                    decoration: BoxDecoration(
+                      color: isSelected
+                          ? const Color(0xFF9C27B0)
+                          : Colors.grey[200],
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: isSelected
+                            ? const Color(0xFF9C27B0)
+                            : Colors.grey[300]!,
+                      ),
+                    ),
+                    child: Text(
+                      size,
+                      style: TextStyle(
+                        color: isSelected ? Colors.white : Colors.black87,
+                        fontWeight: isSelected
+                            ? FontWeight.w600
+                            : FontWeight.normal,
+                      ),
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+          ],
+        ],
+      );
+    });
+  }
+
   static Widget _buildTabBar(UIComponent component, BuildContext context) {
     // This is a simplified implementation
     // In a real app, you'd need to handle TabController properly
@@ -650,10 +906,9 @@ class JsonUIParser {
     UIComponent component,
     BuildContext context,
   ) {
-    final status = component.properties?['status'] as String? ?? '';
-    final title = component.properties?['title'] as String? ?? '';
-    final description = component.properties?['description'] as String? ?? '';
-    final colorHex = component.properties?['color'] as String? ?? '#2196F3';
+    final title = component.properties['title'] as String? ?? '';
+    final description = component.properties['description'] as String? ?? '';
+    final colorHex = component.properties['color'] as String? ?? '#9C27B0';
 
     final color = Color(int.parse(colorHex.replaceFirst('#', '0xFF')));
 
@@ -698,11 +953,12 @@ class JsonUIParser {
     final properties = fabData['properties'] as Map<String, dynamic>? ?? {};
     final iconName = properties['icon'] as String? ?? 'add';
     final backgroundColor =
-        properties['backgroundColor'] as String? ?? '#2196F3';
+        properties['backgroundColor'] as String? ?? '#9C27B0';
     final foregroundColor =
         properties['foregroundColor'] as String? ?? '#FFFFFF';
     final tooltip = properties['tooltip'] as String? ?? '';
     final onPressed = properties['onPressed'] as Map<String, dynamic>?;
+    final showBadge = properties['showBadge'] as bool? ?? false;
 
     // Parse colors
     final bgColor = Color(int.parse(backgroundColor.replaceFirst('#', '0xFF')));
@@ -727,12 +983,53 @@ class JsonUIParser {
         icon = Icons.add;
     }
 
+    Widget fabChild = Icon(icon);
+
+    // Add cart badge if showBadge is true and icon is shopping_cart
+    if (showBadge && iconName.toLowerCase() == 'shopping_cart') {
+      fabChild = Obx(() {
+        final cartController = Get.find<CartController>();
+        final itemCount = cartController.totalQuantity;
+
+        return Stack(
+          children: [
+            Icon(icon),
+            if (itemCount > 0)
+              Positioned(
+                right: 0,
+                top: 0,
+                child: Container(
+                  padding: const EdgeInsets.all(2),
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  constraints: const BoxConstraints(
+                    minWidth: 16,
+                    minHeight: 16,
+                  ),
+                  child: Text(
+                    itemCount > 99 ? '99+' : itemCount.toString(),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+          ],
+        );
+      });
+    }
+
     return FloatingActionButton(
       onPressed: () => _handleFabAction(onPressed, context),
       backgroundColor: bgColor,
       foregroundColor: fgColor,
       tooltip: tooltip.isNotEmpty ? tooltip : null,
-      child: Icon(icon),
+      child: fabChild,
     );
   }
 
@@ -761,14 +1058,8 @@ class JsonUIParser {
   static void _navigateToRoute(String route, BuildContext context) {
     switch (route.toLowerCase()) {
       case '/cart':
-        // Navigate back to main app and switch to cart tab
-        // Since we're in product detail, we need to go back to main app
-        Navigator.of(context).pop(); // Go back to main app
-        // Use a post-frame callback to switch to cart tab
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          // Find the main app shell and switch to cart tab
-          _switchToTab(context, 1);
-        });
+        // Navigate directly to cart page
+        Get.toNamed('/cart');
         break;
       case '/home':
         Navigator.of(context).pop();

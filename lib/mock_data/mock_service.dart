@@ -163,16 +163,29 @@ class MockDataService {
         throw Exception('Product not found');
       }
 
+      debugPrint(
+        '[MockDataService] Adding to cart: productId=$productId, variantId=$variantId, quantity=$quantity',
+      );
+      debugPrint(
+        '[MockDataService] Current cart items count: ${cart.items.length}',
+      );
+
       // Check if item already exists in cart
       final existingItemIndex = cart.items.indexWhere(
         (item) => item.variantId == variantId,
       );
+
+      debugPrint('[MockDataService] Existing item index: $existingItemIndex');
 
       if (existingItemIndex >= 0) {
         // Update existing item quantity
         final existingItem = cart.items[existingItemIndex];
         final newQuantity = existingItem.quantity + quantity;
         final newTotal = existingItem.unitPrice * newQuantity;
+
+        debugPrint(
+          '[MockDataService] Updating existing item: ${existingItem.title}, old quantity: ${existingItem.quantity}, new quantity: $newQuantity',
+        );
 
         cart.items[existingItemIndex] = CartItem(
           id: existingItem.id,
@@ -188,6 +201,10 @@ class MockDataService {
         // Add new item
         final unitPrice = product.variants?.first.prices?.first.amount ?? 2000;
         final total = unitPrice * quantity;
+
+        debugPrint(
+          '[MockDataService] Adding new item: ${product.title}, quantity: $quantity, unitPrice: $unitPrice',
+        );
 
         cart.items.add(
           CartItem(
@@ -217,6 +234,17 @@ class MockDataService {
       );
 
       _carts[cartId] = updatedCart;
+
+      debugPrint(
+        '[MockDataService] Final cart state: ${updatedCart.items.length} items',
+      );
+      for (int i = 0; i < updatedCart.items.length; i++) {
+        final item = updatedCart.items[i];
+        debugPrint(
+          '[MockDataService] Item $i: ${item.title} (variantId: ${item.variantId}, quantity: ${item.quantity})',
+        );
+      }
+
       return CartResponse(cart: updatedCart);
     } catch (e) {
       debugPrint('Error adding to cart: $e');

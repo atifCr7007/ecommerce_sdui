@@ -4,22 +4,51 @@
       "id": "prod_electronics_001",
       "title": "Premium Wireless Headphones",
       "description": "High-quality wireless headphones with noise cancellation, 30-hour battery life, and premium sound quality. Perfect for music lovers and professionals.",
-      "thumbnail": "https://png.pngtree.com/thumb_back/fh260/background/20230620/pngtree-turquoise-background-horizontal-banner-featuring-white-headphones-in-3d-rendering-image_3647835.jpg",
+      "thumbnail": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop&crop=center",
       "images": [
         {
           "id": "img_headphones_001",
-          "url": "https://png.pngtree.com/thumb_back/fh260/background/20230620/pngtree-turquoise-background-horizontal-banner-featuring-white-headphones-in-3d-rendering-image_3647835.jpg"
+          "url": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop&crop=center"
+        },
+        {
+          "id": "img_headphones_002",
+          "url": "https://images.unsplash.com/photo-1583394838336-acd977736f90?w=400&h=400&fit=crop&crop=center"
         }
       ],
       "variants": [
         {
           "id": "var_headphones_001",
           "title": "Black",
+          "color": "Black",
           "prices": [
             {
               "id": "price_headphones_001",
               "currency_code": "INR",
               "amount": 2999900
+            }
+          ]
+        },
+        {
+          "id": "var_headphones_002",
+          "title": "White",
+          "color": "White",
+          "prices": [
+            {
+              "id": "price_headphones_002",
+              "currency_code": "INR",
+              "amount": 2999900
+            }
+          ]
+        },
+        {
+          "id": "var_headphones_003",
+          "title": "Silver",
+          "color": "Silver",
+          "prices": [
+            {
+              "id": "price_headphones_003",
+              "currency_code": "INR",
+              "amount": 3199900
             }
           ]
         }
@@ -35,11 +64,15 @@
       "id": "prod_electronics_002",
       "title": "Smart Fitness Watch",
       "description": "Advanced fitness tracking watch with heart rate monitoring, GPS, sleep tracking, and 7-day battery life. Water-resistant design.",
-      "thumbnail": "https://www.chronopassion.com/files/2024/10/sbgw321_horizontal.jpg",
+      "thumbnail": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=400&fit=crop&crop=center",
       "images": [
         {
           "id": "img_watch_001",
-          "url": "https://www.chronopassion.com/files/2024/10/sbgw321_horizontal.jpg"
+          "url": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=400&fit=crop&crop=center"
+        },
+        {
+          "id": "img_watch_002",
+          "url": "https://images.unsplash.com/photo-1434056886845-dac89ffe9b56?w=400&h=400&fit=crop&crop=center"
         }
       ],
       "variants": [
@@ -66,20 +99,130 @@
       "id": "prod_clothing_001",
       "title": "Premium Cotton T-Shirt",
       "description": "Soft, comfortable 100% organic cotton t-shirt. Available in multiple colors and sizes. Perfect for casual wear.",
-      "thumbnail": "https://assets.myntassets.com/w_412,q_60,dpr_2,fl_progressive/assets/images/27380732/2024/2/6/f269c8c6-9bd6-4663-9c4c-4cc23a33142b1707221187836USPoloAssnMenStripedPoloCollarAppliqueSlimFitT-shirt1.jpg",
+      "thumbnail": "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=400&fit=crop&crop=center",
       "images": [
         {
           "id": "img_tshirt_001",
-          "url": "https://assets.myntassets.com/w_412,q_60,dpr_2,fl_progressive/assets/images/27380732/2024/2/6/f269c8c6-9bd6-4663-9c4c-4cc23a33142b1707221187836USPoloAssnMenStripedPoloCollarAppliqueSlimFitT-shirt1.jpg"
+          "url": "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=400&fit=crop&crop=center"
+        },
+        {
+          "id": "img_tshirt_002",
+          "url": "https://images.unsplash.com/photo-1503341504253-dff4815485f1?w=400&h=400&fit=crop&crop=center"
         }
       ],
       "variants": [
         {
           "id": "var_tshirt_001",
-          "title": "Medium - Blue",
+          "title": "Small - Blue",
+          "color": "Blue",
+          "size": "S",
           "prices": [
             {
               "id": "price_tshirt_001",
+              "currency_code": "INR",
+              "amount": 299900
+            }
+          ]
+        },
+        {
+          "id": "var_tshirt_002",
+          "title": "Medium - Blue",
+          "color": "Blue",
+          "size": "M",
+          "prices": [
+            {
+              "id": "price_tshirt_002",
+              "currency_code": "INR",
+              "amount": 299900
+            }
+          ]
+        },
+        {
+          "id": "var_tshirt_003",
+          "title": "Large - Blue",
+          "color": "Blue",
+          "size": "L",
+          "prices": [
+            {
+              "id": "price_tshirt_003",
+              "currency_code": "INR",
+              "amount": 299900
+            }
+          ]
+        },
+        {
+          "id": "var_tshirt_004",
+          "title": "Small - Black",
+          "color": "Black",
+          "size": "S",
+          "prices": [
+            {
+              "id": "price_tshirt_004",
+              "currency_code": "INR",
+              "amount": 299900
+            }
+          ]
+        },
+        {
+          "id": "var_tshirt_005",
+          "title": "Medium - Black",
+          "color": "Black",
+          "size": "M",
+          "prices": [
+            {
+              "id": "price_tshirt_005",
+              "currency_code": "INR",
+              "amount": 299900
+            }
+          ]
+        },
+        {
+          "id": "var_tshirt_006",
+          "title": "Large - Black",
+          "color": "Black",
+          "size": "L",
+          "prices": [
+            {
+              "id": "price_tshirt_006",
+              "currency_code": "INR",
+              "amount": 299900
+            }
+          ]
+        },
+        {
+          "id": "var_tshirt_007",
+          "title": "Small - White",
+          "color": "White",
+          "size": "S",
+          "prices": [
+            {
+              "id": "price_tshirt_007",
+              "currency_code": "INR",
+              "amount": 299900
+            }
+          ]
+        },
+        {
+          "id": "var_tshirt_008",
+          "title": "Medium - White",
+          "color": "White",
+          "size": "M",
+          "prices": [
+            {
+              "id": "price_tshirt_008",
+              "currency_code": "INR",
+              "amount": 299900
+            }
+          ]
+        },
+        {
+          "id": "var_tshirt_009",
+          "title": "Large - White",
+          "color": "White",
+          "size": "L",
+          "prices": [
+            {
+              "id": "price_tshirt_009",
               "currency_code": "INR",
               "amount": 299900
             }
@@ -97,11 +240,15 @@
       "id": "prod_clothing_002",
       "title": "Designer Jeans",
       "description": "Premium denim jeans with modern fit and classic styling. Made from high-quality materials for durability and comfort.",
-      "thumbnail": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSM4HB3kageM4pgm-ni11O3S-Cl8Y6oTN4RYQ&s",
+      "thumbnail": "https://images.unsplash.com/photo-1542272604-787c3835535d?w=400&h=400&fit=crop&crop=center",
       "images": [
         {
           "id": "img_jeans_001",
-          "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSM4HB3kageM4pgm-ni11O3S-Cl8Y6oTN4RYQ&s"
+          "url": "https://images.unsplash.com/photo-1542272604-787c3835535d?w=400&h=400&fit=crop&crop=center"
+        },
+        {
+          "id": "img_jeans_002",
+          "url": "https://images.unsplash.com/photo-1475178626620-a4d074967452?w=400&h=400&fit=crop&crop=center"
         }
       ],
       "variants": [
@@ -128,11 +275,15 @@
       "id": "prod_books_001",
       "title": "The Art of Programming",
       "description": "Comprehensive guide to modern programming practices, design patterns, and software architecture. Essential reading for developers.",
-      "thumbnail": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDwd25Q-o0lnVfvaFXLoMjhhiRhNUqxK4Qhw&s",
+      "thumbnail": "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400&h=400&fit=crop&crop=center",
       "images": [
         {
           "id": "img_book_001",
-          "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDwd25Q-o0lnVfvaFXLoMjhhiRhNUqxK4Qhw&s"
+          "url": "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400&h=400&fit=crop&crop=center"
+        },
+        {
+          "id": "img_book_002",
+          "url": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=center"
         }
       ],
       "variants": [

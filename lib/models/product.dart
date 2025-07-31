@@ -40,7 +40,8 @@ class Product {
     this.updatedAt,
   });
 
-  factory Product.fromJson(Map<String, dynamic> json) => _$ProductFromJson(json);
+  factory Product.fromJson(Map<String, dynamic> json) =>
+      _$ProductFromJson(json);
   Map<String, dynamic> toJson() => _$ProductToJson(this);
 
   // Helper methods for UI
@@ -77,13 +78,10 @@ class ProductImage {
   final String url;
   final Map<String, dynamic>? metadata;
 
-  ProductImage({
-    required this.id,
-    required this.url,
-    this.metadata,
-  });
+  ProductImage({required this.id, required this.url, this.metadata});
 
-  factory ProductImage.fromJson(Map<String, dynamic> json) => _$ProductImageFromJson(json);
+  factory ProductImage.fromJson(Map<String, dynamic> json) =>
+      _$ProductImageFromJson(json);
   Map<String, dynamic> toJson() => _$ProductImageToJson(this);
 }
 
@@ -93,13 +91,10 @@ class ProductOption {
   final String title;
   final List<ProductOptionValue>? values;
 
-  ProductOption({
-    required this.id,
-    required this.title,
-    this.values,
-  });
+  ProductOption({required this.id, required this.title, this.values});
 
-  factory ProductOption.fromJson(Map<String, dynamic> json) => _$ProductOptionFromJson(json);
+  factory ProductOption.fromJson(Map<String, dynamic> json) =>
+      _$ProductOptionFromJson(json);
   Map<String, dynamic> toJson() => _$ProductOptionToJson(this);
 }
 
@@ -109,13 +104,10 @@ class ProductOptionValue {
   final String value;
   final String? optionId;
 
-  ProductOptionValue({
-    required this.id,
-    required this.value,
-    this.optionId,
-  });
+  ProductOptionValue({required this.id, required this.value, this.optionId});
 
-  factory ProductOptionValue.fromJson(Map<String, dynamic> json) => _$ProductOptionValueFromJson(json);
+  factory ProductOptionValue.fromJson(Map<String, dynamic> json) =>
+      _$ProductOptionValueFromJson(json);
   Map<String, dynamic> toJson() => _$ProductOptionValueToJson(this);
 }
 
@@ -138,6 +130,8 @@ class ProductVariant {
   final int? length;
   final int? height;
   final int? width;
+  final String? color;
+  final String? size;
   final List<ProductVariantPrice>? prices;
 
   ProductVariant({
@@ -158,10 +152,13 @@ class ProductVariant {
     this.length,
     this.height,
     this.width,
+    this.color,
+    this.size,
     this.prices,
   });
 
-  factory ProductVariant.fromJson(Map<String, dynamic> json) => _$ProductVariantFromJson(json);
+  factory ProductVariant.fromJson(Map<String, dynamic> json) =>
+      _$ProductVariantFromJson(json);
   Map<String, dynamic> toJson() => _$ProductVariantToJson(this);
 }
 
@@ -179,7 +176,8 @@ class ProductVariantPrice {
     this.regionId,
   });
 
-  factory ProductVariantPrice.fromJson(Map<String, dynamic> json) => _$ProductVariantPriceFromJson(json);
+  factory ProductVariantPrice.fromJson(Map<String, dynamic> json) =>
+      _$ProductVariantPriceFromJson(json);
   Map<String, dynamic> toJson() => _$ProductVariantPriceToJson(this);
 }
 
@@ -205,6 +203,7 @@ class ProductCategory {
     this.parentCategoryId,
   });
 
-  factory ProductCategory.fromJson(Map<String, dynamic> json) => _$ProductCategoryFromJson(json);
+  factory ProductCategory.fromJson(Map<String, dynamic> json) =>
+      _$ProductCategoryFromJson(json);
   Map<String, dynamic> toJson() => _$ProductCategoryToJson(this);
 }

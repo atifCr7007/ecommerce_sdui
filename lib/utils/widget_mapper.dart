@@ -345,10 +345,9 @@ class WidgetMapper {
         ),
         child: InkWell(
           onTap: () {
-            Navigator.pushNamed(
-              context,
+            Get.toNamed(
               '/product-detail',
-              arguments: product.id,
+              parameters: {'productId': product.id},
             );
           },
           borderRadius: BorderRadius.circular(12.0),

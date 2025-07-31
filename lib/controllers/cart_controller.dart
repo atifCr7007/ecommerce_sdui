@@ -7,6 +7,7 @@ import '../services/payment_service.dart';
 import '../services/order_service.dart';
 import '../mock_data/mock_service.dart';
 import '../config/app_config.dart';
+import '../utils/debug_logger.dart';
 
 class CartController extends GetxController {
   // Services
@@ -150,11 +151,12 @@ class CartController extends GetxController {
     int quantity = 1,
   }) async {
     try {
-      if (kDebugMode) {
-        debugPrint(
-          '[CartController] Adding to cart: productId=$productId, variantId=$variantId, quantity=$quantity',
-        );
-      }
+      DebugLogger.cartOperation(
+        'Adding item to cart',
+        productId: productId,
+        variantId: variantId,
+        quantity: quantity,
+      );
 
       isAddingToCart.value = true;
       error.value = null;
@@ -194,11 +196,14 @@ class CartController extends GetxController {
         cart.value = response.cart;
       }
 
-      if (kDebugMode) {
-        debugPrint(
-          '[CartController] Successfully added to cart. New cart item count: $itemCount',
-        );
-      }
+      DebugLogger.cartOperation(
+        'Successfully added item to cart',
+        productId: productId,
+        variantId: variantId,
+        quantity: quantity,
+        totalItems: itemCount,
+        totalAmount: cart.value?.total.toDouble(),
+      );
 
       // Show success message with better styling
       Get.snackbar(

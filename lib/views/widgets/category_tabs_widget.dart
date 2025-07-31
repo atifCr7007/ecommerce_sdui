@@ -112,12 +112,12 @@ class _CategoryTabsWidgetState extends State<CategoryTabsWidget> {
                     ),
                     decoration: BoxDecoration(
                       color: isSelected
-                          ? const Color(0xFF2196F3)
+                          ? const Color(0xFF9C27B0)
                           : Colors.grey[100],
                       borderRadius: BorderRadius.circular(25),
                       border: Border.all(
                         color: isSelected
-                            ? const Color(0xFF2196F3)
+                            ? const Color(0xFF9C27B0)
                             : Colors.grey[300]!,
                         width: 1,
                       ),

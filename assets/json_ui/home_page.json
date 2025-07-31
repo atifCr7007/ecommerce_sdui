@@ -2,8 +2,8 @@
   "screenId": "home",
   "title": "Onemart Home",
   "theme": {
-    "primaryColor": "#2196F3",
-    "secondaryColor": "#FF5722",
+    "primaryColor": "#9C27B0",
+    "secondaryColor": "#E1BEE7",
     "backgroundColor": "#FFFFFF",
     "textColor": "#212121",
     "cardColor": "#FAFAFA",
@@ -22,10 +22,10 @@
               "id": "main_carousel",
               "properties": {
                 "images": [
-                  "https://img.freepik.com/free-vector/fashion-sale-with-discount-template_23-2148936503.jpg",
-                  "https://img.freepik.com/free-vector/grocery-store-sale-banner-template_23-2151089846.jpg",
-                  "https://img.freepik.com/free-vector/household-appliances-realistic-composition_1284-65307.jpg",
-                  "https://img.freepik.com/free-vector/delicious-cookies-banner-template_23-2148898360.jpg"
+                  "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&h=400&fit=crop&crop=center",
+                  "https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=800&h=400&fit=crop&crop=center",
+                  "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&h=400&fit=crop&crop=center",
+                  "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=400&fit=crop&crop=center"
                 ],
                 "autoPlay": true,
                 "autoPlayInterval": 4,
@@ -112,12 +112,10 @@
               "type": "banner",
               "id": "splash_offer",
               "properties": {
-                "imageUrl": "https://media.istockphoto.com/id/2153947113/vector/limited-time-sale-logo-illustration.jpg?s=612x612&w=0&k=20&c=5UgYoKGPHEC4cDwQRR2iVYGyF74lu6s88AE97Dz_pUc=",
+                "imageUrl": "https://images.unsplash.com/photo-1607083206869-4c7672e72a8a?w=800&h=300&fit=crop&crop=center",
                 "title": "Flash Sale",
                 "subtitle": "Limited time offer - Don't miss out!",
                 "height": 150,
-                "overlayColor": "#2196F3",
-                "overlayOpacity": 0.85,
                 "borderRadius": 12,
                 "margin": {
                   "horizontal": 16
@@ -163,12 +161,9 @@
                     {
                       "type": "banner",
                       "properties": {
-                        "imageUrl": "https://via.placeholder.com/250x300/E91E63/FFFFFF?text=New+Arrivals",
+                        "imageUrl": "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=400&h=500&fit=crop&crop=center",
                         "title": "New Arrivals",
                         "height": 200,
-                        "overlayColor": "#2196F3",
-                        "overlayOpacity": 0.85,
-                        "blendMode": "multiply",
                         "borderRadius": 12
                       },
                       "action": {
@@ -193,12 +188,9 @@
                         {
                           "type": "banner",
                           "properties": {
-                            "imageUrl": "https://via.placeholder.com/250x145/FFC107/FFFFFF?text=Summer+Sale",
+                            "imageUrl": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=400&h=250&fit=crop&crop=center",
                             "title": "Summer Sale",
                             "height": 95,
-                            "overlayColor": "#2196F3",
-                            "overlayOpacity": 0.85,
-                            "blendMode": "multiply",
                             "borderRadius": 12
                           },
                           "action": {
@@ -215,12 +207,9 @@
                         {
                           "type": "banner",
                           "properties": {
-                            "imageUrl": "https://via.placeholder.com/250x145/795548/FFFFFF?text=Black+Friday",
+                            "imageUrl": "https://images.unsplash.com/photo-1607083206325-caf1edba7a0f?w=400&h=250&fit=crop&crop=center",
                             "title": "Black Friday",
                             "height": 95,
-                            "overlayColor": "#2196F3",
-                            "overlayOpacity": 0.85,
-                            "blendMode": "multiply",
                             "borderRadius": 12
                           },
                           "action": {
@@ -261,13 +250,10 @@
               "type": "banner",
               "id": "promotional_banner",
               "properties": {
-                "imageUrl": "https://via.placeholder.com/800x250/4CAF50/FFFFFF?text=50%25+OFF+Everything+-+Use+Code+SAVE50",
+                "imageUrl": "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800&h=300&fit=crop&crop=center",
                 "title": "50% OFF Everything",
                 "subtitle": "Use code SAVE50 at checkout",
                 "height": 180,
-                "overlayColor": "#2196F3",
-                "overlayOpacity": 0.85,
-                "blendMode": "multiply",
                 "borderRadius": 12,
                 "margin": {
                   "horizontal": 16

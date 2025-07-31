@@ -2,8 +2,8 @@
   "screenId": "bookmarks",
   "title": "My Bookmarks",
   "theme": {
-    "primaryColor": "#2196F3",
-    "secondaryColor": "#FF5722",
+    "primaryColor": "#9C27B0",
+    "secondaryColor": "#E1BEE7",
     "backgroundColor": "#FFFFFF",
     "textColor": "#212121"
   },
@@ -143,7 +143,7 @@
                       "type": "button",
                       "properties": {
                         "text": "Browse Products",
-                        "backgroundColor": "#2196F3",
+                        "backgroundColor": "#9C27B0",
                         "textColor": "#FFFFFF",
                         "height": 48,
                         "width": 200
