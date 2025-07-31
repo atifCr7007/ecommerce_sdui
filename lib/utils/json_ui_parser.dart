@@ -11,10 +11,19 @@ import '../controllers/marketplace_controller.dart';
 
 class JsonUIParser {
   static Widget parseScreen(UIScreen screen, BuildContext context) {
+    final components = screen.components
+        .map((component) => parseComponent(component, context))
+        .toList();
+
+    // If there's only one component and it's a scroll_view, return it directly
+    if (components.length == 1) {
+      return components.first;
+    }
+
+    // Otherwise, wrap in a Column with proper sizing
     return Column(
-      children: screen.components
-          .map((component) => parseComponent(component, context))
-          .toList(),
+      mainAxisSize: MainAxisSize.min,
+      children: components,
     );
   }
 
@@ -122,6 +131,20 @@ class JsonUIParser {
             .toList() ??
         [];
 
+    final spacing = (component.properties['spacing'] as num?)?.toDouble() ?? 0.0;
+
+    // Add spacing between children if specified
+    List<Widget> spacedChildren = children;
+    if (spacing > 0 && children.length > 1) {
+      spacedChildren = [];
+      for (int i = 0; i < children.length; i++) {
+        spacedChildren.add(children[i]);
+        if (i < children.length - 1) {
+          spacedChildren.add(SizedBox(height: spacing));
+        }
+      }
+    }
+
     return Column(
       mainAxisAlignment: _getMainAxisAlignment(
         component.properties['mainAxisAlignment'] as String?,
@@ -132,7 +155,7 @@ class JsonUIParser {
       mainAxisSize: _getMainAxisSize(
         component.properties['mainAxisSize'] as String?,
       ),
-      children: children,
+      children: spacedChildren,
     );
   }
 
@@ -427,14 +450,20 @@ class JsonUIParser {
     } else {
       // If there are multiple children, wrap them in a Column or Row
       if (scrollDirection == Axis.horizontal) {
-        scrollContent = Row(
-          mainAxisSize: MainAxisSize.min,
-          children: children,
+        scrollContent = IntrinsicHeight(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: children,
+          ),
         );
       } else {
-        scrollContent = Column(
-          mainAxisSize: MainAxisSize.min,
-          children: children,
+        scrollContent = IntrinsicWidth(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: children,
+          ),
         );
       }
     }
@@ -447,8 +476,17 @@ class JsonUIParser {
       );
     }
 
+    // For vertical scrolling, ensure the content takes full width
+    if (scrollDirection == Axis.vertical) {
+      scrollContent = SizedBox(
+        width: double.infinity,
+        child: scrollContent,
+      );
+    }
+
     return SingleChildScrollView(
       scrollDirection: scrollDirection,
+      physics: const AlwaysScrollableScrollPhysics(),
       child: scrollContent,
     );
   }
@@ -825,7 +863,7 @@ class JsonUIParser {
       case 'max':
         return MainAxisSize.max;
       default:
-        return MainAxisSize.max;
+        return MainAxisSize.min; // Default to min to prevent overflow in scroll views
     }
   }
 
@@ -1322,53 +1360,54 @@ class JsonUIParser {
     final itemSpacing = (properties['itemSpacing'] as num?)?.toDouble() ?? 12.0;
     final padding = properties['padding'] as Map<String, dynamic>? ?? {};
 
-    return GetBuilder<MarketplaceController>(
-      builder: (controller) {
-        final categories = ShopCategory.values;
+    return Obx(() {
+      final controller = Get.find<MarketplaceController>();
+      final categories = ShopCategory.values;
 
-        return Padding(
-          padding: _parsePadding(padding) ?? EdgeInsets.zero,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-              ),
-              const SizedBox(height: 12),
-              SizedBox(
-                height: 100,
-                child: ListView.builder(
-                  scrollDirection: scrollDirection == 'horizontal' ? Axis.horizontal : Axis.vertical,
-                  itemCount: categories.length + (showAll ? 1 : 0),
-                  itemBuilder: (context, index) {
-                    if (showAll && index == 0) {
-                      return _buildCategoryChip(
-                        'All Categories',
-                        '🏪',
-                        controller.selectedCategory.value == null,
-                        () => controller.filterByCategory(null),
-                        itemSpacing,
-                      );
-                    }
-
-                    final categoryIndex = showAll ? index - 1 : index;
-                    final category = categories[categoryIndex];
+      return Padding(
+        padding: _parsePadding(padding) ?? EdgeInsets.zero,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+            ),
+            const SizedBox(height: 12),
+            SizedBox(
+              height: 100,
+              child: ListView.builder(
+                shrinkWrap: true,
+                physics: const ClampingScrollPhysics(),
+                scrollDirection: scrollDirection == 'horizontal' ? Axis.horizontal : Axis.vertical,
+                itemCount: categories.length + (showAll ? 1 : 0),
+                itemBuilder: (context, index) {
+                  if (showAll && index == 0) {
                     return _buildCategoryChip(
-                      category.displayName,
-                      category.icon,
-                      controller.selectedCategory.value == category,
-                      () => controller.filterByCategory(category),
+                      'All Categories',
+                      '🏪',
+                      controller.selectedCategory.value == null,
+                      () => controller.filterByCategory(null),
                       itemSpacing,
                     );
-                  },
-                ),
+                  }
+
+                  final categoryIndex = showAll ? index - 1 : index;
+                  final category = categories[categoryIndex];
+                  return _buildCategoryChip(
+                    category.displayName,
+                    category.icon,
+                    controller.selectedCategory.value == category.displayName,
+                    () => controller.selectCategory(category.displayName),
+                    itemSpacing,
+                  );
+                },
               ),
-            ],
-          ),
-        );
-      },
-    );
+            ),
+          ],
+        ),
+      );
+    });
   }
 
   static Widget _buildCategoryChip(
@@ -1420,9 +1459,9 @@ class JsonUIParser {
     final showRating = properties['showRating'] as bool? ?? true;
     final showVerified = properties['showVerified'] as bool? ?? true;
 
-    return GetBuilder<MarketplaceController>(
-      builder: (controller) {
-        final featuredShops = controller.getFeaturedShops().take(limit).toList();
+    return Obx(() {
+      final controller = Get.find<MarketplaceController>();
+      final featuredShops = controller.getFeaturedShops().take(limit).toList();
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -1458,6 +1497,8 @@ class JsonUIParser {
             SizedBox(
               height: 200,
               child: ListView.builder(
+                shrinkWrap: true,
+                physics: const ClampingScrollPhysics(),
                 scrollDirection: scrollDirection == 'horizontal' ? Axis.horizontal : Axis.vertical,
                 itemCount: featuredShops.length,
                 itemBuilder: (context, index) {
@@ -1490,9 +1531,9 @@ class JsonUIParser {
     final showVerified = properties['showVerified'] as bool? ?? true;
     final showCategory = properties['showCategory'] as bool? ?? true;
 
-    return GetBuilder<MarketplaceController>(
-      builder: (controller) {
-        final filteredShops = controller.filteredShops;
+    return Obx(() {
+      final controller = Get.find<MarketplaceController>();
+      final filteredShops = controller.filteredShops;
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -1592,25 +1633,48 @@ class JsonUIParser {
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
             // Shop logo/image
             Container(
               height: isFeatured ? 80 : 120,
+              width: double.infinity,
               decoration: BoxDecoration(
                 color: Colors.grey[200],
                 borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
               ),
               child: Stack(
                 children: [
-                  Center(
+                  SizedBox(
+                    width: double.infinity,
+                    height: double.infinity,
                     child: shop.logo.isNotEmpty
-                        ? Image.network(
-                            shop.logo,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) =>
-                                const Icon(Icons.store, size: 40, color: Colors.grey),
+                        ? ClipRRect(
+                            borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                            child: Image.network(
+                              shop.logo,
+                              fit: BoxFit.cover,
+                              width: double.infinity,
+                              height: double.infinity,
+                              errorBuilder: (context, error, stackTrace) =>
+                                  Container(
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                    color: Colors.grey[200],
+                                    child: const Center(
+                                      child: Icon(Icons.store, size: 40, color: Colors.grey),
+                                    ),
+                                  ),
+                            ),
                           )
-                        : const Icon(Icons.store, size: 40, color: Colors.grey),
+                        : Container(
+                            width: double.infinity,
+                            height: double.infinity,
+                            color: Colors.grey[200],
+                            child: const Center(
+                              child: Icon(Icons.store, size: 40, color: Colors.grey),
+                            ),
+                          ),
                   ),
                   if (showVerified && shop.isVerified)
                     Positioned(
@@ -1633,11 +1697,12 @@ class JsonUIParser {
               ),
             ),
 
-            Expanded(
+            Flexible(
               child: Padding(
                 padding: const EdgeInsets.all(12),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     // Shop name
                     Text(

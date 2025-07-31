@@ -1,104 +1,152 @@
 {
-  "screen": {
-    "screenId": "marketplace_screen",
-    "title": "Marketplace",
-    "theme": {
-      "backgroundColor": "#FFFFFF"
-    },
-    "components": [
-      {
-        "type": "scroll_view",
-        "id": "marketplace_scroll",
-        "properties": {
-          "scrollDirection": "vertical",
-          "padding": {
-            "top": 16,
-            "bottom": 16,
-            "left": 16,
-            "right": 16
-          }
-        },
+  "type": "scaffold",
+  "body": {
+    "type": "singleChildScrollView",
+    "child": {
+      "type": "padding",
+      "padding": {
+        "top": 20,
+        "left": 16,
+        "right": 16,
+        "bottom": 20
+      },
+      "child": {
+        "type": "column",
+        "crossAxisAlignment": "start",
+        "spacing": 24,
         "children": [
           {
-            "type": "column",
-            "id": "marketplace_column",
-            "properties": {
-              "crossAxisAlignment": "stretch",
-              "mainAxisSize": "min",
-              "spacing": 24
+            "type": "container",
+            "padding": {
+              "all": 20
             },
+            "decoration": {
+              "color": "#F8F9FA",
+              "borderRadius": 16
+            },
+            "child": {
+              "type": "column",
+              "crossAxisAlignment": "start",
+              "spacing": 8,
+              "children": [
+                {
+                  "type": "text",
+                  "data": "Discover Amazing Shops",
+                  "style": {
+                    "fontSize": 24,
+                    "fontWeight": "bold",
+                    "color": "#1A1A1A"
+                  }
+                },
+                {
+                  "type": "text",
+                  "data": "Find the best products from trusted sellers",
+                  "style": {
+                    "fontSize": 16,
+                    "color": "#666666"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "type": "marketplace_search"
+          },
+          {
+            "type": "column",
+            "crossAxisAlignment": "start",
+            "spacing": 16,
             "children": [
               {
-                "type": "marketplace_header",
-                "id": "marketplace_header",
-                "properties": {
-                  "title": "Discover Amazing Shops",
-                  "subtitle": "Find the best products from trusted sellers",
-                  "backgroundColor": "#F8F9FA",
-                  "borderRadius": 12,
-                  "padding": {
-                    "all": 20
+                "type": "text",
+                "data": "Shop Categories",
+                "style": {
+                  "fontSize": 20,
+                  "fontWeight": "w600",
+                  "color": "#1A1A1A"
+                }
+              },
+              {
+                "type": "marketplace_categories"
+              }
+
+
+            ]
+          },
+          {
+            "type": "column",
+            "crossAxisAlignment": "start",
+            "spacing": 16,
+            "children": [
+              {
+                "type": "row",
+                "mainAxisAlignment": "spaceBetween",
+                "crossAxisAlignment": "center",
+                "children": [
+                  {
+                    "type": "column",
+                    "crossAxisAlignment": "start",
+                    "spacing": 4,
+                    "children": [
+                      {
+                        "type": "text",
+                        "data": "Featured Shops",
+                        "style": {
+                          "fontSize": 20,
+                          "fontWeight": "w600",
+                          "color": "#1A1A1A"
+                        }
+                      },
+                      {
+                        "type": "text",
+                        "data": "Top-rated shops you'll love",
+                        "style": {
+                          "fontSize": 14,
+                          "color": "#666666"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "data": "See All",
+                    "style": {
+                      "fontSize": 14,
+                      "color": "#007AFF",
+                      "fontWeight": "w500"
+                    }
                   }
+                ]
+              },
+              {
+                "type": "marketplace_shops",
+                "featured": true
+              }
+
+            ]
+          },
+          {
+            "type": "column",
+            "crossAxisAlignment": "start",
+            "spacing": 16,
+            "children": [
+              {
+                "type": "text",
+                "data": "All Shops",
+                "style": {
+                  "fontSize": 20,
+                  "fontWeight": "w600",
+                  "color": "#1A1A1A"
                 }
               },
               {
-                "type": "marketplace_search",
-                "id": "marketplace_search",
-                "properties": {
-                  "placeholder": "Search shops...",
-                  "backgroundColor": "#FFFFFF",
-                  "borderRadius": 25,
-                  "elevation": 2,
-                  "padding": {
-                    "horizontal": 16,
-                    "vertical": 12
-                  }
-                }
-              },
-              {
-                "type": "marketplace_categories",
-                "id": "marketplace_categories",
-                "properties": {
-                  "title": "Shop Categories",
-                  "showAll": true,
-                  "scrollDirection": "horizontal",
-                  "itemSpacing": 12,
-                  "padding": {
-                    "vertical": 8
-                  }
-                }
-              },
-              {
-                "type": "marketplace_featured_shops",
-                "id": "featured_shops",
-                "properties": {
-                  "title": "Featured Shops",
-                  "subtitle": "Top-rated shops you'll love",
-                  "limit": 5,
-                  "scrollDirection": "horizontal",
-                  "itemSpacing": 16,
-                  "showRating": true,
-                  "showVerified": true
-                }
-              },
-              {
-                "type": "marketplace_all_shops",
-                "id": "all_shops",
-                "properties": {
-                  "title": "All Shops",
-                  "subtitle": "Browse all available shops",
-                  "layout": "grid",
-                  "columns": 2,
-                  "itemSpacing": 16,
-                  "showRating": true,
-                  "showVerified": true,
-                  "showCategory": true
-                }
+                "type": "marketplace_shops",
+                "featured": false
               }
             ]
           }
         ]
       }
-    ]
+    }
   }
 }

@@ -13,19 +13,41 @@ class MarketplaceController extends GetxController {
   final shops = <Shop>[].obs;
   final selectedShop = Rxn<ShopWithProducts>();
   final searchQuery = ''.obs;
-  final selectedCategory = Rxn<ShopCategory>();
+  final selectedCategory = 'All'.obs;
+
+  // Available categories
+  List<String> get categories => [
+    'All',
+    'Electronics',
+    'Clothing',
+    'Books',
+    'Home & Garden',
+    'Sports',
+    'Beauty',
+    'Toys',
+    'Automotive',
+    'Food',
+    'Health',
+  ];
+
+  // Featured shops (top rated)
+  List<Shop> get featuredShops {
+    final sortedShops = shops.toList()
+      ..sort((a, b) => b.rating.compareTo(a.rating));
+    return sortedShops.take(5).toList();
+  }
 
   // Filtered shops based on search and category
   List<Shop> get filteredShops {
     var filtered = shops.toList();
 
     // Filter by category
-    if (selectedCategory.value != null) {
+    if (selectedCategory.value != 'All') {
       filtered = filtered
           .where(
             (shop) =>
                 shop.category.toLowerCase() ==
-                selectedCategory.value!.name.toLowerCase(),
+                selectedCategory.value.toLowerCase(),
           )
           .toList();
     }
@@ -116,18 +138,22 @@ class MarketplaceController extends GetxController {
     debugPrint('[MarketplaceController] Searching shops with query: $query');
   }
 
-  /// Filter by category
-  void filterByCategory(ShopCategory? category) {
+  /// Select category
+  void selectCategory(String category) {
     selectedCategory.value = category;
-    debugPrint(
-      '[MarketplaceController] Filtering by category: ${category?.displayName ?? 'All'}',
-    );
+    debugPrint('[MarketplaceController] Selected category: $category');
+  }
+
+  /// Filter by category (legacy method)
+  void filterByCategory(String? category) {
+    selectedCategory.value = category ?? 'All';
+    debugPrint('[MarketplaceController] Filtering by category: ${category ?? 'All'}');
   }
 
   /// Clear filters
   void clearFilters() {
     searchQuery.value = '';
-    selectedCategory.value = null;
+    selectedCategory.value = 'All';
     debugPrint('[MarketplaceController] Cleared all filters');
   }
 

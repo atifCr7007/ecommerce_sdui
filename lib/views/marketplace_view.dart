@@ -3,13 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import '../controllers/marketplace_controller.dart';
-import '../models/ui_models.dart';
-import '../utils/json_ui_parser.dart';
+import '../utils/stac.dart';
 import '../utils/debug_logger.dart';
 
 class MarketplaceView extends StatefulWidget {
-  final String? shopId; // Optional shop ID for navigation
-
+  final String? shopId;
+  
   const MarketplaceView({super.key, this.shopId});
 
   @override
@@ -17,85 +16,46 @@ class MarketplaceView extends StatefulWidget {
 }
 
 class _MarketplaceViewState extends State<MarketplaceView> {
-  UIScreen? _marketplaceScreen;
+  Map<String, dynamic>? _marketplaceJson;
   bool _isLoading = true;
   String? _error;
+  final MarketplaceController _controller = Get.find<MarketplaceController>();
 
   @override
   void initState() {
     super.initState();
-    _loadMarketplaceScreen();
+    _loadMarketplaceUI();
+
+    // If shopId is provided, handle shop-specific logic
+    if (widget.shopId != null) {
+      DebugLogger.jsonParsing('MarketplaceView initialized with shopId: ${widget.shopId}');
+    }
   }
 
-  Future<void> _loadMarketplaceScreen() async {
+  Future<void> _loadMarketplaceUI() async {
     try {
+      DebugLogger.jsonParsing('Loading marketplace UI from JSON...');
+
+      final String jsonString = await rootBundle.loadString('assets/json_ui/marketplace.json');
+      final Map<String, dynamic> jsonData = json.decode(jsonString);
+
+      DebugLogger.jsonParsing('JSON loaded successfully, ready for Stac parsing...');
+
       setState(() {
-        _isLoading = true;
+        _marketplaceJson = jsonData;
+        _isLoading = false;
         _error = null;
       });
 
-      DebugLogger.jsonParsing(
-        'Loading marketplace screen JSON',
-        componentType: 'screen',
-        screenId: 'marketplace_screen',
-      );
+      DebugLogger.jsonParsing('Marketplace JSON loaded successfully');
 
-      // Load the marketplace screen JSON
-      final String jsonString = await rootBundle.loadString(
-        'assets/json_ui/marketplace.json',
-      );
-
-      // Parse JSON with validation
-      Map<String, dynamic> jsonData;
-      try {
-        jsonData = json.decode(jsonString) as Map<String, dynamic>;
-        DebugLogger.jsonParsing(
-          'Successfully parsed marketplace JSON data',
-          componentType: 'screen',
-        );
-      } catch (parseError) {
-        DebugLogger.jsonParsing(
-          'JSON parsing error: $parseError',
-          componentType: 'screen',
-          error: parseError,
-        );
-        throw Exception('Failed to parse marketplace.json: $parseError');
-      }
-
-      // Validate required fields
-      if (!jsonData.containsKey('screen') ||
-          !jsonData['screen'].containsKey('components')) {
-        throw Exception(
-          'Invalid marketplace.json structure: missing required fields',
-        );
-      }
-
-      DebugLogger.jsonParsing(
-        'Marketplace screen JSON loaded successfully',
-        componentType: 'screen',
-        screenId: jsonData['screen']['screenId'] as String?,
-        componentCount: (jsonData['screen']['components'] as List?)?.length,
-      );
+    } catch (e, stackTrace) {
+      DebugLogger.jsonParsing('Error loading marketplace UI: $e');
+      DebugLogger.jsonParsing('Stack trace: $stackTrace');
 
       setState(() {
-        _marketplaceScreen = UIScreen.fromJson(jsonData['screen']);
         _isLoading = false;
-      });
-
-      // Initialize the marketplace controller
-      if (mounted) {
-        final controller = Get.put(MarketplaceController());
-        await controller.loadMarketplace();
-      }
-    } catch (e) {
-      DebugLogger.jsonParsing(
-        'Failed to load marketplace screen: $e',
-        componentType: 'screen',
-        error: e,
-      );
-      setState(() {
-        _error = 'Failed to load marketplace screen: $e';
-        _isLoading = false;
+        _error = 'Failed to load marketplace: $e';
       });
     }
   }
@@ -104,129 +64,66 @@ class _MarketplaceViewState extends State<MarketplaceView> {
   Widget build(BuildContext context) {
     if (_isLoading) {
       return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
       );
     }
 
     if (_error != null) {
       return Scaffold(
         body: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(32),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.error_outline, size: 64, color: Colors.red[300]),
-                const SizedBox(height: 16),
-                Text(
-                  'Error Loading Marketplace',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.grey[700],
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  _error!,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.grey[600]),
-                ),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: _loadMarketplaceScreen,
-                  child: const Text('Retry'),
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-    }
-
-    if (_marketplaceScreen == null) {
-      return const Scaffold(
-        body: Center(child: Text('No marketplace content available')),
-      );
-    }
-
-    final controller = Get.find<MarketplaceController>();
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(_marketplaceScreen!.title),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        elevation: 0,
-        centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () {
-              // TODO: Implement search functionality
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.filter_list),
-            onPressed: () {
-              // TODO: Implement filter functionality
-            },
-          ),
-        ],
-      ),
-      body: Obx(() {
-        if (controller.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
-        if (controller.error.value != null) {
-          return _buildErrorState(controller);
-        }
-
-        return RefreshIndicator(
-          onRefresh: controller.refreshMarketplace,
-          child: _buildMarketplaceContent(controller),
-        );
-      }),
-    );
-  }
-
-  Widget _buildMarketplaceContent(MarketplaceController controller) {
-    // Use the standard JSON UI parser to render the marketplace screen
-    return JsonUIParser.parseScreen(_marketplaceScreen!, context);
-  }
-
-  Widget _buildErrorState(MarketplaceController controller) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(32),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.error_outline, size: 64, color: Colors.red[300]),
-            const SizedBox(height: 16),
-            Text(
-              'Error Loading Marketplace',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-                color: Colors.grey[700],
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.error_outline,
+                size: 64,
+                color: Colors.red[300],
               ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              controller.error.value!,
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.grey[600]),
-            ),
-            const SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: controller.refreshMarketplace,
-              child: const Text('Retry'),
-            ),
-          ],
+              const SizedBox(height: 16),
+              Text(
+                'Oops! Something went wrong',
+                style: Theme.of(context).textTheme.headlineSmall,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 8),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 32),
+                child: Text(
+                  _error!,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Colors.grey[600],
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              const SizedBox(height: 24),
+              ElevatedButton.icon(
+                onPressed: () {
+                  setState(() {
+                    _isLoading = true;
+                    _error = null;
+                  });
+                  _loadMarketplaceUI();
+                },
+                icon: const Icon(Icons.refresh),
+                label: const Text('Retry'),
+              ),
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    }
+
+    if (_marketplaceJson == null) {
+      return const Scaffold(
+        body: Center(
+          child: Text('No marketplace data available'),
+        ),
+      );
+    }
+
+    return Stac.fromJson(_marketplaceJson!, context);
   }
 }
