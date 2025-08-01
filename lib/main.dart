@@ -10,6 +10,7 @@ import 'controllers/marketplace_controller.dart';
 import 'utils/theme_manager.dart';
 import 'controllers/orders_controller.dart';
 import 'views/home_view.dart';
+import 'views/shop_home_view.dart';
 import 'views/product_detail_view.dart';
 import 'views/search_view.dart';
 
@@ -19,6 +20,15 @@ import 'views/marketplace_view.dart';
 import 'views/shop_view.dart';
 import 'views/bookmarks_view.dart';
 import 'views/orders_view.dart';
+import 'views/order_confirmation_view.dart';
+import 'views/new_home_view.dart';
+import 'views/shops_tab_view.dart';
+import 'views/instant_items_view.dart';
+import 'views/take_away_view.dart';
+import 'views/reorder_view.dart';
+import 'views/category_view.dart';
+import 'views/offers_view.dart';
+import 'common/floating_cart_widget.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -52,7 +62,18 @@ class OneMartApp extends StatelessWidget {
       getPages: [
         GetPage(
           name: '/home',
-          page: () => HomeView(shopId: Get.parameters['shopId']),
+          page: () {
+            final shopId = Get.parameters['shopId'];
+            final shopName = Get.parameters['shopName'];
+
+            // If shop parameters are provided, show shop home view
+            if (shopId != null && shopId.isNotEmpty) {
+              return ShopHomeView(shopId: shopId, shopName: shopName);
+            }
+
+            // Otherwise show regular home view
+            return HomeView(shopId: shopId);
+          },
         ),
         GetPage(
           name: '/product-detail',
@@ -90,6 +111,21 @@ class OneMartApp extends StatelessWidget {
           name: '/promotional-offers',
           page: () => const PlaceholderPage(title: 'Promotional Offers'),
         ),
+        GetPage(
+          name: '/order-confirmation',
+          page: () => const OrderConfirmationView(),
+        ),
+        GetPage(
+          name: '/category',
+          page: () => CategoryView(
+            categoryId: Get.parameters['categoryId'] ?? '',
+            categoryName: Get.parameters['categoryName'],
+          ),
+        ),
+        GetPage(
+          name: '/offers',
+          page: () => const OffersView(),
+        ),
       ],
     );
   }
@@ -106,35 +142,39 @@ class _MainAppShellState extends State<MainAppShell> {
   int _currentIndex = 0;
 
   final List<Widget> _pages = [
-    const MarketplaceView(),
-    const CartView(),
-    const OrdersView(),
-    const BookmarksView(),
+    const NewHomeView(),
+    const ShopsTabView(),
+    const InstantItemsView(),
+    const TakeAwayView(),
+    const ReorderView(),
   ];
 
   List<BottomNavigationBarItem> get _bottomNavItems {
-    final cartController = Get.find<CartController>();
-
     return [
+      const BottomNavigationBarItem(
+        icon: Icon(Icons.home_outlined),
+        activeIcon: Icon(Icons.home),
+        label: 'Home',
+      ),
       const BottomNavigationBarItem(
         icon: Icon(Icons.store_outlined),
         activeIcon: Icon(Icons.store),
-        label: 'Marketplace',
-      ),
-      BottomNavigationBarItem(
-        icon: Obx(() => _buildCartIcon(cartController, false)),
-        activeIcon: Obx(() => _buildCartIcon(cartController, true)),
-        label: 'Cart',
+        label: 'Shops',
       ),
       const BottomNavigationBarItem(
-        icon: Icon(Icons.receipt_long_outlined),
-        activeIcon: Icon(Icons.receipt_long),
-        label: 'My Orders',
+        icon: Icon(Icons.flash_on_outlined),
+        activeIcon: Icon(Icons.flash_on),
+        label: 'Instant Items',
       ),
       const BottomNavigationBarItem(
-        icon: Icon(Icons.bookmark_outline),
-        activeIcon: Icon(Icons.bookmark),
-        label: 'Bookmarks',
+        icon: Icon(Icons.takeout_dining_outlined),
+        activeIcon: Icon(Icons.takeout_dining),
+        label: 'Take Away',
+      ),
+      const BottomNavigationBarItem(
+        icon: Icon(Icons.refresh_outlined),
+        activeIcon: Icon(Icons.refresh),
+        label: 'Reorder',
       ),
     ];
   }
@@ -171,7 +211,9 @@ class _MainAppShellState extends State<MainAppShell> {
     );
   }
 
-  AppBar _buildAppBar(BuildContext context) {
+  AppBar? _buildAppBar(BuildContext context) {
+    // Most new views handle their own app bars or use slivers
+    // Only show app bar for specific tabs that need it
     switch (_currentIndex) {
       case 0: // Home
         return AppBar(
@@ -204,64 +246,11 @@ class _MainAppShellState extends State<MainAppShell> {
             ),
           ],
         );
-      case 1: // Cart
-        return AppBar(
-          backgroundColor: Colors.white,
-          title: const Text(
-            'Cart',
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          centerTitle: true,
-          elevation: 0,
-        );
-      case 2: // Orders
-        return AppBar(
-          backgroundColor: Colors.white,
-          title: const Text(
-            'My Orders',
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          centerTitle: true,
-          elevation: 0,
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.filter_list, color: Colors.black),
-              onPressed: () {
-                // Handle order filtering
-              },
-            ),
-          ],
-        );
-      case 3: // Bookmarks
-        return AppBar(
-          backgroundColor: Colors.white,
-          title: const Text(
-            'Bookmarks',
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          centerTitle: true,
-          elevation: 0,
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.share, color: Colors.black),
-              onPressed: () {
-                // Handle sharing bookmarks
-              },
-            ),
-          ],
-        );
+      case 1: // Shops - uses SliverAppBar
+      case 2: // Instant Items
+      case 3: // Take Away
+      case 4: // Reorder
+        return null; // These views handle their own app bars
       default:
         return AppBar(
           backgroundColor: Colors.white,
@@ -276,7 +265,12 @@ class _MainAppShellState extends State<MainAppShell> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _buildAppBar(context),
-      body: IndexedStack(index: _currentIndex, children: _pages),
+      body: Stack(
+        children: [
+          IndexedStack(index: _currentIndex, children: _pages),
+          const FloatingCartWidget(),
+        ],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: (index) {

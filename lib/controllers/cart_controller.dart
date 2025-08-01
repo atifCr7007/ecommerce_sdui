@@ -23,6 +23,8 @@ class CartController extends GetxController {
   final RxString cartId = ''.obs;
   final RxBool isAddingToCart = false.obs;
   final RxBool isProcessingPayment = false.obs;
+  final RxnString currentShopId = RxnString();
+  final RxnString currentShopName = RxnString();
 
   // Getters
   int get itemCount => cart.value?.items.length ?? 0;
@@ -145,10 +147,30 @@ class CartController extends GetxController {
     }
   }
 
+  /// Set the current shop context for the cart
+  void setShopContext(String shopId, String shopName) {
+    currentShopId.value = shopId;
+    currentShopName.value = shopName;
+    if (kDebugMode) {
+      debugPrint('[CartController] Set shop context: $shopName ($shopId)');
+    }
+  }
+
+  /// Clear the shop context
+  void clearShopContext() {
+    currentShopId.value = null;
+    currentShopName.value = null;
+    if (kDebugMode) {
+      debugPrint('[CartController] Cleared shop context');
+    }
+  }
+
   Future<bool> addToCart(
     String productId,
     String variantId, {
     int quantity = 1,
+    String? shopId,
+    String? shopName,
   }) async {
     try {
       DebugLogger.cartOperation(
@@ -160,6 +182,11 @@ class CartController extends GetxController {
 
       isAddingToCart.value = true;
       error.value = null;
+
+      // Set shop context if provided
+      if (shopId != null && shopName != null) {
+        setShopContext(shopId, shopName);
+      }
 
       if (cartId.value.isEmpty) {
         if (kDebugMode) {
@@ -322,6 +349,9 @@ class CartController extends GetxController {
         final response = await _cartService.clearCart(cartId.value);
         cart.value = response.cart;
       }
+
+      // Clear shop context when cart is cleared
+      clearShopContext();
 
       Get.snackbar(
         'Success',

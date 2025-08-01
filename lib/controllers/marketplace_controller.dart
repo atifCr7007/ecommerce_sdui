@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ecommerce_sdui/models/shop.dart';
 import 'package:ecommerce_sdui/mock_data/mock_service.dart';
+import 'package:ecommerce_sdui/services/mock_shop_service.dart';
 import 'package:ecommerce_sdui/config/app_config.dart';
 
 class MarketplaceController extends GetxController {
   final MockDataService _mockDataService = MockDataService();
+  final MockShopService _mockShopService = MockShopService();
 
   // Observable state
   final isLoading = false.obs;
@@ -18,16 +20,15 @@ class MarketplaceController extends GetxController {
   // Available categories
   List<String> get categories => [
     'All',
-    'Electronics',
-    'Clothing',
-    'Books',
-    'Home & Garden',
-    'Sports',
-    'Beauty',
-    'Toys',
-    'Automotive',
-    'Food',
-    'Health',
+    'food',
+    'electronics',
+    'clothing',
+    'books',
+    'home_garden',
+    'sports',
+    'beauty',
+    'toys',
+    'automotive',
   ];
 
   // Featured shops (top rated)
@@ -86,10 +87,11 @@ class MarketplaceController extends GetxController {
       debugPrint('[MarketplaceController] Loading marketplace...');
 
       if (AppConfig.useMockData) {
-        final response = await _mockDataService.getMarketplace();
-        shops.value = response.shops;
+        // Use the new MockShopService for diverse shop data
+        final allShops = _mockShopService.getAllShops();
+        shops.value = allShops;
         debugPrint(
-          '[MarketplaceController] Loaded ${response.shops.length} shops',
+          '[MarketplaceController] Loaded ${allShops.length} shops from MockShopService',
         );
       } else {
         // TODO: Implement real API call

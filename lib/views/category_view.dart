@@ -1,12 +1,10 @@
 import 'dart:convert';
+import 'package:ecommerce_sdui/utils/widget_mapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import '../controllers/category_controller.dart';
-import '../models/ui_models.dart';
-import '../parsers/json_parser.dart';
-import '../utils/theme_manager.dart';
-import '../utils/widget_mapper.dart';
+import '../utils/stac.dart';
 
 class CategoryView extends StatefulWidget {
   final String categoryId;
@@ -19,7 +17,7 @@ class CategoryView extends StatefulWidget {
 }
 
 class _CategoryViewState extends State<CategoryView> {
-  UIScreen? _categoryScreen;
+  Map<String, dynamic>? _categoryScreen;
   bool _isLoading = true;
   String? _error;
 
@@ -43,7 +41,7 @@ class _CategoryViewState extends State<CategoryView> {
       final Map<String, dynamic> jsonData = json.decode(jsonString);
 
       setState(() {
-        _categoryScreen = UIScreen.fromJson(jsonData);
+        _categoryScreen = jsonData;
         _isLoading = false;
       });
 
@@ -171,7 +169,11 @@ class _CategoryViewState extends State<CategoryView> {
           );
         }
 
-        return _buildCategoryContent(controller);
+        if (_categoryScreen == null) {
+          return const Center(child: Text('Category configuration not available'));
+        }
+
+        return Stac.fromJson(_categoryScreen!, context);
       }),
     );
   }

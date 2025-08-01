@@ -8,6 +8,7 @@ import '../widgets/order_statistics_widget.dart';
 import '../controllers/cart_controller.dart';
 import '../controllers/product_detail_controller.dart';
 import '../controllers/marketplace_controller.dart';
+import '../controllers/favorites_controller.dart';
 
 class JsonUIParser {
   static Widget parseScreen(UIScreen screen, BuildContext context) {
@@ -928,8 +929,86 @@ class JsonUIParser {
         final query = action.parameters?['query'] as String?;
         Get.toNamed('/search', parameters: {'query': query ?? ''});
         break;
+      case 'add_to_cart':
+        _handleAddToCart(action, context);
+        break;
+      case 'toggle_favorite':
+        _handleToggleFavorite(action, context);
+        break;
       default:
         debugPrint('Unknown action type: ${action.type}');
+    }
+  }
+
+  /// Handles add to cart action from SDUI components
+  static void _handleAddToCart(UIAction action, BuildContext context) {
+    try {
+      final cartController = Get.find<CartController>();
+      final productId = action.parameters?['productId'] as String?;
+      final variantId = action.parameters?['variantId'] as String?;
+      final quantity = action.parameters?['quantity'] as int? ?? 1;
+      final shopId = action.parameters?['shopId'] as String?;
+      final shopName = action.parameters?['shopName'] as String?;
+
+      if (productId == null || variantId == null) {
+        debugPrint('Add to cart action missing required parameters: productId or variantId');
+        Get.snackbar(
+          'Error',
+          'Unable to add item to cart. Missing product information.',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+        return;
+      }
+
+      // Add to cart with shop context
+      cartController.addToCart(
+        productId,
+        variantId,
+        quantity: quantity,
+        shopId: shopId,
+        shopName: shopName,
+      );
+    } catch (e) {
+      debugPrint('Error handling add to cart action: $e');
+      Get.snackbar(
+        'Error',
+        'Failed to add item to cart',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    }
+  }
+
+  /// Handles toggle favorite action from SDUI components
+  static void _handleToggleFavorite(UIAction action, BuildContext context) {
+    try {
+      final favoritesController = Get.find<FavoritesController>();
+      final productId = action.parameters?['productId'] as String?;
+
+      if (productId == null) {
+        debugPrint('Toggle favorite action missing productId parameter');
+        return;
+      }
+
+      // For now, just toggle the favorite status using productId
+      // In a real implementation, you'd need to get the Product object first
+      if (favoritesController.isFavorite(productId)) {
+        favoritesController.removeFromFavorites(productId);
+      } else {
+        // Since we need a Product object, we'll show a message for now
+        Get.snackbar(
+          'Feature Not Available',
+          'Favorite functionality requires product details',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.orange,
+          colorText: Colors.white,
+        );
+      }
+    } catch (e) {
+      debugPrint('Error handling toggle favorite action: $e');
     }
   }
 
@@ -1362,7 +1441,7 @@ class JsonUIParser {
 
     return Obx(() {
       final controller = Get.find<MarketplaceController>();
-      final categories = ShopCategory.values;
+      final categories = controller.categories;
 
       return Padding(
         padding: _parsePadding(padding) ?? EdgeInsets.zero,
@@ -1380,25 +1459,14 @@ class JsonUIParser {
                 shrinkWrap: true,
                 physics: const ClampingScrollPhysics(),
                 scrollDirection: scrollDirection == 'horizontal' ? Axis.horizontal : Axis.vertical,
-                itemCount: categories.length + (showAll ? 1 : 0),
+                itemCount: categories.length,
                 itemBuilder: (context, index) {
-                  if (showAll && index == 0) {
-                    return _buildCategoryChip(
-                      'All Categories',
-                      '🏪',
-                      controller.selectedCategory.value == null,
-                      () => controller.filterByCategory(null),
-                      itemSpacing,
-                    );
-                  }
-
-                  final categoryIndex = showAll ? index - 1 : index;
-                  final category = categories[categoryIndex];
+                  final category = categories[index];
                   return _buildCategoryChip(
-                    category.displayName,
-                    category.icon,
-                    controller.selectedCategory.value == category.displayName,
-                    () => controller.selectCategory(category.displayName),
+                    category,
+                    _getCategoryIcon(category),
+                    controller.selectedCategory.value == category,
+                    () => controller.selectCategory(category),
                     itemSpacing,
                   );
                 },
@@ -1412,7 +1480,7 @@ class JsonUIParser {
 
   static Widget _buildCategoryChip(
     String label,
-    String icon,
+    IconData icon,
     bool isSelected,
     VoidCallback onTap,
     double spacing,
@@ -1421,25 +1489,27 @@ class JsonUIParser {
       onTap: onTap,
       child: Container(
         margin: EdgeInsets.only(right: spacing),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        width: 80,
+        padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: isSelected ? Colors.blue : Colors.grey[200],
-          borderRadius: BorderRadius.circular(20),
+          color: isSelected ? const Color(0xFF1976D2) : const Color(0xFFE3F2FD),
+          borderRadius: BorderRadius.circular(12),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
+            Icon(
               icon,
-              style: const TextStyle(fontSize: 24),
+              size: 24,
+              color: isSelected ? Colors.white : const Color(0xFF1976D2),
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: 8),
             Text(
               label,
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w500,
-                color: isSelected ? Colors.white : Colors.black87,
+                color: isSelected ? Colors.white : const Color(0xFF1976D2),
               ),
               textAlign: TextAlign.center,
             ),
@@ -1766,5 +1836,34 @@ class JsonUIParser {
         ),
       ),
     );
+  }
+
+  static IconData _getCategoryIcon(String category) {
+    switch (category.toLowerCase()) {
+      case 'all':
+        return Icons.category;
+      case 'electronics':
+        return Icons.phone_android;
+      case 'clothing':
+        return Icons.shopping_bag;
+      case 'books':
+        return Icons.book;
+      case 'home & garden':
+        return Icons.home;
+      case 'sports':
+        return Icons.sports;
+      case 'beauty':
+        return Icons.face;
+      case 'toys':
+        return Icons.toys;
+      case 'automotive':
+        return Icons.directions_car;
+      case 'food':
+        return Icons.restaurant;
+      case 'health':
+        return Icons.health_and_safety;
+      default:
+        return Icons.store;
+    }
   }
 }

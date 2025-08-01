@@ -1,0 +1,36 @@
+{
+  "type": "scaffold",
+  "appBar": {
+    "type": "appBar",
+    "title": "Shopping Cart",
+    "backgroundColor": "#FFFFFF",
+    "elevation": 0,
+    "actions": [
+      {
+        "type": "iconButton",
+        "icon": "clear_all",
+        "color": "#F44336",
+        "action": {
+          "type": "clearCart"
+        }
+      }
+    ]
+  },
+  "body": {
+    "type": "column",
+    "children": [
+      {
+        "type": "expanded",
+        "child": {
+          "type": "refreshIndicator",
+          "child": {
+            "type": "cart_items_list"
+          }
+        }
+      },
+      {
+        "type": "cart_summary"
+      }
+    ]
+  }
+}
