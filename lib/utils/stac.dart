@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
@@ -76,6 +77,8 @@ class Stac {
         return _buildPositioned(json, context);
       case 'appbar':
         return _buildAppBar(json, context);
+      case 'pageview':
+        return _buildPageView(json, context);
       default:
         // Log unknown components for debugging
         debugPrint('Unknown component type: $type');
@@ -516,6 +519,34 @@ class Stac {
       borderRadius: _parseBorderRadius(decoration['borderRadius']),
       border: _parseBorder(decoration['border']),
       boxShadow: _parseBoxShadow(decoration['boxShadow']),
+      image: _parseDecorationImage(decoration['image']),
+    );
+  }
+
+  static DecorationImage? _parseDecorationImage(Map<String, dynamic>? image) {
+    if (image == null) return null;
+
+    final src = image['src'] as String?;
+    if (src == null || src.isEmpty) return null;
+
+    final fit = image['fit'] as String? ?? 'cover';
+    final opacity = image['opacity'] as num? ?? 1.0;
+    final alignment = image['alignment'] as String? ?? 'center';
+
+    ImageProvider imageProvider;
+
+    // Determine if src is a local asset or network URL
+    if (src.startsWith('http://') || src.startsWith('https://')) {
+      imageProvider = NetworkImage(src);
+    } else {
+      imageProvider = AssetImage(src);
+    }
+
+    return DecorationImage(
+      image: imageProvider,
+      fit: _parseBoxFit(fit),
+      opacity: opacity.toDouble(),
+      alignment: _parseAlignment(alignment) ?? Alignment.center,
     );
   }
 
@@ -730,6 +761,8 @@ class Stac {
         return Icons.notifications;
       case 'favorite':
         return Icons.favorite;
+      case 'favorite_border':
+        return Icons.favorite_border;
       case 'history':
         return Icons.history;
       case 'support_agent':
@@ -907,8 +940,9 @@ class Stac {
   static Widget _buildShopCard(dynamic shop, BuildContext context, bool isFeatured) {
     return GestureDetector(
       onTap: () {
-        // Navigate to individual shop page
-        Get.toNamed('/shop/${shop.id}');
+        // Navigate to home view with shop context using MarketplaceController
+        final controller = Get.find<MarketplaceController>();
+        controller.navigateToShop(shop.id);
       },
       child: Container(
         width: isFeatured ? 160 : null,
@@ -1122,6 +1156,13 @@ class Stac {
       case 'navigate_to_offers':
         Get.toNamed('/offers');
         break;
+      case 'navigate_to_shop':
+        final String shopId = action['shopId'] as String? ?? '';
+        if (shopId.isNotEmpty) {
+          final controller = Get.find<MarketplaceController>();
+          controller.navigateToShop(shopId);
+        }
+        break;
       case 'showSearch':
         // Handle search action
         debugPrint('Show search action triggered');
@@ -1310,6 +1351,57 @@ class Stac {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  static Widget _buildPageView(Map<String, dynamic> json, BuildContext context) {
+    final children = json['children'] as List<dynamic>? ?? [];
+    final height = json['height'] as num? ?? 200;
+    final autoPlay = json['autoPlay'] as bool? ?? true;
+    final autoPlayInterval = json['autoPlayInterval'] as int? ?? 3000; // milliseconds
+    final viewportFraction = json['viewportFraction'] as num? ?? 1.0;
+    final enableInfiniteScroll = json['enableInfiniteScroll'] as bool? ?? true;
+
+    final PageController pageController = PageController(
+      viewportFraction: viewportFraction.toDouble(),
+    );
+
+    // Auto-play functionality
+    if (autoPlay && children.isNotEmpty) {
+      Timer.periodic(Duration(milliseconds: autoPlayInterval), (timer) {
+        if (pageController.hasClients) {
+          final currentPage = pageController.page?.round() ?? 0;
+          final nextPage = enableInfiniteScroll
+              ? (currentPage + 1) % children.length
+              : (currentPage + 1).clamp(0, children.length - 1);
+
+          pageController.animateToPage(
+            nextPage,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+          );
+        }
+      });
+    }
+
+    return SizedBox(
+      height: height.toDouble(),
+      child: PageView.builder(
+        controller: pageController,
+        itemCount: enableInfiniteScroll ? null : children.length,
+        itemBuilder: (context, index) {
+          final actualIndex = enableInfiniteScroll
+              ? index % children.length
+              : index;
+
+          if (actualIndex >= children.length) return Container();
+
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4.0),
+            child: _parseComponent(children[actualIndex], context),
+          );
+        },
       ),
     );
   }
