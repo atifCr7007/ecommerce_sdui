@@ -4,6 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import '../controllers/marketplace_controller.dart';
+import '../controllers/shop_detail_controller.dart';
+import '../controllers/expandable_section_controller.dart';
 
 /// Stac - Server-Driven UI (SDUI) framework for Flutter
 /// Allows building beautiful cross-platform applications with JSON in real time
@@ -65,6 +67,10 @@ class Stac {
         return _buildSliverToBoxAdapter(json, context);
       case 'flexiblespacebar':
         return _buildFlexibleSpaceBar(json, context);
+      case 'expandablesection':
+        return _buildExpandableSection(json, context);
+      case 'dynamicfilterchips':
+        return _buildDynamicFilterChips(json, context);
       case 'margin':
         return _buildMargin(json, context);
       case 'textfield':
@@ -79,6 +85,13 @@ class Stac {
         return _buildAppBar(json, context);
       case 'pageview':
         return _buildPageView(json, context);
+      case 'divider':
+        return _buildDivider(json, context);
+      case 'dynamic_shop_list':
+        return _buildDynamicShopList(json, context);
+      case 'dynamic_product_grid':
+      case 'dynamicproductgrid':
+        return _buildDynamicProductGrid(json, context);
       default:
         // Log unknown components for debugging
         debugPrint('Unknown component type: $type');
@@ -116,7 +129,12 @@ class Stac {
 
   static Widget _buildSingleChildScrollView(Map<String, dynamic> json, BuildContext context) {
     final child = json['child'];
+    final scrollDirection = json['scrollDirection'] as String?;
+    final padding = json['padding'] as Map<String, dynamic>?;
+
     return SingleChildScrollView(
+      scrollDirection: scrollDirection == 'horizontal' ? Axis.horizontal : Axis.vertical,
+      padding: _parseEdgeInsets(padding),
       child: child != null ? _parseComponent(child, context) : Container(),
     );
   }
@@ -177,8 +195,8 @@ class Stac {
 
   static Widget _buildContainer(Map<String, dynamic> json, BuildContext context) {
     final child = json['child'];
-    final width = json['width'] as num?;
-    final height = json['height'] as num?;
+    final width = _parseNumericValue(json['width']);
+    final height = _parseNumericValue(json['height']);
     final padding = json['padding'] as Map<String, dynamic>?;
     final decoration = json['decoration'] as Map<String, dynamic>?;
     final clipBehavior = json['clipBehavior'] as String?;
@@ -387,6 +405,18 @@ class Stac {
     );
   }
 
+  static Widget _buildDivider(Map<String, dynamic> json, BuildContext context) {
+    final color = json['color'] as String?;
+    final thickness = json['thickness'] as num?;
+    final height = json['height'] as num?;
+
+    return Divider(
+      color: color != null ? _parseColor(color) : null,
+      thickness: thickness?.toDouble(),
+      height: height?.toDouble(),
+    );
+  }
+
   static Widget _buildSpacer(Map<String, dynamic> json, BuildContext context) {
     return const Spacer();
   }
@@ -409,14 +439,96 @@ class Stac {
     final children = json['children'] as List<dynamic>? ?? [];
     final scrollDirection = json['scrollDirection'] as String?;
     final spacing = json['spacing'] as num?;
+    final padding = json['padding'] as Map<String, dynamic>?;
 
     return ListView.separated(
       scrollDirection: scrollDirection == 'horizontal' ? Axis.horizontal : Axis.vertical,
+      padding: _parseEdgeInsets(padding),
       itemCount: children.length,
       separatorBuilder: (context, index) => scrollDirection == 'horizontal'
           ? SizedBox(width: spacing?.toDouble() ?? 0)
           : SizedBox(height: spacing?.toDouble() ?? 0),
       itemBuilder: (context, index) => _parseComponent(children[index], context),
+    );
+  }
+
+  static Widget _buildDynamicShopList(Map<String, dynamic> json, BuildContext context) {
+    final scrollDirection = json['scrollDirection'] as String? ?? 'horizontal';
+    final height = json['height'] as num? ?? 280;
+    final padding = json['padding'] as Map<String, dynamic>?;
+    final template = json['template'] as Map<String, dynamic>?;
+    final dataSource = json['dataSource'] as String? ?? 'topRatedShops';
+
+    if (template == null) {
+      return Container(
+        height: height.toDouble(),
+        child: const Center(
+          child: Text('No template provided for dynamic shop list'),
+        ),
+      );
+    }
+
+    // Get mock data based on dataSource
+    final List<Map<String, dynamic>> shopData = _getShopData(dataSource);
+
+    return Container(
+      height: height.toDouble(),
+      child: ListView.separated(
+        scrollDirection: scrollDirection == 'horizontal' ? Axis.horizontal : Axis.vertical,
+        padding: _parseEdgeInsets(padding),
+        itemCount: shopData.length,
+        separatorBuilder: (context, index) => scrollDirection == 'horizontal'
+            ? const SizedBox(width: 10)
+            : const SizedBox(height: 10),
+        itemBuilder: (context, index) {
+          final shop = shopData[index];
+          // Replace template placeholders with actual data
+          final populatedTemplate = _populateTemplate(template, shop);
+          return _parseComponent(populatedTemplate, context);
+        },
+      ),
+    );
+  }
+
+  static Widget _buildDynamicProductGrid(Map<String, dynamic> json, BuildContext context) {
+    final crossAxisCount = json['crossAxisCount'] as int? ?? 2;
+    final crossAxisSpacing = json['crossAxisSpacing'] as num? ?? 8;
+    final mainAxisSpacing = json['mainAxisSpacing'] as num? ?? 8;
+    final padding = json['padding'] as Map<String, dynamic>?;
+    final template = json['template'] as Map<String, dynamic>?;
+    final dataSource = json['dataSource'] as String? ?? 'shopProducts';
+
+    if (template == null) {
+      return Container(
+        height: 200,
+        child: const Center(
+          child: Text('No template provided for dynamic product grid'),
+        ),
+      );
+    }
+
+    // Get mock product data based on dataSource
+    final List<Map<String, dynamic>> productData = _getProductData(dataSource);
+
+    return Padding(
+      padding: _parseEdgeInsets(padding) ?? EdgeInsets.zero,
+      child: GridView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: crossAxisCount,
+          crossAxisSpacing: crossAxisSpacing.toDouble(),
+          mainAxisSpacing: mainAxisSpacing.toDouble(),
+          childAspectRatio: 0.75, // Adjust based on your design
+        ),
+        itemCount: productData.length,
+        itemBuilder: (context, index) {
+          final product = productData[index];
+          // Replace template placeholders with actual data
+          final populatedTemplate = _populateTemplate(template, product);
+          return _parseComponent(populatedTemplate, context);
+        },
+      ),
     );
   }
 
@@ -1069,13 +1181,29 @@ class Stac {
   static Widget _buildCustomScrollView(Map<String, dynamic> json, BuildContext context) {
     final slivers = json['slivers'] as List<dynamic>? ?? [];
 
+    List<Widget> sliverWidgets = slivers
+        .map((sliver) => _parseComponent(sliver, context))
+        .where((widget) => widget is Widget)
+        .map((widget) => _ensureSliver(widget))
+        .toList();
+
     return CustomScrollView(
-      slivers: slivers
-          .map((sliver) => _parseComponent(sliver, context))
-          .where((widget) => widget is Widget)
-          .cast<Widget>()
-          .toList(),
+      slivers: sliverWidgets,
     );
+  }
+
+  static Widget _ensureSliver(Widget widget) {
+    if (widget is SliverList ||
+        widget is SliverGrid ||
+        widget is SliverPadding ||
+        widget is SliverToBoxAdapter ||
+        widget is SliverAppBar ||
+        widget is SliverFillRemaining ||
+        widget is SliverFixedExtentList) {
+      return widget;
+    } else {
+      return SliverToBoxAdapter(child: widget);
+    }
   }
 
   static Widget _buildSliverAppBar(Map<String, dynamic> json, BuildContext context) {
@@ -1084,14 +1212,23 @@ class Stac {
     final pinned = json['pinned'] as bool? ?? false;
     final flexibleSpace = json['flexibleSpace'];
     final borderRadius = json['borderRadius'] as num?;
+    final backgroundColor = json['backgroundColor'] as String?;
+    final foregroundColor = json['foregroundColor'] as String?;
+    final elevation = json['elevation'] as num?;
+    final toolbarHeight = json['toolbarHeight'] as num?;
+    final leading = json['leading'];
+    final actions = json['actions'] as List<dynamic>?;
 
-    // Fix for purple corner bleeding: set transparent background and handle radius in flexibleSpace
     return SliverAppBar(
       expandedHeight: expandedHeight?.toDouble(),
       floating: floating,
       pinned: pinned,
-      backgroundColor: Colors.transparent, // Prevent purple bleeding
-      elevation: 0, // Remove shadow to prevent artifacts
+      backgroundColor: backgroundColor != null ? _parseColor(backgroundColor) : Colors.transparent,
+      foregroundColor: foregroundColor != null ? _parseColor(foregroundColor) : null,
+      elevation: elevation?.toDouble() ?? 0,
+      toolbarHeight: toolbarHeight?.toDouble() ?? kToolbarHeight,
+      leading: leading != null ? _parseComponent(leading, context) : null,
+      actions: actions?.map((action) => _parseComponent(action, context)).toList(),
       flexibleSpace: flexibleSpace != null
         ? (borderRadius != null
           ? ClipRRect(
@@ -1120,6 +1257,155 @@ class Stac {
     return FlexibleSpaceBar(
       background: background != null ? _parseComponent(background, context) : null,
     );
+  }
+
+  static Widget _buildExpandableSection(Map<String, dynamic> json, BuildContext context) {
+    final title = json['title'] as String? ?? '';
+    final isExpanded = json['isExpanded'] as bool? ?? false;
+    final content = json['content'];
+
+    // Create a unique section ID based on title
+    final sectionId = title.toLowerCase().replaceAll(RegExp(r'[^a-z0-9]'), '_');
+
+    // Get or create the expandable section controller
+    ExpandableSectionController controller;
+    try {
+      controller = Get.find<ExpandableSectionController>();
+    } catch (e) {
+      controller = Get.put(ExpandableSectionController());
+    }
+
+    // Initialize the section with default state
+    controller.initializeSection(sectionId, isExpanded);
+
+    return Obx(() {
+      final expanded = controller.isExpanded(sectionId);
+
+      return Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            decoration: const BoxDecoration(
+              color: Colors.white,
+            ),
+            child: GestureDetector(
+              onTap: () {
+                controller.toggleSection(sectionId);
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black,
+                    ),
+                  ),
+                  Icon(
+                    expanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+                    color: Colors.grey[600],
+                    size: 22,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+            height: expanded ? null : 0,
+            child: expanded && content != null
+                ? _parseComponent(content, context)
+                : const SizedBox(),
+          ),
+        ],
+      );
+    });
+  }
+
+  static Widget _buildDynamicFilterChips(Map<String, dynamic> json, BuildContext context) {
+    final padding = json['padding'] as Map<String, dynamic>?;
+
+    // Get the shop detail controller for filter state
+    try {
+      final controller = Get.find<ShopDetailController>();
+
+      return Obx(() {
+        return SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          padding: _parseEdgeInsets(padding),
+          child: Row(
+            children: controller.availableFilters.map((filter) {
+              final isSelected = controller.selectedFilters.contains(filter);
+
+              return Container(
+                margin: const EdgeInsets.only(right: 8),
+                child: GestureDetector(
+                  onTap: () => controller.toggleFilter(filter),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: isSelected ? const Color(0xFFE8F5E8) : Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: isSelected ? const Color(0xFF4CAF50) : const Color(0xFFE0E0E0),
+                        width: 1,
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (filter == 'Pure Veg' && isSelected) ...[
+                          Container(
+                            width: 12,
+                            height: 12,
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF4CAF50),
+                              borderRadius: BorderRadius.circular(6),
+                              border: Border.all(
+                                color: const Color(0xFF4CAF50),
+                                width: 2,
+                              ),
+                            ),
+                            child: Container(
+                              margin: const EdgeInsets.all(2),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFF4CAF50),
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                        ],
+                        Text(
+                          filter,
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: isSelected ? const Color(0xFF4CAF50) : const Color(0xFF666666),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+        );
+      });
+    } catch (e) {
+      // Fallback if controller not found
+      return Container(
+        padding: const EdgeInsets.all(16),
+        child: const Text(
+          'Filter controller not available',
+          style: TextStyle(color: Colors.red),
+        ),
+      );
+    }
   }
 
   static Widget _buildMargin(Map<String, dynamic> json, BuildContext context) {
@@ -1163,6 +1449,25 @@ class Stac {
           controller.navigateToShop(shopId);
         }
         break;
+      case 'navigate_back':
+        Get.back();
+        break;
+      case 'add_to_cart':
+        final String productId = action['productId'] as String? ?? '';
+        if (productId.isNotEmpty) {
+          // Try to find ShopDetailController first, fallback to other controllers
+          try {
+            final controller = Get.find<ShopDetailController>();
+            controller.addToCart(productId);
+          } catch (e) {
+            debugPrint('ShopDetailController not found, product ID: $productId');
+          }
+        }
+        break;
+      case 'show_menu':
+        // Handle menu action
+        debugPrint('Show menu action triggered');
+        break;
       case 'showSearch':
         // Handle search action
         debugPrint('Show search action triggered');
@@ -1175,6 +1480,39 @@ class Stac {
         // Handle menu action
         final List<dynamic>? items = action['items'] as List<dynamic>?;
         debugPrint('Show menu action triggered with items: $items');
+        break;
+      case 'toggle_filter':
+        final String filter = action['filter'] as String? ?? '';
+        if (filter.isNotEmpty) {
+          try {
+            final controller = Get.find<ShopDetailController>();
+            controller.toggleFilter(filter);
+          } catch (e) {
+            debugPrint('ShopDetailController not found for filter: $filter');
+          }
+        }
+        break;
+      case 'open_search':
+        try {
+          final controller = Get.find<ShopDetailController>();
+          // TODO: Implement search dialog or navigation
+          debugPrint('Open search action triggered');
+        } catch (e) {
+          debugPrint('ShopDetailController not found for search');
+        }
+        break;
+      case 'voice_search':
+        try {
+          final controller = Get.find<ShopDetailController>();
+          // TODO: Implement voice search functionality
+          debugPrint('Voice search action triggered');
+        } catch (e) {
+          debugPrint('ShopDetailController not found for voice search');
+        }
+        break;
+      case 'show_location_modal':
+        // TODO: Implement location modal
+        debugPrint('Show location modal action triggered');
         break;
       default:
         debugPrint('Unknown action type: $actionType');
@@ -1404,5 +1742,203 @@ class Stac {
         },
       ),
     );
+  }
+
+  // Helper method to get mock shop data
+  static List<Map<String, dynamic>> _getShopData(String dataSource) {
+    switch (dataSource) {
+      case 'topRatedShops':
+        return [
+          {
+            'name': 'Spice Garden',
+            'rating': '4.5',
+            'deliveryTime': '25-30 mins',
+            'cuisine': 'Biryani • Kebabs • Naan',
+            'image': 'https://p16-capcut-sign-sg.ibyteimg.com/tos-alisg-v-643f9f/oABEZYfLA5sIziAXvN6BBAIGiTIABEJwWICAFi~tplv-4d650qgzx3-image.image?lk3s=2d54f6b1&x-expires=1785542030&x-signature=OEXhCIkLDoxzwszr3K4XhmgQ3K8%3D',
+            'shopId': 'spice-garden'
+          },
+          {
+            'name': 'Pizza Corner',
+            'rating': '4.3',
+            'deliveryTime': '20-25 mins',
+            'cuisine': 'Pizza • Pasta • Garlic Bread',
+            'image': 'https://images.unsplash.com/photo-1513104890138-7c749659a591?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
+            'shopId': 'pizza-corner'
+          },
+          {
+            'name': 'Healthy Bites',
+            'rating': '4.7',
+            'deliveryTime': '15-20 mins',
+            'cuisine': 'Salads • Smoothies • Wraps',
+            'image': 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
+            'shopId': 'healthy-bites'
+          },
+          {
+            'name': 'Burger House',
+            'rating': '4.2',
+            'deliveryTime': '30-35 mins',
+            'cuisine': 'Burgers • Fries • Shakes',
+            'image': 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
+            'shopId': 'burger-house'
+          },
+          {
+            'name': 'Coffee Corner',
+            'rating': '4.6',
+            'deliveryTime': '10-15 mins',
+            'cuisine': 'Coffee • Pastries • Sandwiches',
+            'image': 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
+            'shopId': 'coffee-corner'
+          },
+          {
+            'name': 'Smoothie Bar',
+            'rating': '4.4',
+            'deliveryTime': '12-18 mins',
+            'cuisine': 'Smoothies • Juices • Bowls',
+            'image': 'https://images.unsplash.com/photo-1570197788417-0e82375c9371?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
+            'shopId': 'smoothie-bar'
+          }
+        ];
+      case 'inTheSpotlight':
+        return [
+          {
+            'name': 'Gourmet Kitchen',
+            'rating': '4.8',
+            'deliveryTime': '35-40 mins',
+            'cuisine': 'Fine Dining • Continental • Steaks',
+            'image': 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
+            'shopId': 'gourmet-kitchen'
+          },
+          {
+            'name': 'Dessert Dreams',
+            'rating': '4.9',
+            'deliveryTime': '20-25 mins',
+            'cuisine': 'Cakes • Cookies • Ice Cream',
+            'image': 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
+            'shopId': 'dessert-dreams'
+          },
+          {
+            'name': 'Taco Fiesta',
+            'rating': '4.5',
+            'deliveryTime': '25-30 mins',
+            'cuisine': 'Mexican • Tacos • Burritos',
+            'image': 'https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
+            'shopId': 'taco-fiesta'
+          }
+        ];
+      default:
+        return [];
+    }
+  }
+
+  // Helper method to get mock product data
+  static List<Map<String, dynamic>> _getProductData(String dataSource) {
+    switch (dataSource) {
+      case 'shopProducts':
+        // Try to get products from ShopDetailController
+        try {
+          final controller = Get.find<ShopDetailController>();
+          return controller.filteredProducts.map((product) => {
+            'productId': product.id,
+            'productName': product.title,
+            'productImage': product.displayImage,
+            'productRating': product.rating.toString(),
+            'originalPrice': '159', // Mock original price
+            'discountedPrice': '99', // Mock discounted price
+            'isVeg': product.tags?.contains('vegetarian') ?? false,
+          }).toList();
+        } catch (e) {
+          // Fallback to mock data if controller not found
+          return [
+            {
+              'productId': 'food_001',
+              'productName': 'Gooey Chocolate Brownie',
+              'productImage': 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=300&h=300&fit=crop',
+              'productRating': '4.6',
+              'originalPrice': '129',
+              'discountedPrice': '99',
+              'isVeg': false,
+            },
+            {
+              'productId': 'food_002',
+              'productName': 'Mummys Special [Small]',
+              'productImage': 'https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=300&h=300&fit=crop',
+              'productRating': '4.6',
+              'originalPrice': '159',
+              'discountedPrice': '99',
+              'isVeg': true,
+            },
+          ];
+        }
+      case 'beverages':
+        return [
+          {
+            'productId': 'bev_001',
+            'productName': 'Fresh Orange Juice',
+            'productImage': 'https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=300&h=300&fit=crop',
+            'productRating': '4.5',
+            'originalPrice': '89',
+            'discountedPrice': '69',
+            'isVeg': true,
+          },
+          {
+            'productId': 'bev_002',
+            'productName': 'Cold Coffee',
+            'productImage': 'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=300&h=300&fit=crop',
+            'productRating': '4.7',
+            'originalPrice': '99',
+            'discountedPrice': '79',
+            'isVeg': true,
+          },
+          {
+            'productId': 'bev_003',
+            'productName': 'Mango Smoothie',
+            'productImage': 'https://images.unsplash.com/photo-1553530666-ba11a7da3888?w=300&h=300&fit=crop',
+            'productRating': '4.8',
+            'originalPrice': '119',
+            'discountedPrice': '99',
+            'isVeg': true,
+          },
+        ];
+      default:
+        return [];
+    }
+  }
+
+  // Helper method to populate template with data
+  static Map<String, dynamic> _populateTemplate(Map<String, dynamic> template, Map<String, dynamic> data) {
+    final Map<String, dynamic> result = {};
+
+    template.forEach((key, value) {
+      if (value is String && value.startsWith('{{') && value.endsWith('}}')) {
+        // Extract placeholder name
+        final placeholder = value.substring(2, value.length - 2);
+        result[key] = data[placeholder] ?? value;
+      } else if (value is Map<String, dynamic>) {
+        result[key] = _populateTemplate(value, data);
+      } else if (value is List) {
+        result[key] = value.map((item) {
+          if (item is Map<String, dynamic>) {
+            return _populateTemplate(item, data);
+          }
+          return item;
+        }).toList();
+      } else {
+        result[key] = value;
+      }
+    });
+
+    return result;
+  }
+
+  /// Helper method to parse numeric values that might be strings
+  static double? _parseNumericValue(dynamic value) {
+    if (value == null) return null;
+    if (value is num) return value.toDouble();
+    if (value is String) {
+      if (value == "double.infinity") return double.infinity;
+      if (value == "double.maxFinite") return double.maxFinite;
+      return double.tryParse(value);
+    }
+    return null;
   }
 }

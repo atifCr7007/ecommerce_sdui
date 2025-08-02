@@ -164,11 +164,11 @@ class MarketplaceController extends GetxController {
     await loadMarketplace();
   }
 
-  /// Navigate to shop - redirects to home view with shop context
+  /// Navigate to shop - redirects to shop detail view
   void navigateToShop(String shopId) {
-    debugPrint('[MarketplaceController] Navigating to home view with shop: $shopId');
-    // Navigate to home view and pass the shop ID as a parameter
-    Get.toNamed('/home', parameters: {'shopId': shopId});
+    debugPrint('[MarketplaceController] Navigating to shop detail view with shop: $shopId');
+    // Navigate to shop detail view and pass the shop ID as a parameter
+    Get.toNamed('/shop-detail', parameters: {'shopId': shopId});
   }
 
   /// Get shops by category

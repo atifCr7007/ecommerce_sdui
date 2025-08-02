@@ -257,31 +257,10 @@ class _ShopHomeViewState extends State<ShopHomeView> {
       );
     }
 
-    // Apply shop theme
+    // Apply shop theme and render pure JSON UI
     return Theme(
       data: _shopTheme!.toThemeData(),
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(_shop!.name),
-          backgroundColor: _shopTheme!.appBarColorValue,
-          foregroundColor: _shopTheme!.textColorValue,
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.favorite_border),
-              onPressed: () {
-                // TODO: Implement shop favorite functionality
-              },
-            ),
-            IconButton(
-              icon: const Icon(Icons.share),
-              onPressed: () {
-                // TODO: Implement shop share functionality
-              },
-            ),
-          ],
-        ),
-        body: Stac.fromJson(_shopUIConfig!, context),
-      ),
+      child: Stac.fromJson(_shopUIConfig!, context),
     );
   }
 }

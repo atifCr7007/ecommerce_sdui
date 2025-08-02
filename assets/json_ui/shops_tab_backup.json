@@ -1,0 +1,3046 @@
+{
+  "type": "scaffold",
+  "backgroundColor": "#FFFFFF",
+  "body": {
+    "type": "customScrollView",
+    "slivers": [
+      {
+        "type": "sliverAppBar",
+        "expandedHeight": 480,
+        "floating": false,
+        "pinned": false,
+        "backgroundColor": "#FFFFFF",
+        "borderRadius": 25,
+        "flexibleSpace": {
+          "type": "flexibleSpaceBar",
+          "background": {
+            "type": "container",
+            "decoration": {
+              "image": {
+                "src": "https://images.unsplash.com/photo-1557683304-673a23048d34?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8Z3JhZGllbnQlMjBiYWNrZ3JvdW5kfGVufDB8fDB8fHww",
+                "fit": "cover",
+                "opacity": 0.6,
+                "alignment": "center"
+              },
+              "borderRadius": {
+                "bottomLeft": 25,
+                "bottomRight": 25
+              }
+            },
+            "child": {
+              "type": "padding",
+              "padding": {"top": 60, "left": 16, "right": 16, "bottom": 16},
+              "child": {
+                "type": "column",
+                "mainAxisAlignment": "start",
+                "children": [
+                  {
+                    "type": "sizedBox",
+                    "height": 10
+                  },
+                  {
+                    "type": "row",
+                    "mainAxisAlignment": "spaceBetween",
+                    "children": [
+                      {
+                        "type": "column",
+                        "crossAxisAlignment": "start",
+                        "children": [
+                          {
+                            "type": "row",
+                            "children": [
+                              {
+                                "type": "icon",
+                                "icon": "location_on",
+                                "size": 16,
+                                "color": "#FFFFFF"
+                              },
+                              {
+                                "type": "sizedBox",
+                                "width": 8
+                              },
+                              {
+                                "type": "text",
+                                "data": "Current Location",
+                                "style": {
+                                  "fontSize": 14,
+                                  "color": "#FFFFFF",
+                                  "fontWeight": "w400"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "type": "sizedBox",
+                            "height": 4
+                          },
+                          {
+                            "type": "text",
+                            "data": "New Delhi, India",
+                            "style": {
+                              "fontSize": 18,
+                              "fontWeight": "w600",
+                              "color": "#FFFFFF"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "type": "row",
+                        "children": [
+                          {
+                            "type": "container",
+                            "width": 40,
+                            "height": 40,
+                            "margin": {"right": 8},
+                            "decoration": {
+                              "color": "black",
+                              "borderRadius": 20,
+                              "border": {
+                                "color": "#FFFFFF40",
+                                "width": 1
+                              }
+                            },
+                            "child": {
+                              "type": "center",
+                              "child": {
+                                "type": "text",
+                                "data": "🔔",
+                                "style": {
+                                  "fontSize": 18,
+                                  "fontWeight": "w600",
+                                  "color": "#FFFFFF"
+                                }
+                              }
+                            },
+                            "action": {
+                              "type": "navigate",
+                              "route": "/notifications"
+                            }
+                          },
+                          {
+                            "type":"sizedBox",
+                            "width": 8
+                          },
+                          {
+                            "type": "container",
+                            "width": 40,
+                            "height": 40,
+                            "decoration": {
+                              "color": "black",
+                              "borderRadius": 20,
+                              "border": {
+                                "color": "#FFFFFF40",
+                                "width": 1
+                              }
+                            },
+                            "child": {
+                              "type": "center",
+                              "child": {
+                                "type": "icon",
+                                "icon": "person",
+                                "size": 20,
+                                "color": "#FFFFFF"
+                              }
+                            },
+                            "action": {
+                              "type": "navigate",
+                              "route": "/profile"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+
+                  },
+                  {
+                    "type": "sizedBox",
+                    "height": 15
+                  },
+                  {
+                    "type": "container",
+                    "margin": {"horizontal": 20, "top": 0, "bottom": 0},
+                    "padding": {"horizontal": 20, "vertical": 14},
+                    "decoration": {
+                      "color": "#FFFFFF",
+                      "borderRadius": 25,
+                      "boxShadow": [
+                        {
+                          "color": "#00000015",
+                          "blurRadius": 10,
+                          "offset": {"dx": 0, "dy": 4}
+                        }
+                      ]
+                    },
+                    "child": {
+                      "type": "row",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "icon": "search",
+                          "size": 20,
+                          "color": "#999999"
+                        },
+                        {
+                          "type": "sizedBox",
+                          "width": 12
+                        },
+                        {
+                          "type": "expanded",
+                          "child": {
+                            "type": "text",
+                            "data": "Search shops, products, categories...",
+                            "style": {
+                              "fontSize": 16,
+                              "color": "#999999"
+                            }
+                          }
+                        },
+                        {
+                          "type": "sizedBox",
+                          "width": 12
+                        },
+                        {
+                          "type": "icon",
+                          "icon": "mic",
+                          "size": 20,
+                          "color": "#667eea"
+                        }
+                      ]
+                    },
+                    "action": {
+                      "type": "navigate",
+                      "route": "/search"
+                    }
+                  },
+                  {
+                    "type": "sizedBox",
+                    "height": 20
+                  },
+                  {
+                    "type": "container",
+                    "height": 140,
+                    "margin": {"horizontal": 20},
+                    "decoration": {
+                      "color": "#00000000"
+                    },
+                    "child": {
+                      "type": "center",
+                      "child": {
+                        "type": "container",
+                        "width": 300,
+                        "height": 150,
+                        "decoration": {
+                          "borderRadius": 75
+                        },
+                        "child": {
+                          "type": "center",
+                          "child": {
+                            "type": "lottie",
+                            "src": "assets/lottie/shopping_bag.json",
+                            "width": 190,
+                            "height": 190,
+                            "fit": "cover",
+                            "repeat": true,
+                            "animate": true
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "type": "sizedBox",
+                    "height": 50
+                  },
+                  {
+          "type": "container",
+          "height": 100,
+          "padding": {"horizontal": 16, "vertical": 0},
+         
+          "child": {
+            "type": "row",
+            "children": [
+              {
+                "type": "expanded",
+                "child": {
+                  "type": "container",
+                  "padding": {"all": 10},
+                  "decoration": {
+                    "image": {
+                      "src": "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+                      "fit": "cover",
+                      "opacity": 0.8,
+                      "alignment": "center"
+                    },
+                    "color": "#C0242560",
+                    "borderRadius": 16,
+                    "boxShadow": [
+                      {
+                        "color": "#00000020",
+                        "blurRadius": 8,
+                        "offset": {"dx": 0, "dy": 2}
+                      }
+                    ]
+                  },
+                  "child": {
+                    "type": "row",
+                    "mainAxisAlignment": "spaceBetween",
+                    "crossAxisAlignment": "center",
+                    "children": [
+                      {
+                        "type": "expanded",
+                        "child": {
+                          "type": "column",
+                          "crossAxisAlignment": "center",
+                          "mainAxisAlignment": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "data": "Trending T-shirt",
+                              "style": {
+                                "fontSize": 16,
+                                "fontWeight": "bold",
+                                "color": "#FFFFFF"
+                              }
+                            }
+                          
+                          ]
+                        }
+                      },
+                      {
+                        "type": "image",
+                        "src": "https://atlas-content-cdn.pixelsquid.com/stock-images/men-s-t-shirt-t-shirt-WER8yLE-600.jpg",
+                        "width": 60,
+                        "height": 60,
+                        "fit": "contain",
+                        "opacity": 0.9
+                      }
+                    ]
+                  },
+                  "action": {
+                    "type": "navigate",
+                    "route": "/category",
+                    "arguments": {"category": "pizza"}
+                  }
+                }
+              },
+              {
+                "type": "sizedBox",
+                "width": 16
+              },
+              {
+                "type": "expanded",
+                "child": {
+                  "type": "container",
+                  "padding": {"all": 16},
+                  "decoration": {
+                    "image": {
+                      "src": "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+                      "fit": "cover",
+                      "opacity": 0.8,
+                      "alignment": "center"
+                    },
+                    "color": "#C0242560",
+                    "borderRadius": 16,
+                    "boxShadow": [
+                      {
+                        "color": "#00000020",
+                        "blurRadius": 8,
+                        "offset": {"dx": 0, "dy": 2}
+                      }
+                    ]
+                  },
+                  "child": {
+                    "type": "row",
+                    "mainAxisAlignment": "spaceBetween",
+                    "crossAxisAlignment": "center",
+                    "children": [
+                      {
+                        "type": "expanded",
+                        "child": {
+                          "type": "column",
+                          "crossAxisAlignment": "center",
+                          "mainAxisAlignment": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "data": "Delicious Burgers",
+                              "style": {
+                                "fontSize": 16,
+                                "fontWeight": "bold",
+                                "color": "#FFFFFF"
+                              }
+                            }
+                           
+                          ]
+                        }
+                      },
+                      {
+                        "type": "image",
+                        "src": "https://cdn.prod.website-files.com/631b4b4e277091ef01450237/65947cd2a2c28c35b5ca6fb1_Whopper%20w%20Cheese.png",
+                        "width": 60,
+                        "height": 60,
+                        "fit": "contain",
+                        "opacity": 0.9
+                      }
+                    ]
+                  },
+                  "action": {
+                    "type": "navigate",
+                    "route": "/category",
+                    "arguments": {"category": "burgers"}
+                  }
+                }
+              }
+            ]
+          }
+        }
+                ]
+              }
+            }
+          }
+        }
+      },
+      {
+        "type": "sliverToBoxAdapter",
+        "child": {
+          "type": "padding",
+          "padding": {"horizontal": 16, "top": 8, "bottom": 16},
+          "child": {
+            "type": "column",
+            "crossAxisAlignment": "start",
+            "children": [
+              {
+                "type": "sizedBox",
+                "height": 16
+              },
+              {
+                "type": "pageview",
+                "height": 140,
+                "autoPlay": true,
+                "autoPlayInterval": 4000,
+                "viewportFraction": 1.0,
+                "enableInfiniteScroll": true,
+                "children": [
+                  {
+                    "type": "container",
+                    "margin": {"horizontal": 8, "vertical": 12},
+                    "padding": {"all": 20},
+                    "decoration": {
+                      "gradient": {
+                        "type": "linear",
+                        "colors": ["#F8F9FA", "#E9ECEF"],
+                        "begin": "topLeft",
+                        "end": "bottomRight"
+                      },
+                      "borderRadius": 16,
+                      "boxShadow": [
+                        {
+                          "color": "#00000015",
+                          "blurRadius": 12,
+                          "offset": {"dx": 0, "dy": 4}
+                        }
+                      ]
+                    },
+                    "child": {
+                      "type": "row",
+                      "mainAxisAlignment": "spaceBetween",
+                      "crossAxisAlignment": "center",
+                      "children": [
+                        {
+                          "type": "column",
+                          "crossAxisAlignment": "start",
+                          "mainAxisAlignment": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "data": "� Authentic Thali",
+                              "style": {
+                                "fontSize": 18,
+                                "fontWeight": "w900",
+                                "color": "#2C3E50"
+                              }
+                            },
+                            {
+                              "type": "text",
+                              "data": "Traditional flavors await",
+                              "style": {
+                                "fontSize": 12,
+                                "fontWeight": "w500",
+                                "color": "#7F8C8D"
+                              }
+                            },
+                            {
+                              "type": "sizedBox",
+                              "height": 8
+                            },
+                            {
+                              "type": "container",
+                              "padding": {"horizontal": 16, "vertical": 8},
+                              "decoration": {
+                                "color": "#2C3E50",
+                                "borderRadius": 25
+                              },
+                              "child": {
+                                "type": "text",
+                                "data": "ORDER NOW",
+                                "style": {
+                                  "fontSize": 12,
+                                  "fontWeight": "w700",
+                                  "color": "#FFFFFF"
+                                }
+                              },
+                              "action": {
+                                "type": "navigate_to_shop",
+                                "shopId": "traditional-kitchen"
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "type": "image",
+                          "src": "https://png.pngtree.com/png-clipart/20220302/ourmid/pngtree-bangali-veg-thali-image-png-image_4470183.png",
+                          "width": 80,
+                          "height": 80,
+                          "fit": "cover"
+                        }
+                      ]
+                    },
+                    "action": {
+                      "type": "navigate_to_shop",
+                      "shopId": "traditional-kitchen"
+                    }
+                  },
+                  {
+                    "type": "container",
+                    "margin": {"horizontal": 8, "vertical": 12},
+                    "padding": {"all": 20},
+                    "decoration": {
+                      "gradient": {
+                        "type": "linear",
+                        "colors": ["#FFF8E1", "#F3E5AB"],
+                        "begin": "topLeft",
+                        "end": "bottomRight"
+                      },
+                      "borderRadius": 16,
+                      "boxShadow": [
+                        {
+                          "color": "#00000015",
+                          "blurRadius": 12,
+                          "offset": {"dx": 0, "dy": 4}
+                        }
+                      ]
+                    },
+                    "child": {
+                      "type": "row",
+                      "mainAxisAlignment": "spaceBetween",
+                      "crossAxisAlignment": "center",
+                      "children": [
+                        {
+                          "type": "column",
+                          "crossAxisAlignment": "start",
+                          "mainAxisAlignment": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "data": "🍕 Pizza Festival",
+                              "style": {
+                                "fontSize": 18,
+                                "fontWeight": "w900",
+                                "color": "#D84315"
+                              }
+                            },
+                            {
+                              "type": "text",
+                              "data": "Buy 1 Get 1 Free",
+                              "style": {
+                                "fontSize": 12,
+                                "fontWeight": "w500",
+                                "color": "#FF6F00"
+                              }
+                            },
+                            {
+                              "type": "sizedBox",
+                              "height": 8
+                            },
+                            {
+                              "type": "container",
+                              "padding": {"horizontal": 16, "vertical": 8},
+                              "decoration": {
+                                "color": "#D84315",
+                                "borderRadius": 25
+                              },
+                              "child": {
+                                "type": "text",
+                                "data": "ORDER NOW",
+                                "style": {
+                                  "fontSize": 12,
+                                  "fontWeight": "w700",
+                                  "color": "#FFFFFF"
+                                }
+                              },
+                              "action": {
+                                "type": "navigate_to_shop",
+                                "shopId": "pizza-hut"
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "data": "🍕",
+                          "style": {
+                            "fontSize": 60
+                          }
+                        }
+                      ]
+                    },
+                    "action": {
+                      "type": "navigate_to_shop",
+                      "shopId": "pizza-hut"
+                    }
+                  },
+                  {
+                    "type": "container",
+                    "margin": {"horizontal": 8, "vertical": 12},
+                    "padding": {"all": 20},
+                    "decoration": {
+                      "gradient": {
+                        "type": "linear",
+                        "colors": ["#E8F5E8", "#C8E6C9"],
+                        "begin": "topLeft",
+                        "end": "bottomRight"
+                      },
+                      "borderRadius": 16,
+                      "boxShadow": [
+                        {
+                          "color": "#00000015",
+                          "blurRadius": 12,
+                          "offset": {"dx": 0, "dy": 4}
+                        }
+                      ]
+                    },
+                    "child": {
+                      "type": "row",
+                      "mainAxisAlignment": "spaceBetween",
+                      "crossAxisAlignment": "center",
+                      "children": [
+                        {
+                          "type": "column",
+                          "crossAxisAlignment": "start",
+                          "mainAxisAlignment": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "data": "🥗 Healthy Bowls",
+                              "style": {
+                                "fontSize": 18,
+                                "fontWeight": "w900",
+                                "color": "#2E7D32"
+                              }
+                            },
+                            {
+                              "type": "text",
+                              "data": "Fresh & Nutritious",
+                              "style": {
+                                "fontSize": 12,
+                                "fontWeight": "w500",
+                                "color": "#388E3C"
+                              }
+                            },
+                            {
+                              "type": "sizedBox",
+                              "height": 8
+                            },
+                            {
+                              "type": "container",
+                              "padding": {"horizontal": 16, "vertical": 8},
+                              "decoration": {
+                                "color": "#2E7D32",
+                                "borderRadius": 25
+                              },
+                              "child": {
+                                "type": "text",
+                                "data": "ORDER NOW",
+                                "style": {
+                                  "fontSize": 12,
+                                  "fontWeight": "w700",
+                                  "color": "#FFFFFF"
+                                }
+                              },
+                              "action": {
+                                "type": "navigate_to_shop",
+                                "shopId": "fresh-bowl-co"
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "data": "🥗",
+                          "style": {
+                            "fontSize": 60
+                          }
+                        }
+                      ]
+                    },
+                    "action": {
+                      "type": "navigate_to_shop",
+                      "shopId": "fresh-bowl-co"
+                    }
+                  },
+                  {
+                    "type": "container",
+                    "margin": {"horizontal": 8, "vertical": 12},
+                    "padding": {"all": 20},
+                    "decoration": {
+                      "gradient": {
+                        "type": "linear",
+                        "colors": ["#FCE4EC", "#F8BBD9"],
+                        "begin": "topLeft",
+                        "end": "bottomRight"
+                      },
+                      "borderRadius": 16,
+                      "boxShadow": [
+                        {
+                          "color": "#00000015",
+                          "blurRadius": 12,
+                          "offset": {"dx": 0, "dy": 4}
+                        }
+                      ]
+                    },
+                    "child": {
+                      "type": "row",
+                      "mainAxisAlignment": "spaceBetween",
+                      "crossAxisAlignment": "center",
+                      "children": [
+                        {
+                          "type": "column",
+                          "crossAxisAlignment": "start",
+                          "mainAxisAlignment": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "data": "🍰 Sweet Treats",
+                              "style": {
+                                "fontSize": 18,
+                                "fontWeight": "w900",
+                                "color": "#AD1457"
+                              }
+                            },
+                            {
+                              "type": "text",
+                              "data": "Desserts & Cakes",
+                              "style": {
+                                "fontSize": 12,
+                                "fontWeight": "w500",
+                                "color": "#C2185B"
+                              }
+                            },
+                            {
+                              "type": "sizedBox",
+                              "height": 8
+                            },
+                            {
+                              "type": "container",
+                              "padding": {"horizontal": 16, "vertical": 8},
+                              "decoration": {
+                                "color": "#AD1457",
+                                "borderRadius": 25
+                              },
+                              "child": {
+                                "type": "text",
+                                "data": "ORDER NOW",
+                                "style": {
+                                  "fontSize": 12,
+                                  "fontWeight": "w700",
+                                  "color": "#FFFFFF"
+                                }
+                              },
+                              "action": {
+                                "type": "navigate_to_shop",
+                                "shopId": "sweet-delights"
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "data": "🍰",
+                          "style": {
+                            "fontSize": 60
+                          }
+                        }
+                      ]
+                    },
+                    "action": {
+                      "type": "navigate_to_shop",
+                      "shopId": "sweet-delights"
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "sizedBox",
+                "height": 24
+              },
+              {
+                "type": "padding",
+                "padding": {"horizontal": 16},
+                "child": {
+                  "type": "text",
+                  "data": "Top Rated Near You",
+                  "style": {
+                    "fontSize": 20,
+                    "fontWeight": "w700",
+                    "color": "#2C3E50"
+                  }
+                }
+              },
+              {
+                "type": "sizedBox",
+                "height": 16
+              },
+              {
+                "type": "container",
+                "height": 280,
+                "child": {
+                  "type": "listview",
+                  "scrollDirection": "horizontal",
+                  "padding": {"horizontal": 8},
+                  "children": [
+                    {
+                      "type": "container",
+                      "width": 220,
+                      "margin": {"left": 10, "right": 10},
+                      "decoration": {
+                        "color": "#FFFFFF",
+                        "borderRadius": 12,
+                        "boxShadow": [
+                          {
+                            "color": "#00000015",
+                            "blurRadius": 8,
+                            "offset": {"dx": 0, "dy": 4}
+                          }
+                        ]
+                      },
+                      "child": {
+                        "type": "column",
+                        "crossAxisAlignment": "start",
+                        "children": [
+                          {
+                            "type": "stack",
+                            "children": [
+                              {
+                                "type": "container",
+                                "height": 140,
+                                "decoration": {
+                                  "image": {
+                                    "src": "https://p16-capcut-sign-sg.ibyteimg.com/tos-alisg-v-643f9f/oABEZYfLA5sIziAXvN6BBAIGiTIABEJwWICAFi~tplv-4d650qgzx3-image.image?lk3s=2d54f6b1&x-expires=1785542030&x-signature=OEXhCIkLDoxzwszr3K4XhmgQ3K8%3D",
+                                    "fit": "cover",
+                                    "opacity": 1.0,
+                                    "alignment": "center"
+                                  },
+                                  "borderRadius": {
+                                    "topLeft": 12,
+                                    "topRight": 12
+                                  }
+                                }
+                              },
+                              {
+                                "type": "positioned",
+                                "top": 8,
+                                "right": 8,
+                                "child": {
+                                  "type": "container",
+                                  "width": 32,
+                                  "height": 32,
+                                  "decoration": {
+                                    "color": "#00000000",
+                                    "borderRadius": 16
+                                  },
+                                  "child": {
+                                    "type": "center",
+                                    "child": {
+                                      "type": "icon",
+                                      "icon": "favorite_border",
+                                      "size": 18,
+                                      "color": "#E53935"
+                                    }
+                                  }
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "type": "padding",
+                            "padding": {"all": 12},
+                            "child": {
+                              "type": "column",
+                              "crossAxisAlignment": "start",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "data": "Spice Garden",
+                                  "style": {
+                                    "fontSize": 16,
+                                    "fontWeight": "w700",
+                                    "color": "#2C3E50"
+                                  }
+                                },
+                                {
+                                  "type": "sizedBox",
+                                  "height": 6
+                                },
+                                {
+                                  "type": "row",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "data": "⭐ 4.5",
+                                      "style": {
+                                        "fontSize": 12,
+                                        "fontWeight": "w600",
+                                        "color": "#FFB300"
+                                      }
+                                    },
+                                    {
+                                      "type": "sizedBox",
+                                      "width": 8
+                                    },
+                                    {
+                                      "type": "text",
+                                      "data": "25-30 mins",
+                                      "style": {
+                                        "fontSize": 12,
+                                        "fontWeight": "w500",
+                                        "color": "#7F8C8D"
+                                      }
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "sizedBox",
+                                  "height": 4
+                                },
+                                {
+                                  "type": "text",
+                                  "data": "Biryani • Kebabs • Naan",
+                                  "style": {
+                                    "fontSize": 11,
+                                    "fontWeight": "w400",
+                                    "color": "#95A5A6"
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      },
+                      "action": {
+                        "type": "navigate_to_shop",
+                        "shopId": "spice-garden"
+                      }
+                    },
+                    {
+                      "type": "container",
+                      "width": 220,
+                      "margin": {"left": 10, "right": 10},
+                      "decoration": {
+                        "color": "#FFFFFF",
+                        "borderRadius": 12,
+                        "boxShadow": [
+                          {
+                            "color": "#00000015",
+                            "blurRadius": 8,
+                            "offset": {"dx": 0, "dy": 4}
+                          }
+                        ]
+                      },
+                      "child": {
+                        "type": "column",
+                        "crossAxisAlignment": "start",
+                        "children": [
+                          {
+                            "type": "stack",
+                            "children": [
+                              {
+                                "type": "container",
+                                "height": 140,
+                                "decoration": {
+                                  "image": {
+                                    "src": "https://images.unsplash.com/photo-1513104890138-7c749659a591?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                                    "fit": "cover",
+                                    "opacity": 1.0,
+                                    "alignment": "center"
+                                  },
+                                  "borderRadius": {
+                                    "topLeft": 12,
+                                    "topRight": 12
+                                  }
+                                }
+                              },
+                              {
+                                "type": "positioned",
+                                "top": 8,
+                                "right": 8,
+                                "child": {
+                                  "type": "container",
+                                  "width": 32,
+                                  "height": 32,
+                                  "decoration": {
+                                    "color": "#00000000",
+                                    "borderRadius": 16
+                                  },
+                                  "child": {
+                                    "type": "center",
+                                    "child": {
+                                      "type": "icon",
+                                      "icon": "favorite_border",
+                                      "size": 18,
+                                      "color": "#E53935"
+                                    }
+                                  }
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "type": "padding",
+                            "padding": {"all": 12},
+                            "child": {
+                              "type": "column",
+                              "crossAxisAlignment": "start",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "data": "Pizza Corner",
+                                  "style": {
+                                    "fontSize": 16,
+                                    "fontWeight": "w700",
+                                    "color": "#2C3E50"
+                                  }
+                                },
+                                {
+                                  "type": "sizedBox",
+                                  "height": 6
+                                },
+                                {
+                                  "type": "row",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "data": "⭐ 4.3",
+                                      "style": {
+                                        "fontSize": 12,
+                                        "fontWeight": "w600",
+                                        "color": "#FFB300"
+                                      }
+                                    },
+                                    {
+                                      "type": "sizedBox",
+                                      "width": 8
+                                    },
+                                    {
+                                      "type": "text",
+                                      "data": "20-25 mins",
+                                      "style": {
+                                        "fontSize": 12,
+                                        "fontWeight": "w500",
+                                        "color": "#7F8C8D"
+                                      }
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "sizedBox",
+                                  "height": 4
+                                },
+                                {
+                                  "type": "text",
+                                  "data": "Pizza • Pasta • Garlic Bread",
+                                  "style": {
+                                    "fontSize": 11,
+                                    "fontWeight": "w400",
+                                    "color": "#95A5A6"
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      },
+                      "action": {
+                        "type": "navigate_to_shop",
+                        "shopId": "pizza-corner"
+                      }
+                    },
+                    {
+                      "type": "container",
+                      "width": 220,
+                      "margin": {"left": 10, "right": 10},
+                      "decoration": {
+                        "color": "#FFFFFF",
+                        "borderRadius": 12,
+                        "boxShadow": [
+                          {
+                            "color": "#00000015",
+                            "blurRadius": 8,
+                            "offset": {"dx": 0, "dy": 4}
+                          }
+                        ]
+                      },
+                      "child": {
+                        "type": "column",
+                        "crossAxisAlignment": "start",
+                        "children": [
+                          {
+                            "type": "stack",
+                            "children": [
+                              {
+                                "type": "container",
+                                "height": 140,
+                                "decoration": {
+                                  "image": {
+                                    "src": "https://images.unsplash.com/photo-1546833999-b9f581a1996d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                                    "fit": "cover",
+                                    "opacity": 1.0,
+                                    "alignment": "center"
+                                  },
+                                  "borderRadius": {
+                                    "topLeft": 12,
+                                    "topRight": 12
+                                  }
+                                }
+                              },
+                              {
+                                "type": "positioned",
+                                "top": 8,
+                                "right": 8,
+                                "child": {
+                                  "type": "container",
+                                  "width": 32,
+                                  "height": 32,
+                                  "decoration": {
+                                    "color": "#00000000",
+                                    "borderRadius": 16
+                                  },
+                                  "child": {
+                                    "type": "center",
+                                    "child": {
+                                      "type": "icon",
+                                      "icon": "favorite_border",
+                                      "size": 18,
+                                      "color": "#E53935"
+                                    }
+                                  }
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "type": "padding",
+                            "padding": {"all": 12},
+                            "child": {
+                              "type": "column",
+                              "crossAxisAlignment": "start",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "data": "Healthy Bites",
+                                  "style": {
+                                    "fontSize": 16,
+                                    "fontWeight": "w700",
+                                    "color": "#2C3E50"
+                                  }
+                                },
+                                {
+                                  "type": "sizedBox",
+                                  "height": 6
+                                },
+                                {
+                                  "type": "row",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "data": "⭐ 4.7",
+                                      "style": {
+                                        "fontSize": 12,
+                                        "fontWeight": "w600",
+                                        "color": "#FFB300"
+                                      }
+                                    },
+                                    {
+                                      "type": "sizedBox",
+                                      "width": 8
+                                    },
+                                    {
+                                      "type": "text",
+                                      "data": "15-20 mins",
+                                      "style": {
+                                        "fontSize": 12,
+                                        "fontWeight": "w500",
+                                        "color": "#7F8C8D"
+                                      }
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "sizedBox",
+                                  "height": 4
+                                },
+                                {
+                                  "type": "text",
+                                  "data": "Salads • Smoothies • Wraps",
+                                  "style": {
+                                    "fontSize": 11,
+                                    "fontWeight": "w400",
+                                    "color": "#95A5A6"
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      },
+                      "action": {
+                        "type": "navigate_to_shop",
+                        "shopId": "healthy-bites"
+                      }
+                    },
+                    {
+                      "type": "container",
+                      "width": 220,
+                      "margin": {"left": 10, "right": 10},
+                      "decoration": {
+                        "color": "#FFFFFF",
+                        "borderRadius": 12,
+                        "boxShadow": [
+                          {
+                            "color": "#00000015",
+                            "blurRadius": 8,
+                            "offset": {"dx": 0, "dy": 4}
+                          }
+                        ]
+                      },
+                      "child": {
+                        "type": "column",
+                        "crossAxisAlignment": "start",
+                        "children": [
+                          {
+                            "type": "stack",
+                            "children": [
+                              {
+                                "type": "container",
+                                "height": 140,
+                                "decoration": {
+                                  "image": {
+                                    "src": "https://images.unsplash.com/photo-1571091718767-18b5b1457add?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                                    "fit": "cover",
+                                    "opacity": 1.0,
+                                    "alignment": "center"
+                                  },
+                                  "borderRadius": {
+                                    "topLeft": 12,
+                                    "topRight": 12
+                                  }
+                                }
+                              },
+                              {
+                                "type": "positioned",
+                                "top": 8,
+                                "right": 8,
+                                "child": {
+                                  "type": "container",
+                                  "width": 32,
+                                  "height": 32,
+                                  "decoration": {
+                                    "color": "#00000000",
+                                    "borderRadius": 16
+                                  },
+                                  "child": {
+                                    "type": "center",
+                                    "child": {
+                                      "type": "icon",
+                                      "icon": "favorite_border",
+                                      "size": 18,
+                                      "color": "#E53935"
+                                    }
+                                  }
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "type": "padding",
+                            "padding": {"all": 12},
+                            "child": {
+                              "type": "column",
+                              "crossAxisAlignment": "start",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "data": "Burger House",
+                                  "style": {
+                                    "fontSize": 16,
+                                    "fontWeight": "w700",
+                                    "color": "#2C3E50"
+                                  }
+                                },
+                                {
+                                  "type": "sizedBox",
+                                  "height": 6
+                                },
+                                {
+                                  "type": "row",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "data": "⭐ 4.4",
+                                      "style": {
+                                        "fontSize": 12,
+                                        "fontWeight": "w600",
+                                        "color": "#FFB300"
+                                      }
+                                    },
+                                    {
+                                      "type": "sizedBox",
+                                      "width": 8
+                                    },
+                                    {
+                                      "type": "text",
+                                      "data": "18-22 mins",
+                                      "style": {
+                                        "fontSize": 12,
+                                        "fontWeight": "w500",
+                                        "color": "#7F8C8D"
+                                      }
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "sizedBox",
+                                  "height": 4
+                                },
+                                {
+                                  "type": "text",
+                                  "data": "Burgers • Fries • Shakes",
+                                  "style": {
+                                    "fontSize": 11,
+                                    "fontWeight": "w400",
+                                    "color": "#95A5A6"
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      },
+                      "action": {
+                        "type": "navigate_to_shop",
+                        "shopId": "burger-house"
+                      }
+                    },
+                    {
+                      "type": "container",
+                      "width": 220,
+                      "margin": {"left": 10, "right": 10},
+                      "decoration": {
+                        "color": "#FFFFFF",
+                        "borderRadius": 12,
+                        "boxShadow": [
+                          {
+                            "color": "#00000015",
+                            "blurRadius": 8,
+                            "offset": {"dx": 0, "dy": 4}
+                          }
+                        ]
+                      },
+                      "child": {
+                        "type": "column",
+                        "crossAxisAlignment": "start",
+                        "children": [
+                          {
+                            "type": "stack",
+                            "children": [
+                              {
+                                "type": "container",
+                                "height": 140,
+                                "decoration": {
+                                  "image": {
+                                    "src": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                                    "fit": "cover",
+                                    "opacity": 1.0,
+                                    "alignment": "center"
+                                  },
+                                  "borderRadius": {
+                                    "topLeft": 12,
+                                    "topRight": 12
+                                  }
+                                }
+                              },
+                              {
+                                "type": "positioned",
+                                "top": 8,
+                                "right": 8,
+                                "child": {
+                                  "type": "container",
+                                  "width": 32,
+                                  "height": 32,
+                                  "decoration": {
+                                    "color": "#00000000",
+                                    "borderRadius": 16
+                                  },
+                                  "child": {
+                                    "type": "center",
+                                    "child": {
+                                      "type": "icon",
+                                      "icon": "favorite_border",
+                                      "size": 18,
+                                      "color": "#E53935"
+                                    }
+                                  }
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "type": "padding",
+                            "padding": {"all": 12},
+                            "child": {
+                              "type": "column",
+                              "crossAxisAlignment": "start",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "data": "Sweet Delights",
+                                  "style": {
+                                    "fontSize": 16,
+                                    "fontWeight": "w700",
+                                    "color": "#2C3E50"
+                                  }
+                                },
+                                {
+                                  "type": "sizedBox",
+                                  "height": 6
+                                },
+                                {
+                                  "type": "row",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "data": "⭐ 4.6",
+                                      "style": {
+                                        "fontSize": 12,
+                                        "fontWeight": "w600",
+                                        "color": "#FFB300"
+                                      }
+                                    },
+                                    {
+                                      "type": "sizedBox",
+                                      "width": 8
+                                    },
+                                    {
+                                      "type": "text",
+                                      "data": "12-18 mins",
+                                      "style": {
+                                        "fontSize": 12,
+                                        "fontWeight": "w500",
+                                        "color": "#7F8C8D"
+                                      }
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "sizedBox",
+                                  "height": 4
+                                },
+                                {
+                                  "type": "text",
+                                  "data": "Cakes • Pastries • Ice Cream",
+                                  "style": {
+                                    "fontSize": 11,
+                                    "fontWeight": "w400",
+                                    "color": "#95A5A6"
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      },
+                      "action": {
+                        "type": "navigate_to_shop",
+                        "shopId": "sweet-delights"
+                      }
+                    },
+                    {
+                      "type": "container",
+                      "width": 220,
+                      "margin": {"left": 10, "right": 10},
+                      "decoration": {
+                        "color": "#FFFFFF",
+                        "borderRadius": 12,
+                        "boxShadow": [
+                          {
+                            "color": "#00000015",
+                            "blurRadius": 8,
+                            "offset": {"dx": 0, "dy": 4}
+                          }
+                        ]
+                      },
+                      "child": {
+                        "type": "column",
+                        "crossAxisAlignment": "start",
+                        "children": [
+                          {
+                            "type": "stack",
+                            "children": [
+                              {
+                                "type": "container",
+                                "height": 140,
+                                "decoration": {
+                                  "image": {
+                                    "src": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                                    "fit": "cover",
+                                    "opacity": 1.0,
+                                    "alignment": "center"
+                                  },
+                                  "borderRadius": {
+                                    "topLeft": 12,
+                                    "topRight": 12
+                                  }
+                                }
+                              },
+                              {
+                                "type": "positioned",
+                                "top": 8,
+                                "right": 8,
+                                "child": {
+                                  "type": "container",
+                                  "width": 32,
+                                  "height": 32,
+                                  "decoration": {
+                                    "color": "#00000000",
+                                    "borderRadius": 16
+                                  },
+                                  "child": {
+                                    "type": "center",
+                                    "child": {
+                                      "type": "icon",
+                                      "icon": "favorite_border",
+                                      "size": 18,
+                                      "color": "#E53935"
+                                    }
+                                  }
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "type": "padding",
+                            "padding": {"all": 12},
+                            "child": {
+                              "type": "column",
+                              "crossAxisAlignment": "start",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "data": "Taco Fiesta",
+                                  "style": {
+                                    "fontSize": 16,
+                                    "fontWeight": "w700",
+                                    "color": "#2C3E50"
+                                  }
+                                },
+                                {
+                                  "type": "sizedBox",
+                                  "height": 6
+                                },
+                                {
+                                  "type": "row",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "data": "⭐ 4.2",
+                                      "style": {
+                                        "fontSize": 12,
+                                        "fontWeight": "w600",
+                                        "color": "#FFB300"
+                                      }
+                                    },
+                                    {
+                                      "type": "sizedBox",
+                                      "width": 8
+                                    },
+                                    {
+                                      "type": "text",
+                                      "data": "22-28 mins",
+                                      "style": {
+                                        "fontSize": 12,
+                                        "fontWeight": "w500",
+                                        "color": "#7F8C8D"
+                                      }
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "sizedBox",
+                                  "height": 4
+                                },
+                                {
+                                  "type": "text",
+                                  "data": "Tacos • Burritos • Nachos",
+                                  "style": {
+                                    "fontSize": 11,
+                                    "fontWeight": "w400",
+                                    "color": "#95A5A6"
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      },
+                      "action": {
+                        "type": "navigate_to_shop",
+                        "shopId": "taco-fiesta"
+                      }
+                    },
+                    {
+                      "type": "container",
+                      "width": 220,
+                      "margin": {"left": 10, "right": 10},
+                      "decoration": {
+                        "color": "#FFFFFF",
+                        "borderRadius": 12,
+                        "boxShadow": [
+                          {
+                            "color": "#00000015",
+                            "blurRadius": 8,
+                            "offset": {"dx": 0, "dy": 4}
+                          }
+                        ]
+                      },
+                      "child": {
+                        "type": "column",
+                        "crossAxisAlignment": "start",
+                        "children": [
+                          {
+                            "type": "stack",
+                            "children": [
+                              {
+                                "type": "container",
+                                "height": 140,
+                                "decoration": {
+                                  "image": {
+                                    "src": "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                                    "fit": "cover",
+                                    "opacity": 1.0,
+                                    "alignment": "center"
+                                  },
+                                  "borderRadius": {
+                                    "topLeft": 12,
+                                    "topRight": 12
+                                  }
+                                }
+                              },
+                              {
+                                "type": "positioned",
+                                "top": 8,
+                                "right": 8,
+                                "child": {
+                                  "type": "container",
+                                  "width": 32,
+                                  "height": 32,
+                                  "decoration": {
+                                    "color": "#00000000",
+                                    "borderRadius": 16
+                                  },
+                                  "child": {
+                                    "type": "center",
+                                    "child": {
+                                      "type": "icon",
+                                      "icon": "favorite_border",
+                                      "size": 18,
+                                      "color": "#E53935"
+                                    }
+                                  }
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "type": "padding",
+                            "padding": {"all": 12},
+                            "child": {
+                              "type": "column",
+                              "crossAxisAlignment": "start",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "data": "Sushi Master",
+                                  "style": {
+                                    "fontSize": 16,
+                                    "fontWeight": "w700",
+                                    "color": "#2C3E50"
+                                  }
+                                },
+                                {
+                                  "type": "sizedBox",
+                                  "height": 6
+                                },
+                                {
+                                  "type": "row",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "data": "⭐ 4.8",
+                                      "style": {
+                                        "fontSize": 12,
+                                        "fontWeight": "w600",
+                                        "color": "#FFB300"
+                                      }
+                                    },
+                                    {
+                                      "type": "sizedBox",
+                                      "width": 8
+                                    },
+                                    {
+                                      "type": "text",
+                                      "data": "30-35 mins",
+                                      "style": {
+                                        "fontSize": 12,
+                                        "fontWeight": "w500",
+                                        "color": "#7F8C8D"
+                                      }
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "sizedBox",
+                                  "height": 4
+                                },
+                                {
+                                  "type": "text",
+                                  "data": "Sushi • Ramen • Tempura",
+                                  "style": {
+                                    "fontSize": 11,
+                                    "fontWeight": "w400",
+                                    "color": "#95A5A6"
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      },
+                      "action": {
+                        "type": "navigate_to_shop",
+                        "shopId": "sushi-master"
+                      }
+                    },
+                    {
+                      "type": "container",
+                      "width": 220,
+                      "margin": {"left": 10, "right": 10},
+                      "decoration": {
+                        "color": "#FFFFFF",
+                        "borderRadius": 12,
+                        "boxShadow": [
+                          {
+                            "color": "#00000015",
+                            "blurRadius": 8,
+                            "offset": {"dx": 0, "dy": 4}
+                          }
+                        ]
+                      },
+                      "child": {
+                        "type": "column",
+                        "crossAxisAlignment": "start",
+                        "children": [
+                          {
+                            "type": "stack",
+                            "children": [
+                              {
+                                "type": "container",
+                                "height": 140,
+                                "decoration": {
+                                  "image": {
+                                    "src": "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                                    "fit": "cover",
+                                    "opacity": 1.0,
+                                    "alignment": "center"
+                                  },
+                                  "borderRadius": {
+                                    "topLeft": 12,
+                                    "topRight": 12
+                                  }
+                                }
+                              },
+                              {
+                                "type": "positioned",
+                                "top": 8,
+                                "right": 8,
+                                "child": {
+                                  "type": "container",
+                                  "width": 32,
+                                  "height": 32,
+                                  "decoration": {
+                                    "color": "#00000000",
+                                    "borderRadius": 16
+                                  },
+                                  "child": {
+                                    "type": "center",
+                                    "child": {
+                                      "type": "icon",
+                                      "icon": "favorite_border",
+                                      "size": 18,
+                                      "color": "#E53935"
+                                    }
+                                  }
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "type": "padding",
+                            "padding": {"all": 12},
+                            "child": {
+                              "type": "column",
+                              "crossAxisAlignment": "start",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "data": "Coffee Corner",
+                                  "style": {
+                                    "fontSize": 16,
+                                    "fontWeight": "w700",
+                                    "color": "#2C3E50"
+                                  }
+                                },
+                                {
+                                  "type": "sizedBox",
+                                  "height": 6
+                                },
+                                {
+                                  "type": "row",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "data": "⭐ 4.1",
+                                      "style": {
+                                        "fontSize": 12,
+                                        "fontWeight": "w600",
+                                        "color": "#FFB300"
+                                      }
+                                    },
+                                    {
+                                      "type": "sizedBox",
+                                      "width": 8
+                                    },
+                                    {
+                                      "type": "text",
+                                      "data": "8-12 mins",
+                                      "style": {
+                                        "fontSize": 12,
+                                        "fontWeight": "w500",
+                                        "color": "#7F8C8D"
+                                      }
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "sizedBox",
+                                  "height": 4
+                                },
+                                {
+                                  "type": "text",
+                                  "data": "Coffee • Sandwiches • Muffins",
+                                  "style": {
+                                    "fontSize": 11,
+                                    "fontWeight": "w400",
+                                    "color": "#95A5A6"
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      },
+                      "action": {
+                        "type": "navigate_to_shop",
+                        "shopId": "coffee-corner"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "sizedBox",
+                "height": 32
+              },
+              {
+                      "type": "container",
+                      "width": 220,
+                      "margin": {"left": 10, "right": 10},
+                      "decoration": {
+                        "color": "#FFFFFF",
+                        "borderRadius": 12,
+                        "boxShadow": [
+                          {
+                            "color": "#00000015",
+                            "blurRadius": 8,
+                            "offset": {"dx": 0, "dy": 4}
+                          }
+                        ]
+                      },
+                      "child": {
+                        "type": "column",
+                        "crossAxisAlignment": "start",
+                        "children": [
+                          {
+                            "type": "stack",
+                            "children": [
+                              {
+                                "type": "container",
+                                "height": 140,
+                                "decoration": {
+                                  "image": {
+                                    "src": "https://images.unsplash.com/photo-1551218808-94e220e084d2?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                                    "fit": "cover",
+                                    "opacity": 1.0,
+                                    "alignment": "center"
+                                  },
+                                  "borderRadius": {
+                                    "topLeft": 12,
+                                    "topRight": 12
+                                  }
+                                }
+                              },
+                              {
+                                "type": "positioned",
+                                "top": 8,
+                                "left": 8,
+                                "child": {
+                                  "type": "container",
+                                  "padding": {"horizontal": 8, "vertical": 4},
+                                  "decoration": {
+                                    "color": "#FF6B35",
+                                    "borderRadius": 12
+                                  },
+                                  "child": {
+                                    "type": "text",
+                                    "data": "NEW",
+                                    "style": {
+                                      "fontSize": 10,
+                                      "fontWeight": "w700",
+                                      "color": "#FFFFFF"
+                                    }
+                                  }
+                                }
+                              },
+                              {
+                                "type": "positioned",
+                                "top": 8,
+                                "right": 8,
+                                "child": {
+                                  "type": "container",
+                                  "width": 32,
+                                  "height": 32,
+                                  "decoration": {
+                                    "color": "#00000000",
+                                    "borderRadius": 16
+                                  },
+                                  "child": {
+                                    "type": "center",
+                                    "child": {
+                                      "type": "icon",
+                                      "icon": "favorite_border",
+                                      "size": 18,
+                                      "color": "#E53935"
+                                    }
+                                  }
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "type": "padding",
+                            "padding": {"all": 12},
+                            "child": {
+                              "type": "column",
+                              "crossAxisAlignment": "start",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "data": "Noodle Express",
+                                  "style": {
+                                    "fontSize": 16,
+                                    "fontWeight": "w700",
+                                    "color": "#2C3E50"
+                                  }
+                                },
+                                {
+                                  "type": "sizedBox",
+                                  "height": 6
+                                },
+                                {
+                                  "type": "row",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "data": "⭐ 4.6",
+                                      "style": {
+                                        "fontSize": 12,
+                                        "fontWeight": "w600",
+                                        "color": "#FFB300"
+                                      }
+                                    },
+                                    {
+                                      "type": "sizedBox",
+                                      "width": 8
+                                    },
+                                    {
+                                      "type": "text",
+                                      "data": "18-25 mins",
+                                      "style": {
+                                        "fontSize": 12,
+                                        "fontWeight": "w500",
+                                        "color": "#7F8C8D"
+                                      }
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "sizedBox",
+                                  "height": 4
+                                },
+                                {
+                                  "type": "text",
+                                  "data": "Ramen • Pho • Asian Fusion",
+                                  "style": {
+                                    "fontSize": 11,
+                                    "fontWeight": "w400",
+                                    "color": "#95A5A6"
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      },
+                      "action": {
+                        "type": "navigate_to_shop",
+                        "shopId": "noodle-express"
+                      }
+                    },
+                    {
+                      "type": "container",
+                      "width": 220,
+                      "margin": {"left": 10, "right": 10},
+                      "decoration": {
+                        "color": "#FFFFFF",
+                        "borderRadius": 12,
+                        "boxShadow": [
+                          {
+                            "color": "#00000015",
+                            "blurRadius": 8,
+                            "offset": {"dx": 0, "dy": 4}
+                          }
+                        ]
+                      },
+                      "child": {
+                        "type": "column",
+                        "crossAxisAlignment": "start",
+                        "children": [
+                          {
+                            "type": "stack",
+                            "children": [
+                              {
+                                "type": "container",
+                                "height": 140,
+                                "decoration": {
+                                  "image": {
+                                    "src": "https://images.unsplash.com/photo-1559847844-5315695dadae?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                                    "fit": "cover",
+                                    "opacity": 1.0,
+                                    "alignment": "center"
+                                  },
+                                  "borderRadius": {
+                                    "topLeft": 12,
+                                    "topRight": 12
+                                  }
+                                }
+                              },
+                              {
+                                "type": "positioned",
+                                "top": 8,
+                                "left": 8,
+                                "child": {
+                                  "type": "container",
+                                  "padding": {"horizontal": 8, "vertical": 4},
+                                  "decoration": {
+                                    "color": "#FF6B35",
+                                    "borderRadius": 12
+                                  },
+                                  "child": {
+                                    "type": "text",
+                                    "data": "NEW",
+                                    "style": {
+                                      "fontSize": 10,
+                                      "fontWeight": "w700",
+                                      "color": "#FFFFFF"
+                                    }
+                                  }
+                                }
+                              },
+                              {
+                                "type": "positioned",
+                                "top": 8,
+                                "right": 8,
+                                "child": {
+                                  "type": "container",
+                                  "width": 32,
+                                  "height": 32,
+                                  "decoration": {
+                                    "color": "#00000000",
+                                    "borderRadius": 16
+                                  },
+                                  "child": {
+                                    "type": "center",
+                                    "child": {
+                                      "type": "icon",
+                                      "icon": "favorite_border",
+                                      "size": 18,
+                                      "color": "#E53935"
+                                    }
+                                  }
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "type": "padding",
+                            "padding": {"all": 12},
+                            "child": {
+                              "type": "column",
+                              "crossAxisAlignment": "start",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "data": "Smoothie Bar",
+                                  "style": {
+                                    "fontSize": 16,
+                                    "fontWeight": "w700",
+                                    "color": "#2C3E50"
+                                  }
+                                },
+                                {
+                                  "type": "sizedBox",
+                                  "height": 6
+                                },
+                                {
+                                  "type": "row",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "data": "⭐ 4.8",
+                                      "style": {
+                                        "fontSize": 12,
+                                        "fontWeight": "w600",
+                                        "color": "#FFB300"
+                                      }
+                                    },
+                                    {
+                                      "type": "sizedBox",
+                                      "width": 8
+                                    },
+                                    {
+                                      "type": "text",
+                                      "data": "5-10 mins",
+                                      "style": {
+                                        "fontSize": 12,
+                                        "fontWeight": "w500",
+                                        "color": "#7F8C8D"
+                                      }
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "sizedBox",
+                                  "height": 4
+                                },
+                                {
+                                  "type": "text",
+                                  "data": "Smoothies • Juices • Bowls",
+                                  "style": {
+                                    "fontSize": 11,
+                                    "fontWeight": "w400",
+                                    "color": "#95A5A6"
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      },
+                      "action": {
+                        "type": "navigate_to_shop",
+                        "shopId": "smoothie-bar"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "sizedBox",
+                "height": 32
+              },
+              {
+                "type": "row",
+                "crossAxisAlignment": "center",
+                "children": [
+                  {
+                    "type": "text",
+                    "data": "In The Spotlight",
+                    "style": {
+                      "fontSize": 16,
+                      "fontWeight": "w700",
+                      "color": "#2C3E50"
+                    }
+                  },
+                  {
+                    "type": "sizedBox",
+                    "width": 16
+                  },
+                  {
+                    "type": "expanded",
+                    "child": {
+                      "type": "divider",
+                      "color": "#E0E0E0",
+                      "thickness": 1
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "sizedBox",
+                "height": 16
+              },
+              {
+                "type": "container",
+                "height": 280,
+                "child": {
+                  "type": "listview",
+                  "scrollDirection": "horizontal",
+                  "padding": {"horizontal": 8},
+                  "children": [
+                    {
+                      "type": "container",
+                      "width": 220,
+                      "margin": {"left": 10, "right": 10},
+                      "decoration": {
+                        "color": "#FFFFFF",
+                        "borderRadius": 12,
+                        "boxShadow": [
+                          {
+                            "color": "#00000015",
+                            "blurRadius": 8,
+                            "offset": {"dx": 0, "dy": 4}
+                          }
+                        ]
+                      },
+                      "child": {
+                        "type": "column",
+                        "crossAxisAlignment": "start",
+                        "children": [
+                          {
+                            "type": "stack",
+                            "children": [
+                              {
+                                "type": "container",
+                                "height": 140,
+                                "decoration": {
+                                  "image": {
+                                    "src": "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                                    "fit": "cover",
+                                    "opacity": 1.0,
+                                    "alignment": "center"
+                                  },
+                                  "borderRadius": {
+                                    "topLeft": 12,
+                                    "topRight": 12
+                                  }
+                                }
+                              },
+                              {
+                                "type": "positioned",
+                                "top": 8,
+                                "left": 8,
+                                "child": {
+                                  "type": "container",
+                                  "padding": {"horizontal": 8, "vertical": 4},
+                                  "decoration": {
+                                    "color": "#4CAF50",
+                                    "borderRadius": 12
+                                  },
+                                  "child": {
+                                    "type": "text",
+                                    "data": "5 DEALS",
+                                    "style": {
+                                      "fontSize": 10,
+                                      "fontWeight": "w700",
+                                      "color": "#FFFFFF"
+                                    }
+                                  }
+                                }
+                              },
+                              {
+                                "type": "positioned",
+                                "top": 8,
+                                "right": 8,
+                                "child": {
+                                  "type": "container",
+                                  "width": 32,
+                                  "height": 32,
+                                  "decoration": {
+                                    "color": "#00000000",
+                                    "borderRadius": 16
+                                  },
+                                  "child": {
+                                    "type": "center",
+                                    "child": {
+                                      "type": "icon",
+                                      "icon": "favorite_border",
+                                      "size": 18,
+                                      "color": "#E53935"
+                                    }
+                                  }
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "type": "padding",
+                            "padding": {"all": 12},
+                            "child": {
+                              "type": "column",
+                              "crossAxisAlignment": "start",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "data": "Grill Master",
+                                  "style": {
+                                    "fontSize": 16,
+                                    "fontWeight": "w700",
+                                    "color": "#2C3E50"
+                                  }
+                                },
+                                {
+                                  "type": "sizedBox",
+                                  "height": 6
+                                },
+                                {
+                                  "type": "row",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "data": "⭐ 4.7",
+                                      "style": {
+                                        "fontSize": 12,
+                                        "fontWeight": "w600",
+                                        "color": "#FFB300"
+                                      }
+                                    },
+                                    {
+                                      "type": "sizedBox",
+                                      "width": 8
+                                    },
+                                    {
+                                      "type": "text",
+                                      "data": "20-25 mins",
+                                      "style": {
+                                        "fontSize": 12,
+                                        "fontWeight": "w500",
+                                        "color": "#7F8C8D"
+                                      }
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "sizedBox",
+                                  "height": 4
+                                },
+                                {
+                                  "type": "text",
+                                  "data": "BBQ • Steaks • Grilled Items",
+                                  "style": {
+                                    "fontSize": 11,
+                                    "fontWeight": "w400",
+                                    "color": "#95A5A6"
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      },
+                      "action": {
+                        "type": "navigate_to_shop",
+                        "shopId": "grill-master"
+                      }
+                    },
+                    {
+                      "type": "container",
+                      "width": 220,
+                      "margin": {"left": 10, "right": 10},
+                      "decoration": {
+                        "color": "#FFFFFF",
+                        "borderRadius": 12,
+                        "boxShadow": [
+                          {
+                            "color": "#00000015",
+                            "blurRadius": 8,
+                            "offset": {"dx": 0, "dy": 4}
+                          }
+                        ]
+                      },
+                      "child": {
+                        "type": "column",
+                        "crossAxisAlignment": "start",
+                        "children": [
+                          {
+                            "type": "stack",
+                            "children": [
+                              {
+                                "type": "container",
+                                "height": 140,
+                                "decoration": {
+                                  "image": {
+                                    "src": "https://images.unsplash.com/photo-1513104890138-7c749659a591?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                                    "fit": "cover",
+                                    "opacity": 1.0,
+                                    "alignment": "center"
+                                  },
+                                  "borderRadius": {
+                                    "topLeft": 12,
+                                    "topRight": 12
+                                  }
+                                }
+                              },
+                              {
+                                "type": "positioned",
+                                "top": 8,
+                                "left": 8,
+                                "child": {
+                                  "type": "container",
+                                  "padding": {"horizontal": 8, "vertical": 4},
+                                  "decoration": {
+                                    "color": "#4CAF50",
+                                    "borderRadius": 12
+                                  },
+                                  "child": {
+                                    "type": "text",
+                                    "data": "3 OFFERS",
+                                    "style": {
+                                      "fontSize": 10,
+                                      "fontWeight": "w700",
+                                      "color": "#FFFFFF"
+                                    }
+                                  }
+                                }
+                              },
+                              {
+                                "type": "positioned",
+                                "top": 8,
+                                "right": 8,
+                                "child": {
+                                  "type": "container",
+                                  "width": 32,
+                                  "height": 32,
+                                  "decoration": {
+                                    "color": "#00000000",
+                                    "borderRadius": 16
+                                  },
+                                  "child": {
+                                    "type": "center",
+                                    "child": {
+                                      "type": "icon",
+                                      "icon": "favorite_border",
+                                      "size": 18,
+                                      "color": "#E53935"
+                                    }
+                                  }
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "type": "padding",
+                            "padding": {"all": 12},
+                            "child": {
+                              "type": "column",
+                              "crossAxisAlignment": "start",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "data": "Pasta Palace",
+                                  "style": {
+                                    "fontSize": 16,
+                                    "fontWeight": "w700",
+                                    "color": "#2C3E50"
+                                  }
+                                },
+                                {
+                                  "type": "sizedBox",
+                                  "height": 6
+                                },
+                                {
+                                  "type": "row",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "data": "⭐ 4.5",
+                                      "style": {
+                                        "fontSize": 12,
+                                        "fontWeight": "w600",
+                                        "color": "#FFB300"
+                                      }
+                                    },
+                                    {
+                                      "type": "sizedBox",
+                                      "width": 8
+                                    },
+                                    {
+                                      "type": "text",
+                                      "data": "25-30 mins",
+                                      "style": {
+                                        "fontSize": 12,
+                                        "fontWeight": "w500",
+                                        "color": "#7F8C8D"
+                                      }
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "sizedBox",
+                                  "height": 4
+                                },
+                                {
+                                  "type": "text",
+                                  "data": "Pasta • Italian • Lasagna",
+                                  "style": {
+                                    "fontSize": 11,
+                                    "fontWeight": "w400",
+                                    "color": "#95A5A6"
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      },
+                      "action": {
+                        "type": "navigate_to_shop",
+                        "shopId": "pasta-palace"
+                      }
+                    },
+                    {
+                      "type": "container",
+                      "width": 220,
+                      "margin": {"left": 10, "right": 10},
+                      "decoration": {
+                        "color": "#FFFFFF",
+                        "borderRadius": 12,
+                        "boxShadow": [
+                          {
+                            "color": "#00000015",
+                            "blurRadius": 8,
+                            "offset": {"dx": 0, "dy": 4}
+                          }
+                        ]
+                      },
+                      "child": {
+                        "type": "column",
+                        "crossAxisAlignment": "start",
+                        "children": [
+                          {
+                            "type": "stack",
+                            "children": [
+                              {
+                                "type": "container",
+                                "height": 140,
+                                "decoration": {
+                                  "image": {
+                                    "src": "https://images.unsplash.com/photo-1551782450-a2132b4ba21d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                                    "fit": "cover",
+                                    "opacity": 1.0,
+                                    "alignment": "center"
+                                  },
+                                  "borderRadius": {
+                                    "topLeft": 12,
+                                    "topRight": 12
+                                  }
+                                }
+                              },
+                              {
+                                "type": "positioned",
+                                "top": 8,
+                                "left": 8,
+                                "child": {
+                                  "type": "container",
+                                  "padding": {"horizontal": 8, "vertical": 4},
+                                  "decoration": {
+                                    "color": "#4CAF50",
+                                    "borderRadius": 12
+                                  },
+                                  "child": {
+                                    "type": "text",
+                                    "data": "7 DEALS",
+                                    "style": {
+                                      "fontSize": 10,
+                                      "fontWeight": "w700",
+                                      "color": "#FFFFFF"
+                                    }
+                                  }
+                                }
+                              },
+                              {
+                                "type": "positioned",
+                                "top": 8,
+                                "right": 8,
+                                "child": {
+                                  "type": "container",
+                                  "width": 32,
+                                  "height": 32,
+                                  "decoration": {
+                                    "color": "#00000000",
+                                    "borderRadius": 16
+                                  },
+                                  "child": {
+                                    "type": "center",
+                                    "child": {
+                                      "type": "icon",
+                                      "icon": "favorite_border",
+                                      "size": 18,
+                                      "color": "#E53935"
+                                    }
+                                  }
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "type": "padding",
+                            "padding": {"all": 12},
+                            "child": {
+                              "type": "column",
+                              "crossAxisAlignment": "start",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "data": "Dessert Dreams",
+                                  "style": {
+                                    "fontSize": 16,
+                                    "fontWeight": "w700",
+                                    "color": "#2C3E50"
+                                  }
+                                },
+                                {
+                                  "type": "sizedBox",
+                                  "height": 6
+                                },
+                                {
+                                  "type": "row",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "data": "⭐ 4.9",
+                                      "style": {
+                                        "fontSize": 12,
+                                        "fontWeight": "w600",
+                                        "color": "#FFB300"
+                                      }
+                                    },
+                                    {
+                                      "type": "sizedBox",
+                                      "width": 8
+                                    },
+                                    {
+                                      "type": "text",
+                                      "data": "15-20 mins",
+                                      "style": {
+                                        "fontSize": 12,
+                                        "fontWeight": "w500",
+                                        "color": "#7F8C8D"
+                                      }
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "sizedBox",
+                                  "height": 4
+                                },
+                                {
+                                  "type": "text",
+                                  "data": "Cakes • Cookies • Ice Cream",
+                                  "style": {
+                                    "fontSize": 11,
+                                    "fontWeight": "w400",
+                                    "color": "#95A5A6"
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      },
+                      "action": {
+                        "type": "navigate_to_shop",
+                        "shopId": "dessert-dreams"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "sizedBox",
+                "height": 32
+              },
+              {
+                "type": "row",
+                "children": [
+                  {
+                    "type": "text",
+                    "data": "ANSARI, WHAT'S ON YOUR MIND?",
+                    "style": {
+                      "fontSize": 16,
+                      "fontWeight": "w700",
+                      "color": "#2C3E50"
+                    }
+                  },
+                  {
+                    "type": "sizedBox",
+                    "width": 16
+                  },
+                  {
+                    "type": "expanded",
+                    "child": {
+                      "type": "divider",
+                      "color": "#E0E0E0",
+                      "thickness": 1
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "sizedBox",
+                "height": 4
+              },
+              {
+                "type": "padding",
+                "padding": {"horizontal": 16},
+                "child": {
+                  "type": "container",
+                  "height": 200,
+                  "child": {
+                    "type": "gridview",
+                    "crossAxisCount": 3,
+                    "crossAxisSpacing": 16,
+                    "mainAxisSpacing": 16,
+                    "childAspectRatio": 0.85,
+                    "children": [
+                      {
+                        "type": "column",
+                        "mainAxisAlignment": "center",
+                        "children": [
+                          {
+                            "type": "container",
+                            "width": 70,
+                            "height": 70,
+                            "decoration": {
+                              "color": "#FFF3E0",
+                              "borderRadius": 35,
+                              "border": {
+                                "color": "#FFB74D",
+                                "width": 2
+                              }
+                            },
+                            "child": {
+                              "type": "center",
+                              "child": {
+                                "type": "container",
+                                "width": 50,
+                                "height": 50,
+                                "decoration": {
+                                  "image": {
+                                    "src": "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                                    "fit": "cover"
+                                  },
+                                  "borderRadius": 25
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "type": "sizedBox",
+                            "height": 8
+                          },
+                          {
+                            "type": "text",
+                            "data": "Burger",
+                            "style": {
+                              "fontSize": 12,
+                              "fontWeight": "w600",
+                              "color": "#2C3E50"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "type": "column",
+                        "mainAxisAlignment": "center",
+                        "children": [
+                          {
+                            "type": "container",
+                            "width": 70,
+                            "height": 70,
+                            "decoration": {
+                              "color": "#FFF8E1",
+                              "borderRadius": 35,
+                              "border": {
+                                "color": "#FFD54F",
+                                "width": 2
+                              }
+                            },
+                            "child": {
+                              "type": "center",
+                              "child": {
+                                "type": "container",
+                                "width": 50,
+                                "height": 50,
+                                "decoration": {
+                                  "image": {
+                                    "src": "https://images.unsplash.com/photo-1563379091339-03246963d51a?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                                    "fit": "cover"
+                                  },
+                                  "borderRadius": 25
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "type": "sizedBox",
+                            "height": 8
+                          },
+                          {
+                            "type": "text",
+                            "data": "Biryani",
+                            "style": {
+                              "fontSize": 12,
+                              "fontWeight": "w600",
+                              "color": "#2C3E50"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "type": "column",
+                        "mainAxisAlignment": "center",
+                        "children": [
+                          {
+                            "type": "container",
+                            "width": 70,
+                            "height": 70,
+                            "decoration": {
+                              "color": "#E8F5E8",
+                              "borderRadius": 35,
+                              "border": {
+                                "color": "#81C784",
+                                "width": 2
+                              }
+                            },
+                            "child": {
+                              "type": "center",
+                              "child": {
+                                "type": "container",
+                                "width": 50,
+                                "height": 50,
+                                "decoration": {
+                                  "image": {
+                                    "src": "https://images.unsplash.com/photo-1512058564366-18510be2db19?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                                    "fit": "cover"
+                                  },
+                                  "borderRadius": 25
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "type": "sizedBox",
+                            "height": 8
+                          },
+                          {
+                            "type": "text",
+                            "data": "Khichdi",
+                            "style": {
+                              "fontSize": 12,
+                              "fontWeight": "w600",
+                              "color": "#2C3E50"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "type": "column",
+                        "mainAxisAlignment": "center",
+                        "children": [
+                          {
+                            "type": "container",
+                            "width": 70,
+                            "height": 70,
+                            "decoration": {
+                              "color": "#FFEBEE",
+                              "borderRadius": 35,
+                              "border": {
+                                "color": "#E57373",
+                                "width": 2
+                              }
+                            },
+                            "child": {
+                              "type": "center",
+                              "child": {
+                                "type": "container",
+                                "width": 50,
+                                "height": 50,
+                                "decoration": {
+                                  "image": {
+                                    "src": "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                                    "fit": "cover"
+                                  },
+                                  "borderRadius": 25
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "type": "sizedBox",
+                            "height": 8
+                          },
+                          {
+                            "type": "text",
+                            "data": "Pizza",
+                            "style": {
+                              "fontSize": 12,
+                              "fontWeight": "w600",
+                              "color": "#2C3E50"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "type": "column",
+                        "mainAxisAlignment": "center",
+                        "children": [
+                          {
+                            "type": "container",
+                            "width": 70,
+                            "height": 70,
+                            "decoration": {
+                              "color": "#E0F2F1",
+                              "borderRadius": 35,
+                              "border": {
+                                "color": "#4DB6AC",
+                                "width": 2
+                              }
+                            },
+                            "child": {
+                              "type": "center",
+                              "child": {
+                                "type": "container",
+                                "width": 50,
+                                "height": 50,
+                                "decoration": {
+                                  "image": {
+                                    "src": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                                    "fit": "cover"
+                                  },
+                                  "borderRadius": 25
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "type": "sizedBox",
+                            "height": 8
+                          },
+                          {
+                            "type": "text",
+                            "data": "Salad",
+                            "style": {
+                              "fontSize": 12,
+                              "fontWeight": "w600",
+                              "color": "#2C3E50"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "type": "column",
+                        "mainAxisAlignment": "center",
+                        "children": [
+                          {
+                            "type": "container",
+                            "width": 70,
+                            "height": 70,
+                            "decoration": {
+                              "color": "#F3E5F5",
+                              "borderRadius": 35,
+                              "border": {
+                                "color": "#BA68C8",
+                                "width": 2
+                              }
+                            },
+                            "child": {
+                              "type": "center",
+                              "child": {
+                                "type": "container",
+                                "width": 50,
+                                "height": 50,
+                                "decoration": {
+                                  "image": {
+                                    "src": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                                    "fit": "cover"
+                                  },
+                                  "borderRadius": 25
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "type": "sizedBox",
+                            "height": 8
+                          },
+                          {
+                            "type": "text",
+                            "data": "Cakes",
+                            "style": {
+                              "fontSize": 12,
+                              "fontWeight": "w600",
+                              "color": "#2C3E50"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }
+}

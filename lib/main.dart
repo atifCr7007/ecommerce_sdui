@@ -28,6 +28,7 @@ import 'views/take_away_view.dart';
 import 'views/reorder_view.dart';
 import 'views/category_view.dart';
 import 'views/offers_view.dart';
+import 'views/shop_detail_view.dart';
 import 'common/floating_cart_widget.dart';
 
 void main() async {
@@ -90,6 +91,10 @@ class OneMartApp extends StatelessWidget {
         GetPage(
           name: '/shop/:shopId',
           page: () => ShopView(shopId: Get.parameters['shopId'] ?? ''),
+        ),
+        GetPage(
+          name: '/shop-detail',
+          page: () => ShopDetailView(shopId: Get.parameters['shopId'] ?? ''),
         ),
         GetPage(
           name: '/flash-sale',
