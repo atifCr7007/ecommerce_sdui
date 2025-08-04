@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
@@ -6,6 +7,9 @@ import 'package:lottie/lottie.dart';
 import '../controllers/marketplace_controller.dart';
 import '../controllers/shop_detail_controller.dart';
 import '../controllers/expandable_section_controller.dart';
+import '../controllers/restaurant_listing_controller.dart';
+import '../controllers/cart_controller.dart';
+import '../models/restaurant.dart';
 
 /// Stac - Server-Driven UI (SDUI) framework for Flutter
 /// Allows building beautiful cross-platform applications with JSON in real time
@@ -17,85 +21,135 @@ class Stac {
 
   static Widget _parseComponent(Map<String, dynamic> json, BuildContext context) {
     final String type = json['type'] as String;
+    final Map<String, dynamic>? action = json['action'] as Map<String, dynamic>?;
 
+    Widget widget;
     switch (type.toLowerCase()) {
       case 'scaffold':
-        return _buildScaffold(json, context);
+        widget = _buildScaffold(json, context);
+        break;
       case 'singlechildscrollview':
-        return _buildSingleChildScrollView(json, context);
+        widget = _buildSingleChildScrollView(json, context);
+        break;
       case 'padding':
-        return _buildPadding(json, context);
+        widget = _buildPadding(json, context);
+        break;
       case 'column':
-        return _buildColumn(json, context);
+        widget = _buildColumn(json, context);
+        break;
       case 'row':
-        return _buildRow(json, context);
+        widget = _buildRow(json, context);
+        break;
       case 'container':
-        return _buildContainer(json, context);
+        widget = _buildContainer(json, context);
+        break;
       case 'text':
-        return _buildText(json, context);
+        widget = _buildText(json, context);
+        break;
       case 'icon':
-        return _buildIcon(json, context);
+        widget = _buildIcon(json, context);
+        break;
       case 'iconbutton':
-        return _buildIconButton(json, context);
+        widget = _buildIconButton(json, context);
+        break;
       case 'image':
-        return _buildImage(json, context);
+        widget = _buildImage(json, context);
+        break;
       case 'lottie':
-        return _buildLottie(json, context);
+        widget = _buildLottie(json, context);
+        break;
       case 'sizedbox':
-        return _buildSizedBox(json, context);
+        widget = _buildSizedBox(json, context);
+        break;
       case 'spacer':
-        return _buildSpacer(json, context);
+        widget = _buildSpacer(json, context);
+        break;
       case 'expanded':
-        return _buildExpanded(json, context);
+        widget = _buildExpanded(json, context);
+        break;
       case 'center':
-        return _buildCenter(json, context);
+        widget = _buildCenter(json, context);
+        break;
       case 'listview':
-        return _buildListView(json, context);
+        widget = _buildListView(json, context);
+        break;
       case 'gridview':
-        return _buildGridView(json, context);
+        widget = _buildGridView(json, context);
+        break;
       case 'marketplace_categories':
-        return _buildMarketplaceCategories(json, context);
+        widget = _buildMarketplaceCategories(json, context);
+        break;
       case 'marketplace_shops':
-        return _buildMarketplaceShops(json, context);
+        widget = _buildMarketplaceShops(json, context);
+        break;
       case 'marketplace_search':
-        return _buildMarketplaceSearch(json, context);
+        widget = _buildMarketplaceSearch(json, context);
+        break;
       case 'customscrollview':
-        return _buildCustomScrollView(json, context);
+        widget = _buildCustomScrollView(json, context);
+        break;
       case 'sliverappbar':
-        return _buildSliverAppBar(json, context);
+        widget = _buildSliverAppBar(json, context);
+        break;
       case 'slivertoboxadapter':
-        return _buildSliverToBoxAdapter(json, context);
+        widget = _buildSliverToBoxAdapter(json, context);
+        break;
+      case 'dynamic_text':
+        widget = _buildDynamicText(json, context);
+        break;
+      case 'dynamic_image':
+        widget = _buildDynamicImage(json, context);
+        break;
+      case 'dynamic_icon':
+        widget = _buildDynamicIcon(json, context);
+        break;
       case 'flexiblespacebar':
-        return _buildFlexibleSpaceBar(json, context);
+        widget = _buildFlexibleSpaceBar(json, context);
+        break;
       case 'expandablesection':
-        return _buildExpandableSection(json, context);
+        widget = _buildExpandableSection(json, context);
+        break;
       case 'dynamicfilterchips':
-        return _buildDynamicFilterChips(json, context);
+        widget = _buildDynamicFilterChips(json, context);
+        break;
       case 'margin':
-        return _buildMargin(json, context);
+        widget = _buildMargin(json, context);
+        break;
       case 'textfield':
-        return _buildTextField(json, context);
+        widget = _buildTextField(json, context);
+        break;
       case 'sliverlist':
-        return _buildSliverList(json, context);
+        widget = _buildSliverList(json, context);
+        break;
       case 'stack':
-        return _buildStack(json, context);
+        widget = _buildStack(json, context);
+        break;
       case 'positioned':
-        return _buildPositioned(json, context);
+        widget = _buildPositioned(json, context);
+        break;
       case 'appbar':
-        return _buildAppBar(json, context);
+        widget = _buildAppBar(json, context);
+        break;
       case 'pageview':
-        return _buildPageView(json, context);
+        widget = _buildPageView(json, context);
+        break;
       case 'divider':
-        return _buildDivider(json, context);
+        widget = _buildDivider(json, context);
+        break;
       case 'dynamic_shop_list':
-        return _buildDynamicShopList(json, context);
+        widget = _buildDynamicShopList(json, context);
+        break;
+      case 'dynamic_restaurant_list':
+        widget = _buildDynamicRestaurantList(json, context);
+        break;
       case 'dynamic_product_grid':
       case 'dynamicproductgrid':
-        return _buildDynamicProductGrid(json, context);
+        widget = _buildDynamicProductGrid(json, context);
+        break;
       default:
         // Log unknown components for debugging
         debugPrint('Unknown component type: $type');
-        return Container(
+        widget = Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
             color: Colors.red[50],
@@ -115,7 +169,18 @@ class Stac {
             ],
           ),
         );
+        break;
     }
+
+    // Handle actions by wrapping widget with GestureDetector if action is present
+    if (action != null) {
+      return GestureDetector(
+        onTap: () => _handleAction(action, context),
+        child: widget,
+      );
+    }
+
+    return widget;
   }
 
   static Widget _buildScaffold(Map<String, dynamic> json, BuildContext context) {
@@ -488,6 +553,67 @@ class Stac {
         },
       ),
     );
+  }
+
+  static Widget _buildDynamicRestaurantList(Map<String, dynamic> json, BuildContext context) {
+    final padding = json['padding'] as Map<String, dynamic>?;
+    final dataSource = json['dataSource'] as String? ?? 'restaurants';
+
+    // Try to get GetX controller for real-time data
+    try {
+      final controller = Get.find<RestaurantListingController>();
+
+      debugPrint('🎯 [GETX_INTEGRATION] Using RestaurantListingController with ${controller.filteredRestaurants.length} restaurants');
+
+      return Padding(
+        padding: _parseEdgeInsets(padding) ?? EdgeInsets.zero,
+        child: Obx(() {
+          final restaurants = controller.filteredRestaurants;
+
+          if (restaurants.isEmpty) {
+            return const Center(
+              child: Padding(
+                padding: EdgeInsets.all(32.0),
+                child: Text(
+                  'No restaurants found',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.grey,
+                  ),
+                ),
+              ),
+            );
+          }
+
+          return ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: restaurants.length,
+            itemBuilder: (context, index) {
+              final restaurant = restaurants[index];
+              return _buildRestaurantCardFromModel(restaurant, context);
+            },
+          );
+        }),
+      );
+    } catch (e) {
+      // Fallback to mock data if controller not found
+      debugPrint('⚠️ [GETX_FALLBACK] RestaurantListingController not found, using mock data: $e');
+      final List<Map<String, dynamic>> restaurantData = _getRestaurantData(dataSource);
+
+      return Padding(
+        padding: _parseEdgeInsets(padding) ?? EdgeInsets.zero,
+        child: ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: restaurantData.length,
+          itemBuilder: (context, index) {
+            final restaurant = restaurantData[index];
+            return _buildRestaurantCard(restaurant, context);
+          },
+        ),
+      );
+    }
   }
 
   static Widget _buildDynamicProductGrid(Map<String, dynamic> json, BuildContext context) {
@@ -1449,18 +1575,106 @@ class Stac {
           controller.navigateToShop(shopId);
         }
         break;
+      case 'navigate_to_search':
+        Get.toNamed('/search');
+        break;
+      case 'show_filter_sheet':
+        try {
+          final controller = Get.find<RestaurantListingController>();
+          controller.showFilterBottomSheet(context);
+        } catch (e) {
+          debugPrint('RestaurantListingController not found for filter sheet');
+        }
+        break;
+      case 'show_sort_sheet':
+        try {
+          final controller = Get.find<RestaurantListingController>();
+          controller.showSortBottomSheet(context);
+        } catch (e) {
+          debugPrint('RestaurantListingController not found for sort sheet');
+        }
+        break;
+      case 'toggle_filter':
+        try {
+          final controller = Get.find<RestaurantListingController>();
+          final filterType = action['filter'] as String?;
+          if (filterType != null) {
+            _handleFilterToggle(controller, filterType);
+          }
+        } catch (e) {
+          debugPrint('RestaurantListingController not found for filter toggle');
+        }
+        break;
+      case 'toggle_favorite':
+        try {
+          final controller = Get.find<RestaurantListingController>();
+          final restaurantId = action['restaurantId'] as String?;
+          if (restaurantId != null) {
+            controller.toggleFavorite(restaurantId);
+          }
+        } catch (e) {
+          debugPrint('RestaurantListingController not found for favorite toggle');
+        }
+        break;
+      case 'navigate_to_restaurant':
+        try {
+          final controller = Get.find<RestaurantListingController>();
+          final restaurantId = action['restaurantId'] as String?;
+          if (restaurantId != null) {
+            controller.navigateToRestaurant(restaurantId);
+          }
+        } catch (e) {
+          debugPrint('RestaurantListingController not found for restaurant navigation');
+        }
+        break;
       case 'navigate_back':
         Get.back();
         break;
       case 'add_to_cart':
         final String productId = action['productId'] as String? ?? '';
+        final String variantId = action['variantId'] as String? ?? '';
+        final int quantity = action['quantity'] as int? ?? 1;
+        final String shopId = action['shopId'] as String? ?? '';
+        final String shopName = action['shopName'] as String? ?? '';
+
+        debugPrint('🛒 [ADD_TO_CART] Adding product: $productId, variant: $variantId, quantity: $quantity');
+        debugPrint('🏪 [ADD_TO_CART] Shop: $shopName ($shopId)');
+
         if (productId.isNotEmpty) {
-          // Try to find ShopDetailController first, fallback to other controllers
           try {
-            final controller = Get.find<ShopDetailController>();
-            controller.addToCart(productId);
+            // Try to use CartController directly for better integration
+            final cartController = Get.find<CartController>();
+
+            // Add to cart using CartController
+            cartController.addToCart(
+              productId,
+              variantId,
+              quantity: quantity,
+              shopId: shopId,
+              shopName: shopName,
+            ).then((success) {
+              if (success) {
+                debugPrint('✅ [ADD_TO_CART] Successfully added to cart');
+                debugPrint('📊 [CART_STATE] Total items: ${cartController.itemCount}');
+                debugPrint('💰 [CART_STATE] Total price: ${cartController.formattedTotal}');
+              } else {
+                debugPrint('❌ [ADD_TO_CART] Failed to add to cart');
+              }
+            }).catchError((error) {
+              debugPrint('❌ [ADD_TO_CART] Error: $error');
+            });
+
           } catch (e) {
-            debugPrint('ShopDetailController not found, product ID: $productId');
+            debugPrint('❌ [ADD_TO_CART] Error adding to cart: $e');
+
+            // Fallback to ShopDetailController
+            try {
+              final controller = Get.find<ShopDetailController>();
+              controller.addToCart(productId);
+              debugPrint('✅ [ADD_TO_CART] Fallback: Used ShopDetailController');
+            } catch (e2) {
+              debugPrint('❌ [ADD_TO_CART] Both controllers failed: $e2');
+            }
           }
         }
         break;
@@ -1481,17 +1695,7 @@ class Stac {
         final List<dynamic>? items = action['items'] as List<dynamic>?;
         debugPrint('Show menu action triggered with items: $items');
         break;
-      case 'toggle_filter':
-        final String filter = action['filter'] as String? ?? '';
-        if (filter.isNotEmpty) {
-          try {
-            final controller = Get.find<ShopDetailController>();
-            controller.toggleFilter(filter);
-          } catch (e) {
-            debugPrint('ShopDetailController not found for filter: $filter');
-          }
-        }
-        break;
+
       case 'open_search':
         try {
           final controller = Get.find<ShopDetailController>();
@@ -1558,15 +1762,44 @@ class Stac {
   }
 
   static Widget _buildSliverList(Map<String, dynamic> json, BuildContext context) {
+    final dataSource = json['dataSource'] as String?;
+    final template = json['template'] as Map<String, dynamic>?;
+
+    if (dataSource == 'filtered_restaurants' && template != null) {
+      try {
+        final controller = Get.find<RestaurantListingController>();
+        return Obx(() {
+          final restaurants = controller.filteredRestaurants;
+
+          return SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                if (index >= restaurants.length) return null;
+
+                final restaurant = restaurants[index];
+                final populatedTemplate = _populateRestaurantTemplate(template, restaurant);
+
+                return GestureDetector(
+                  onTap: () => controller.navigateToRestaurant(restaurant.id),
+                  child: _parseComponent(populatedTemplate, context),
+                );
+              },
+              childCount: restaurants.length,
+            ),
+          );
+        });
+      } catch (e) {
+        debugPrint('RestaurantListingController not found for sliverList: $e');
+      }
+    }
+
+    // Fallback to original implementation
     final delegate = json['delegate'] as Map<String, dynamic>?;
     final itemCount = delegate?['itemCount'] as int? ?? 0;
-    final itemBuilder = delegate?['itemBuilder'] as String?;
 
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, index) {
-          // For now, return placeholder items
-          // In a real implementation, you would use the itemBuilder to create specific items
           return _buildProductItem(index, context);
         },
         childCount: itemCount,
@@ -1604,12 +1837,16 @@ class Stac {
     final foregroundColor = json['foregroundColor'] as String?;
     final elevation = json['elevation'] as num?;
     final actions = json['actions'] as List<dynamic>?;
+    final leading = json['leading'] as Map<String, dynamic>?;
+
+    debugPrint('🔧 [APPBAR_BUILD] Building AppBar with leading: $leading');
 
     return AppBar(
       title: title != null ? Text(title) : null,
       backgroundColor: _parseColor(backgroundColor),
       foregroundColor: _parseColor(foregroundColor),
       elevation: elevation?.toDouble(),
+      leading: leading != null ? _parseComponent(leading, context) : null,
       actions: actions?.map((action) => _parseComponent(action, context)).toList(),
     );
   }
@@ -1940,5 +2177,520 @@ class Stac {
       return double.tryParse(value);
     }
     return null;
+  }
+
+  /// Handle filter toggle for restaurant listing
+  static void _handleFilterToggle(RestaurantListingController controller, String filterType) {
+    switch (filterType) {
+      case 'pure_veg':
+        controller.toggleFilter(RestaurantFilter.pureVeg);
+        break;
+      case 'fast_delivery':
+        controller.toggleFilter(RestaurantFilter.fastDelivery);
+        break;
+      case 'price_range':
+        controller.toggleFilter(RestaurantFilter.budgetFriendly);
+        break;
+      case 'top_rated':
+        controller.toggleFilter(RestaurantFilter.topRated);
+        break;
+      case 'offers':
+        controller.toggleFilter(RestaurantFilter.offers);
+        break;
+    }
+  }
+
+  /// Build dynamic text component for restaurant listing
+  static Widget _buildDynamicText(Map<String, dynamic> json, BuildContext context) {
+    final dataSource = json['dataSource'] as String?;
+    final style = json['style'] as Map<String, dynamic>?;
+
+    String text = '';
+    if (dataSource != null) {
+      try {
+        final controller = Get.find<RestaurantListingController>();
+        switch (dataSource) {
+          case 'results_count':
+            text = controller.resultsCountText;
+            break;
+          default:
+            text = dataSource; // fallback to dataSource as text
+        }
+      } catch (e) {
+        text = dataSource; // fallback if controller not found
+      }
+    }
+
+    return Text(
+      text,
+      style: style != null ? _parseTextStyle(style) : null,
+    );
+  }
+
+  /// Build dynamic image component for restaurant listing
+  static Widget _buildDynamicImage(Map<String, dynamic> json, BuildContext context) {
+    final dataSource = json['dataSource'] as String?;
+    final fit = json['fit'] as String?;
+    final placeholder = json['placeholder'] as Map<String, dynamic>?;
+
+    // Try to get image URL from current restaurant context
+    String imageUrl = '';
+    if (dataSource == 'imageUrl') {
+      // This will be populated by the template system
+      imageUrl = 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=400&h=400&fit=crop&crop=center';
+    }
+
+    if (imageUrl.isNotEmpty) {
+      return Image.network(
+        imageUrl,
+        fit: fit == 'cover' ? BoxFit.cover : BoxFit.contain,
+        errorBuilder: (context, error, stackTrace) {
+          return placeholder != null
+            ? _parseComponent(placeholder, context)
+            : Container(
+                color: Colors.grey[300],
+                child: const Icon(Icons.restaurant, color: Colors.grey),
+              );
+        },
+      );
+    }
+
+    return placeholder != null
+      ? _parseComponent(placeholder, context)
+      : Container(
+          width: 80,
+          height: 80,
+          color: Colors.grey[300],
+          child: const Icon(Icons.restaurant, color: Colors.grey),
+        );
+  }
+
+  /// Build dynamic icon component for restaurant listing
+  static Widget _buildDynamicIcon(Map<String, dynamic> json, BuildContext context) {
+    final dataSource = json['dataSource'] as String?;
+    final size = (json['size'] as num?)?.toDouble();
+    final color = json['color'] as String?;
+
+    IconData iconData = Icons.help;
+    if (dataSource == 'favorite_icon') {
+      iconData = Icons.favorite_border; // default to unfavorited
+    }
+
+    return Icon(
+      iconData,
+      size: size,
+      color: color != null ? _parseColor(color) : null,
+    );
+  }
+
+  /// Populate restaurant template with actual restaurant data
+  static Map<String, dynamic> _populateRestaurantTemplate(
+    Map<String, dynamic> template,
+    Restaurant restaurant,
+  ) {
+    // Convert template to JSON string for easy replacement
+    String templateJson = json.encode(template);
+
+    // Replace placeholders with actual restaurant data
+    templateJson = templateJson.replaceAll('{{id}}', restaurant.id);
+    templateJson = templateJson.replaceAll('{{name}}', restaurant.name);
+    templateJson = templateJson.replaceAll('{{rating}}', '${restaurant.rating} (${restaurant.reviewCount}+)');
+    templateJson = templateJson.replaceAll('{{deliveryTime}}', restaurant.deliveryTime);
+    templateJson = templateJson.replaceAll('{{cuisines}}', restaurant.cuisineString);
+    templateJson = templateJson.replaceAll('{{location}}', restaurant.location);
+    templateJson = templateJson.replaceAll('{{distance}}', restaurant.distance);
+    templateJson = templateJson.replaceAll('{{imageUrl}}', restaurant.imageUrl);
+    templateJson = templateJson.replaceAll('{{favorite_icon}}', restaurant.isFavorite ? 'favorite' : 'favorite_border');
+
+    // Convert back to Map
+    return json.decode(templateJson) as Map<String, dynamic>;
+  }
+
+  // Helper method to get mock restaurant data
+  static List<Map<String, dynamic>> _getRestaurantData(String dataSource) {
+    return [
+      {
+        'id': 'mcdonalds',
+        'name': 'McDonald\'s',
+        'rating': '4.6 (2.2K+)',
+        'deliveryTime': '10-15 mins',
+        'cuisine': 'Burgers, Beverages, Cafe',
+        'location': 'Vashi',
+        'distance': '0.6 km',
+        'imageUrl': 'https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=300&h=200&fit=crop',
+        'isFavorite': false,
+        'priceRange': '₹99',
+        'offer': 'ITEMS AT ₹99'
+      },
+      {
+        'id': 'wendys',
+        'name': 'Wendy\'s Burgers',
+        'rating': '4.2 (3.7K+)',
+        'deliveryTime': '30-35 mins',
+        'cuisine': 'Burgers, American, Fast Food',
+        'location': 'Vashi',
+        'distance': '2.6 km',
+        'imageUrl': 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=300&h=200&fit=crop',
+        'isFavorite': false,
+        'priceRange': '₹55',
+        'offer': 'ITEMS AT ₹55'
+      },
+      {
+        'id': 'chinatown',
+        'name': 'China Town',
+        'rating': '4.3 (99)',
+        'deliveryTime': '25-30 mins',
+        'cuisine': 'Chinese, Beverages',
+        'location': 'Vashi',
+        'distance': '2.4 km',
+        'imageUrl': 'https://images.unsplash.com/photo-1526318896980-cf78c088247c?w=300&h=200&fit=crop',
+        'isFavorite': false,
+        'priceRange': '₹200',
+        'offer': null
+      }
+    ];
+  }
+
+  // Helper method to build restaurant card from Restaurant model
+  static Widget _buildRestaurantCardFromModel(Restaurant restaurant, BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        debugPrint('🚀 [NAVIGATION] Navigating to shop detail for: ${restaurant.name}');
+        _handleRestaurantNavigation(restaurant, context);
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.05),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+      child: Row(
+        children: [
+          // Restaurant Image
+          Container(
+            width: 100,
+            height: 100,
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(12),
+                bottomLeft: Radius.circular(12),
+              ),
+              image: DecorationImage(
+                image: NetworkImage(restaurant.imageUrl),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: Stack(
+              children: [
+                // Favorite Icon
+                Positioned(
+                  top: 8,
+                  right: 8,
+                  child: Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Icon(
+                      restaurant.isFavorite ? Icons.favorite : Icons.favorite_border,
+                      color: restaurant.isFavorite ? Colors.red : Colors.grey,
+                      size: 16,
+                    ),
+                  ),
+                ),
+                // Offer Badge (if available)
+                if (restaurant.tags?.isNotEmpty == true)
+                  Positioned(
+                    bottom: 8,
+                    left: 8,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withValues(alpha: 0.8),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Text(
+                        restaurant.tags!.first.toUpperCase(),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          // Restaurant Details
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Name and Rating
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          restaurant.name,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: Colors.green,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(Icons.star, color: Colors.white, size: 12),
+                            const SizedBox(width: 2),
+                            Text(
+                              restaurant.rating.toString(),
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  // Rating and Delivery Time
+                  Text(
+                    '${restaurant.rating} (${restaurant.reviewCount}+) • ${restaurant.deliveryTime}',
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  // Cuisine
+                  Text(
+                    restaurant.cuisineString,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  // Location and Distance
+                  Text(
+                    '${restaurant.location} • ${restaurant.distance}',
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    ),
+    );
+  }
+
+  // Helper method to build restaurant card
+  static Widget _buildRestaurantCard(Map<String, dynamic> restaurant, BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          // Restaurant Image
+          Container(
+            width: 100,
+            height: 100,
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(12),
+                bottomLeft: Radius.circular(12),
+              ),
+              image: DecorationImage(
+                image: NetworkImage(restaurant['imageUrl'] ?? ''),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: Stack(
+              children: [
+                // Favorite Icon
+                Positioned(
+                  top: 8,
+                  right: 8,
+                  child: Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Icon(
+                      restaurant['isFavorite'] == true ? Icons.favorite : Icons.favorite_border,
+                      color: restaurant['isFavorite'] == true ? Colors.red : Colors.grey,
+                      size: 16,
+                    ),
+                  ),
+                ),
+                // Price/Offer Badge
+                if (restaurant['offer'] != null)
+                  Positioned(
+                    bottom: 8,
+                    left: 8,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.8),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Text(
+                        restaurant['offer'],
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          // Restaurant Details
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Name and Rating
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          restaurant['name'] ?? '',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: Colors.green,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(Icons.star, color: Colors.white, size: 12),
+                            const SizedBox(width: 2),
+                            Text(
+                              restaurant['rating']?.split(' ')[0] ?? '4.0',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  // Rating and Delivery Time
+                  Text(
+                    '${restaurant['rating']} • ${restaurant['deliveryTime']}',
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  // Cuisine
+                  Text(
+                    restaurant['cuisine'] ?? '',
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  // Location and Distance
+                  Text(
+                    '${restaurant['location']} • ${restaurant['distance']}',
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Handle restaurant navigation to shop detail screen
+  static void _handleRestaurantNavigation(Restaurant restaurant, BuildContext context) {
+    try {
+      debugPrint('🏪 [SHOP_NAVIGATION] Navigating to shop detail for: ${restaurant.name}');
+      debugPrint('📍 [SHOP_NAVIGATION] Restaurant ID: ${restaurant.id}');
+
+      // Navigate to shop detail view with restaurant data
+      Get.toNamed('/shop-detail', arguments: {
+        'shopId': restaurant.id,
+        'shopName': restaurant.name,
+        'shopData': {
+          'id': restaurant.id,
+          'name': restaurant.name,
+          'rating': restaurant.rating,
+          'reviewCount': restaurant.reviewCount,
+          'deliveryTime': restaurant.deliveryTime,
+          'cuisines': restaurant.cuisines,
+          'location': restaurant.location,
+          'distance': restaurant.distance,
+          'imageUrl': restaurant.imageUrl,
+          'isFavorite': restaurant.isFavorite,
+          'tags': restaurant.tags,
+        }
+      });
+    } catch (e) {
+      debugPrint('❌ [SHOP_NAVIGATION] Error navigating to shop detail: $e');
+    }
   }
 }

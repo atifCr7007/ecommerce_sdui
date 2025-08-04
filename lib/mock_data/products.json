@@ -1,6 +1,54 @@
 {
   "products": [
     {
+      "id": "gooey_chocolate_brownie",
+      "title": "Gooey Chocolate Brownie",
+      "description": "Rich, fudgy chocolate brownie with a gooey center. Made with premium Belgian chocolate and served warm. A perfect dessert for chocolate lovers.",
+      "thumbnail": "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=400&h=400&fit=crop&crop=center",
+      "images": [
+        {
+          "id": "img_brownie_001",
+          "url": "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=400&h=400&fit=crop&crop=center"
+        },
+        {
+          "id": "img_brownie_002",
+          "url": "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=400&h=400&fit=crop&crop=center"
+        }
+      ],
+      "variants": [
+        {
+          "id": "gooey_chocolate_brownie_variant_1",
+          "title": "Regular",
+          "size": "Regular",
+          "prices": [
+            {
+              "id": "price_brownie_001",
+              "currency_code": "INR",
+              "amount": 9900
+            }
+          ]
+        }
+      ],
+      "tags": ["dessert", "chocolate", "sweet", "bestseller"],
+      "rating": 4.6,
+      "reviewCount": 83,
+      "category": "desserts",
+      "shopId": "shop_001",
+      "shopName": "Spice Garden Restaurant",
+      "isVegetarian": true,
+      "isVegan": false,
+      "allergens": ["gluten", "dairy", "eggs"],
+      "nutritionalInfo": {
+        "calories": 320,
+        "protein": "4g",
+        "carbs": "45g",
+        "fat": "15g"
+      },
+      "preparationTime": "5 mins",
+      "isAvailable": true,
+      "stock": 25
+    },
+    {
       "id": "prod_electronics_001",
       "title": "Premium Wireless Headphones",
       "description": "High-quality wireless headphones with noise cancellation, 30-hour battery life, and premium sound quality. Perfect for music lovers and professionals.",

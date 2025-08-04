@@ -1199,7 +1199,12 @@
                               "color": "#2C3E50"
                             }
                           }
-                        ]
+                        ],
+                        "action": {
+                          "type": "navigate",
+                          "route": "/restaurant-listing",
+                          "parameters": {"category": "pizza"}
+                        }
                       },
                       {
                         "type": "column",
@@ -1237,7 +1242,12 @@
                               "color": "#2C3E50"
                             }
                           }
-                        ]
+                        ],
+                        "action": {
+                          "type": "navigate",
+                          "route": "/restaurant-listing",
+                          "parameters": {"category": "burgers"}
+                        }
                       },
                       {
                         "type": "column",
@@ -1275,7 +1285,12 @@
                               "color": "#2C3E50"
                             }
                           }
-                        ]
+                        ],
+                        "action": {
+                          "type": "navigate",
+                          "route": "/restaurant-listing",
+                          "parameters": {"category": "noodles"}
+                        }
                       },
                       {
                         "type": "column",

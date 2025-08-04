@@ -1,0 +1,277 @@
+{
+  "type": "scaffold",
+  "backgroundColor": "#FFFFFF",
+  "appBar": {
+    "type": "appBar",
+    "backgroundColor": "#FFFFFF",
+    "elevation": 0,
+    "title": "Burgers",
+    "leading": {
+      "type": "iconButton",
+      "icon": "arrow_back",
+      "color": "#000000",
+      "action": {
+        "type": "navigate_back"
+      }
+    },
+    "actions": [
+      {
+        "type": "iconButton",
+        "icon": "search",
+        "color": "#000000",
+        "action": {
+          "type": "navigate_to_search"
+        }
+      }
+    ]
+  },
+  "body": {
+    "type": "column",
+    "children": [
+      {
+        "type": "container",
+        "padding": {"all": 16},
+        "child": {
+          "type": "row",
+          "children": [
+            {
+              "type": "expanded",
+              "child": {
+                "type": "container",
+                "height": 80,
+                "margin": {"right": 8},
+                "decoration": {
+                  "borderRadius": 12,
+                  "gradient": {
+                    "type": "linear",
+                    "colors": ["#FF9500", "#FFAD33"],
+                    "begin": "topLeft",
+                    "end": "bottomRight"
+                  }
+                },
+                "child": {
+                  "type": "padding",
+                  "padding": {"all": 12},
+                  "child": {
+                    "type": "row",
+                    "children": [
+                      {
+                        "type": "expanded",
+                        "child": {
+                          "type": "column",
+                          "crossAxisAlignment": "start",
+                          "mainAxisAlignment": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "data": "MINIMUM",
+                              "style": {
+                                "fontSize": 12,
+                                "fontWeight": "w500",
+                                "color": "#FFFFFF"
+                              }
+                            },
+                            {
+                              "type": "text",
+                              "data": "40% OFF",
+                              "style": {
+                                "fontSize": 16,
+                                "fontWeight": "bold",
+                                "color": "#FFFFFF"
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "type": "container",
+                        "width": 30,
+                        "height": 30,
+                        "decoration": {
+                          "color": "#FF6B35",
+                          "borderRadius": 4
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "type": "expanded",
+              "child": {
+                "type": "container",
+                "height": 80,
+                "margin": {"left": 8},
+                "decoration": {
+                  "borderRadius": 12,
+                  "gradient": {
+                    "type": "linear",
+                    "colors": ["#FFD700", "#FFA500"],
+                    "begin": "topLeft",
+                    "end": "bottomRight"
+                  }
+                },
+                "child": {
+                  "type": "padding",
+                  "padding": {"all": 12},
+                  "child": {
+                    "type": "row",
+                    "children": [
+                      {
+                        "type": "expanded",
+                        "child": {
+                          "type": "column",
+                          "crossAxisAlignment": "start",
+                          "mainAxisAlignment": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "data": "LOW",
+                              "style": {
+                                "fontSize": 12,
+                                "fontWeight": "w500",
+                                "color": "#FFFFFF"
+                              }
+                            },
+                            {
+                              "type": "text",
+                              "data": "DELIVERY FEE",
+                              "style": {
+                                "fontSize": 14,
+                                "fontWeight": "bold",
+                                "color": "#FFFFFF"
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "type": "container",
+                        "width": 30,
+                        "height": 30,
+                        "decoration": {
+                          "color": "#FF8C00",
+                          "borderRadius": 4
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "container",
+        "height": 50,
+        "padding": {"vertical": 8},
+        "child": {
+          "type": "singleChildScrollView",
+          "scrollDirection": "horizontal",
+          "child": {
+            "type": "row",
+            "children": [
+              {
+                "type": "sizedBox",
+                "width": 16
+              },
+              {
+                "type": "container",
+                "padding": {"horizontal": 12, "vertical": 8},
+                "margin": {"right": 8},
+                "decoration": {
+                  "color": "#F0F0F0",
+                  "borderRadius": 20
+                },
+                "child": {
+                  "type": "text",
+                  "data": "Less than 30 mins",
+                  "style": {
+                    "fontSize": 14,
+                    "color": "#666666"
+                  }
+                }
+              },
+              {
+                "type": "container",
+                "padding": {"horizontal": 12, "vertical": 8},
+                "margin": {"right": 8},
+                "decoration": {
+                  "color": "#F0F0F0",
+                  "borderRadius": 20
+                },
+                "child": {
+                  "type": "text",
+                  "data": "Rs. 300-Rs. 600",
+                  "style": {
+                    "fontSize": 14,
+                    "color": "#666666"
+                  }
+                }
+              },
+              {
+                "type": "container",
+                "padding": {"horizontal": 12, "vertical": 8},
+                "margin": {"right": 8},
+                "decoration": {
+                  "color": "#F0F0F0",
+                  "borderRadius": 20
+                },
+                "child": {
+                  "type": "text",
+                  "data": "Less than Rs. 300",
+                  "style": {
+                    "fontSize": 14,
+                    "color": "#666666"
+                  }
+                }
+              },
+              {
+                "type": "container",
+                "padding": {"horizontal": 12, "vertical": 8},
+                "margin": {"right": 8},
+                "decoration": {
+                  "color": "#F0F0F0",
+                  "borderRadius": 20
+                },
+                "child": {
+                  "type": "text",
+                  "data": "Pure Veg",
+                  "style": {
+                    "fontSize": 14,
+                    "color": "#666666"
+                  }
+                }
+              },
+              {
+                "type": "sizedBox",
+                "width": 16
+              }
+            ]
+          }
+        }
+      },
+      {
+        "type": "container",
+        "padding": {"horizontal": 16, "vertical": 8},
+        "child": {
+          "type": "text",
+          "data": "Restaurants to explore",
+          "style": {
+            "fontSize": 18,
+            "fontWeight": "bold",
+            "color": "#000000"
+          }
+        }
+      },
+      {
+        "type": "expanded",
+        "child": {
+          "type": "dynamic_restaurant_list"
+        }
+      }
+    ]
+  }
+}

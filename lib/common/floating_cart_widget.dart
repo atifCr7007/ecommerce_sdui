@@ -80,22 +80,11 @@ class FloatingCartWidget extends StatelessWidget {
                         ],
                       ),
                     ),
-                    // Delete button
-                    IconButton(
-                      onPressed: () => _showClearCartDialog(context, cartController),
-                      icon: const Icon(
-                        Icons.delete_outline,
-                        color: Colors.red,
-                        size: 20,
-                      ),
-                      padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(
-                        minWidth: 32,
-                        minHeight: 32,
-                      ),
-                    ),
                   ],
                 ),
+                const SizedBox(height: 12),
+                // Cart items list
+                _buildCartItemsList(cart, cartController),
                 const SizedBox(height: 16),
                 // Action buttons
                 Row(
@@ -190,37 +179,101 @@ class FloatingCartWidget extends StatelessWidget {
     Get.toNamed('/cart');
   }
 
-  void _showClearCartDialog(BuildContext context, CartController cartController) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Clear Cart'),
-          content: const Text('Are you sure you want to remove all items from your cart?'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                cartController.clearCart();
-                Get.snackbar(
-                  'Cart Cleared',
-                  'All items have been removed from your cart',
-                  snackPosition: SnackPosition.BOTTOM,
-                  backgroundColor: Colors.green,
-                  colorText: Colors.white,
-                  duration: const Duration(seconds: 2),
-                );
-              },
-              style: TextButton.styleFrom(foregroundColor: Colors.red),
-              child: const Text('Clear'),
-            ),
-          ],
-        );
-      },
+  Widget _buildCartItemsList(dynamic cart, CartController cartController) {
+    if (cart.items.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    return Container(
+      constraints: const BoxConstraints(maxHeight: 200),
+      child: ListView.separated(
+        shrinkWrap: true,
+        itemCount: cart.items.length,
+        separatorBuilder: (context, index) => const Divider(height: 1),
+        itemBuilder: (context, index) {
+          final item = cart.items[index];
+          return _buildCartItem(item, cartController);
+        },
+      ),
     );
   }
+
+  Widget _buildCartItem(dynamic item, CartController cartController) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        children: [
+          // Item image
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(6),
+              color: Colors.grey[200],
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(6),
+              child: Image.network(
+                item.thumbnail ?? 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=400&h=400&fit=crop&crop=center',
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    color: Colors.grey[300],
+                    child: const Icon(Icons.fastfood, color: Colors.grey),
+                  );
+                },
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
+          // Item details
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  item.title ?? 'Unknown Item',
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black87,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  '${item.formattedPrice} × ${item.quantity}',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey[600],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // Delete button
+          IconButton(
+            onPressed: () => _removeItemFromCart(item, cartController),
+            icon: const Icon(
+              Icons.remove_circle_outline,
+              color: Colors.red,
+              size: 20,
+            ),
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(
+              minWidth: 32,
+              minHeight: 32,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _removeItemFromCart(dynamic item, CartController cartController) {
+    cartController.removeItem(item.id);
+  }
+
+
 }

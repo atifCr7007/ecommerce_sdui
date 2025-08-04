@@ -157,15 +157,10 @@
                                         }
                                       },
                                       {
-                                        "type": "container",
-                                        "width": 3,
-                                        "height": 3,
-                                        "margin": {"horizontal": 6},
-                                        "decoration": {
-                                          "color": "#666666",
-                                          "borderRadius": 1.5
-                                        }
-                                      },
+                                        "type": "sizedBox",
+                                        "width": 6
+                                      }
+                                   ,
                                       {
                                         "type": "text",
                                         "data": "Vashi",
@@ -249,6 +244,10 @@
                           "decoration": {
                             "color": "#E0E0E0"
                           }
+                        },
+                        {
+                          "type": "sizedBox",
+                          "height": 12
                         },
                         {
                           "type": "row",
@@ -589,7 +588,12 @@
                                       "borderRadius": 6
                                     },
                                     "action": {
-                                      "type": "add_to_cart"
+                                      "type": "add_to_cart",
+                                      "productId": "gooey_chocolate_brownie",
+                                      "variantId": "gooey_chocolate_brownie_variant_1",
+                                      "quantity": 1,
+                                      "shopId": "shop_001",
+                                      "shopName": "Spice Garden Restaurant"
                                     },
                                     "child": {
                                       "type": "text",
@@ -772,7 +776,12 @@
                                       "borderRadius": 6
                                     },
                                     "action": {
-                                      "type": "add_to_cart"
+                                      "type": "add_to_cart",
+                                      "productId": "gooey_chocolate_brownie",
+                                      "variantId": "gooey_chocolate_brownie_variant_1",
+                                      "quantity": 1,
+                                      "shopId": "shop_001",
+                                      "shopName": "Spice Garden Restaurant"
                                     },
                                     "child": {
                                       "type": "text",
@@ -897,7 +906,12 @@
                                     "borderRadius": 6
                                   },
                                   "action": {
-                                    "type": "add_to_cart"
+                                    "type": "add_to_cart",
+                                    "productId": "gooey_chocolate_brownie",
+                                    "variantId": "gooey_chocolate_brownie_variant_1",
+                                    "quantity": 1,
+                                    "shopId": "shop_001",
+                                    "shopName": "Spice Garden Restaurant"
                                   },
                                   "child": {
                                     "type": "text",
@@ -998,7 +1012,12 @@
                                     "borderRadius": 6
                                   },
                                   "action": {
-                                    "type": "add_to_cart"
+                                    "type": "add_to_cart",
+                                    "productId": "gooey_chocolate_brownie",
+                                    "variantId": "gooey_chocolate_brownie_variant_1",
+                                    "quantity": 1,
+                                    "shopId": "shop_001",
+                                    "shopName": "Spice Garden Restaurant"
                                   },
                                   "child": {
                                     "type": "text",
@@ -1122,7 +1141,12 @@
                                     "borderRadius": 6
                                   },
                                   "action": {
-                                    "type": "add_to_cart"
+                                    "type": "add_to_cart",
+                                    "productId": "gooey_chocolate_brownie",
+                                    "variantId": "gooey_chocolate_brownie_variant_1",
+                                    "quantity": 1,
+                                    "shopId": "shop_001",
+                                    "shopName": "Spice Garden Restaurant"
                                   },
                                   "child": {
                                     "type": "text",
