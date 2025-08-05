@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'controllers/home_controller.dart';
 import 'controllers/product_detail_controller.dart';
 import 'controllers/search_controller.dart';
-import 'controllers/category_controller.dart';
 import 'controllers/cart_controller.dart';
 import 'controllers/favorites_controller.dart';
 import 'controllers/marketplace_controller.dart';
@@ -16,20 +15,15 @@ import 'views/search_view.dart';
 
 import 'views/cart_view.dart';
 import 'views/checkout_view.dart';
-import 'views/marketplace_view.dart';
 import 'views/shop_view.dart';
 import 'views/bookmarks_view.dart';
 import 'views/orders_view.dart';
 import 'views/order_confirmation_view.dart';
 import 'views/new_home_view.dart';
 import 'views/shops_tab_view.dart';
-import 'views/instant_items_view.dart';
-import 'views/take_away_view.dart';
-import 'views/reorder_view.dart';
-import 'views/category_view.dart';
+
 import 'views/offers_view.dart';
 import 'views/shop_detail_view.dart';
-import 'views/restaurant_listing_view.dart';
 import 'common/floating_cart_widget.dart';
 
 void main() async {
@@ -52,7 +46,6 @@ class OneMartApp extends StatelessWidget {
     Get.put(HomeController());
     Get.put(ProductDetailController());
     Get.put(ProductSearchController());
-    Get.put(CategoryController());
     Get.put(MarketplaceController());
     Get.put(OrdersController());
 
@@ -88,7 +81,6 @@ class OneMartApp extends StatelessWidget {
         ),
         GetPage(name: '/cart', page: () => const CartView()),
         GetPage(name: '/checkout', page: () => const CheckoutView()),
-        GetPage(name: '/marketplace', page: () => const MarketplaceView()),
         GetPage(
           name: '/shop/:shopId',
           page: () => ShopView(shopId: Get.parameters['shopId'] ?? ''),
@@ -122,21 +114,8 @@ class OneMartApp extends StatelessWidget {
           page: () => const OrderConfirmationView(),
         ),
         GetPage(
-          name: '/category',
-          page: () => CategoryView(
-            categoryId: Get.parameters['categoryId'] ?? '',
-            categoryName: Get.parameters['categoryName'],
-          ),
-        ),
-        GetPage(
           name: '/offers',
           page: () => const OffersView(),
-        ),
-        GetPage(
-          name: '/restaurant-listing',
-          page: () => RestaurantListingView(
-            category: Get.parameters['category'] ?? '',
-          ),
         ),
       ],
     );
@@ -156,12 +135,13 @@ class _MainAppShellState extends State<MainAppShell> {
   final List<Widget> _pages = [
     const NewHomeView(),
     const ShopsTabView(),
-    const InstantItemsView(),
-    const TakeAwayView(),
-    const ReorderView(),
+    const CartView(),
+    const OrdersView(),
   ];
 
   List<BottomNavigationBarItem> get _bottomNavItems {
+    final cartController = Get.find<CartController>();
+
     return [
       const BottomNavigationBarItem(
         icon: Icon(Icons.home_outlined),
@@ -173,30 +153,28 @@ class _MainAppShellState extends State<MainAppShell> {
         activeIcon: Icon(Icons.store),
         label: 'Shops',
       ),
-      const BottomNavigationBarItem(
-        icon: Icon(Icons.flash_on_outlined),
-        activeIcon: Icon(Icons.flash_on),
-        label: 'Instant Items',
+      BottomNavigationBarItem(
+        icon: Obx(() => _buildCartIcon(cartController, false)),
+        activeIcon: Obx(() => _buildCartIcon(cartController, true)),
+        label: 'Cart',
       ),
       const BottomNavigationBarItem(
-        icon: Icon(Icons.takeout_dining_outlined),
-        activeIcon: Icon(Icons.takeout_dining),
-        label: 'Take Away',
-      ),
-      const BottomNavigationBarItem(
-        icon: Icon(Icons.refresh_outlined),
-        activeIcon: Icon(Icons.refresh),
-        label: 'Reorder',
+        icon: Icon(Icons.receipt_long_outlined),
+        activeIcon: Icon(Icons.receipt_long),
+        label: 'My Orders',
       ),
     ];
   }
 
   Widget _buildCartIcon(CartController cartController, bool isActive) {
-    final itemCount = cartController.totalQuantity;
+    final itemCount = cartController.itemCount;
 
     return Stack(
       children: [
-        Icon(isActive ? Icons.shopping_cart : Icons.shopping_cart_outlined),
+        Icon(
+          isActive ? Icons.shopping_cart : Icons.shopping_cart_outlined,
+          color: isActive ? Colors.blue : Colors.grey,
+        ),
         if (itemCount > 0)
           Positioned(
             right: 0,
@@ -259,9 +237,8 @@ class _MainAppShellState extends State<MainAppShell> {
           ],
         );
       case 1: // Shops - uses SliverAppBar
-      case 2: // Instant Items
-      case 3: // Take Away
-      case 4: // Reorder
+      case 2: // Cart - has its own app bar
+      case 3: // My Orders - has its own app bar
         return null; // These views handle their own app bars
       default:
         return AppBar(
@@ -280,7 +257,8 @@ class _MainAppShellState extends State<MainAppShell> {
       body: Stack(
         children: [
           IndexedStack(index: _currentIndex, children: _pages),
-          const FloatingCartWidget(),
+          // Hide floating cart when cart tab (index 2) is selected
+          if (_currentIndex != 2) const FloatingCartWidget(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(

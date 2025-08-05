@@ -1,322 +1,780 @@
 {
   "type": "scaffold",
+  "backgroundColor": "#F8F9FA",
   "body": {
-    "type": "singleChildScrollView",
-    "child": {
-      "type": "padding",
-      "padding": {"all": 16},
-      "child": {
-        "type": "column",
-        "crossAxisAlignment": "start",
-        "spacing": 24,
-        "children": [
-          {
-            "type": "container",
-            "padding": {"all": 20},
-            "decoration": {
-              "gradient": {
-                "type": "linear",
-                "colors": ["#2196F3", "#1976D2"],
-                "begin": "topLeft",
-                "end": "bottomRight"
-              },
-              "borderRadius": 16
-            },
-            "child": {
-              "type": "column",
-              "crossAxisAlignment": "start",
-              "children": [
-                {
-                  "type": "text",
-                  "data": "Welcome to OneMart",
-                  "style": {
-                    "fontSize": 24,
-                    "fontWeight": "bold",
-                    "color": "#FFFFFF"
-                  }
-                },
-                {
-                  "type": "text",
-                  "data": "Your one-stop shop for everything",
-                  "style": {
-                    "fontSize": 16,
-                    "color": "#FFFFFF"
-                  }
-                }
-              ]
-            }
-          },
-          {
-            "type": "text",
-            "data": "Quick Actions",
-            "style": {
-              "fontSize": 20,
-              "fontWeight": "w600",
-              "color": "#1A1A1A"
-            }
-          },
-          {
-            "type": "row",
-            "mainAxisAlignment": "spaceBetween",
-            "children": [
-              {
-                "type": "container",
-                "width": 100,
-                "height": 100,
-                "decoration": {
-                  "color": "#E3F2FD",
-                  "borderRadius": 12
-                },
-                "child": {
-                  "type": "column",
-                  "mainAxisAlignment": "center",
-                  "children": [
-                    {
-                      "type": "icon",
-                      "icon": "store",
-                      "size": 32,
-                      "color": "#2196F3"
-                    },
-                    {
-                      "type": "text",
-                      "data": "Shops",
-                      "style": {
-                        "fontSize": 12,
-                        "fontWeight": "w500",
-                        "color": "#2196F3"
-                      }
-                    }
-                  ]
-                }
-              },
-              {
-                "type": "container",
-                "width": 100,
-                "height": 100,
-                "decoration": {
-                  "color": "#FFF3E0",
-                  "borderRadius": 12
-                },
-                "child": {
-                  "type": "column",
-                  "mainAxisAlignment": "center",
-                  "children": [
-                    {
-                      "type": "icon",
-                      "icon": "flash_on",
-                      "size": 32,
-                      "color": "#FF9800"
-                    },
-                    {
-                      "type": "text",
-                      "data": "Instant",
-                      "style": {
-                        "fontSize": 12,
-                        "fontWeight": "w500",
-                        "color": "#FF9800"
-                      }
-                    }
-                  ]
-                }
-              },
-              {
-                "type": "container",
-                "width": 100,
-                "height": 100,
-                "decoration": {
-                  "color": "#E8F5E8",
-                  "borderRadius": 12
-                },
-                "child": {
-                  "type": "column",
-                  "mainAxisAlignment": "center",
-                  "children": [
-                    {
-                      "type": "icon",
-                      "icon": "takeout_dining",
-                      "size": 32,
-                      "color": "#4CAF50"
-                    },
-                    {
-                      "type": "text",
-                      "data": "Takeaway",
-                      "style": {
-                        "fontSize": 12,
-                        "fontWeight": "w500",
-                        "color": "#4CAF50"
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          },
-          {
-            "type": "text",
-            "data": "Featured Categories",
-            "style": {
-              "fontSize": 20,
-              "fontWeight": "w600",
-              "color": "#1A1A1A"
-            }
-          },
-          {
-            "type": "gridView",
-            "crossAxisCount": 2,
-            "crossAxisSpacing": 16,
-            "mainAxisSpacing": 16,
-            "shrinkWrap": true,
-            "physics": "neverScrollable",
-            "childAspectRatio": 1.5,
+    "type": "customScrollView",
+    "slivers": [
+      {
+        "type": "sliverAppBar",
+        "expandedHeight": 180,
+        "floating": false,
+        "pinned": true,
+        "backgroundColor": "#FFFFFF",
+        "elevation": 0,
+        "flexibleSpace": {
+          "type": "flexibleSpaceBar",
+          "background": {
+            "type": "stack",
             "children": [
               {
                 "type": "container",
                 "decoration": {
                   "gradient": {
                     "type": "linear",
-                    "colors": ["#FF6B35", "#FF8E53"],
+                    "colors": ["#FF6B6B", "#FF8E53", "#FFA726"],
                     "begin": "topLeft",
                     "end": "bottomRight"
-                  },
-                  "borderRadius": 12
-                },
-                "child": {
-                  "type": "center",
-                  "child": {
-                    "type": "column",
-                    "mainAxisAlignment": "center",
-                    "children": [
-                      {
-                        "type": "icon",
-                        "icon": "restaurant",
-                        "size": 32,
-                        "color": "#FFFFFF"
-                      },
-                      {
-                        "type": "text",
-                        "data": "Food & Dining",
-                        "style": {
-                          "fontSize": 14,
-                          "fontWeight": "w600",
-                          "color": "#FFFFFF"
-                        }
-                      }
-                    ]
                   }
                 }
               },
               {
-                "type": "container",
-                "decoration": {
-                  "gradient": {
-                    "type": "linear",
-                    "colors": ["#9C27B0", "#BA68C8"],
-                    "begin": "topLeft",
-                    "end": "bottomRight"
-                  },
-                  "borderRadius": 12
-                },
+                "type": "positioned",
+                "right": -30,
+                "top": 30,
                 "child": {
-                  "type": "center",
-                  "child": {
-                    "type": "column",
-                    "mainAxisAlignment": "center",
-                    "children": [
-                      {
-                        "type": "icon",
-                        "icon": "shopping_bag",
-                        "size": 32,
-                        "color": "#FFFFFF"
-                      },
-                      {
-                        "type": "text",
-                        "data": "Fashion",
-                        "style": {
-                          "fontSize": 14,
-                          "fontWeight": "w600",
-                          "color": "#FFFFFF"
-                        }
-                      }
-                    ]
-                  }
-                }
-              },
-              {
-                "type": "container",
-                "decoration": {
-                  "gradient": {
-                    "type": "linear",
-                    "colors": ["#4CAF50", "#66BB6A"],
-                    "begin": "topLeft",
-                    "end": "bottomRight"
-                  },
-                  "borderRadius": 12
-                },
-                "child": {
-                  "type": "center",
-                  "child": {
-                    "type": "column",
-                    "mainAxisAlignment": "center",
-                    "children": [
-                      {
-                        "type": "icon",
-                        "icon": "eco",
-                        "size": 32,
-                        "color": "#FFFFFF"
-                      },
-                      {
-                        "type": "text",
-                        "data": "Grocery",
-                        "style": {
-                          "fontSize": 14,
-                          "fontWeight": "w600",
-                          "color": "#FFFFFF"
-                        }
-                      }
-                    ]
-                  }
-                }
-              },
-              {
-                "type": "container",
-                "decoration": {
-                  "gradient": {
-                    "type": "linear",
-                    "colors": ["#FF5722", "#FF8A65"],
-                    "begin": "topLeft",
-                    "end": "bottomRight"
-                  },
-                  "borderRadius": 12
-                },
-                "child": {
-                  "type": "center",
-                  "child": {
-                    "type": "column",
-                    "mainAxisAlignment": "center",
-                    "children": [
-                      {
-                        "type": "icon",
-                        "icon": "phone_android",
-                        "size": 32,
-                        "color": "#FFFFFF"
-                      },
-                      {
-                        "type": "text",
-                        "data": "Electronics",
-                        "style": {
-                          "fontSize": 14,
-                          "fontWeight": "w600",
-                          "color": "#FFFFFF"
-                        }
-                      }
-                    ]
-                  }
+                  "type": "lottieAnimation",
+                  "url": "https://lottie.host/4f0e15b1-8a9f-4c6a-9c4a-2d8f7b3e9a1c/vNv1RjQj8K.json",
+                  "width": 140,
+                  "height": 140,
+                  "repeat": true
                 }
               }
             ]
           }
+        },
+        "title": {
+          "type": "row",
+          "children": [
+            {
+              "type": "icon",
+              "icon": "location_on",
+              "color": "#FF6B35",
+              "size": 18
+            },
+            {
+              "type": "sizedBox",
+              "width": 6
+            },
+            {
+              "type": "column",
+              "crossAxisAlignment": "start",
+              "children": [
+                {
+                  "type": "row",
+                  "children": [
+                    {
+                      "type": "text",
+                      "data": "Work",
+                      "style": {
+                        "fontSize": 14,
+                        "fontWeight": "bold",
+                        "color": "#1A1A1A"
+                      }
+                    },
+                    {
+                      "type": "sizedBox",
+                      "width": 4
+                    },
+                    {
+                      "type": "icon",
+                      "icon": "keyboard_arrow_down",
+                      "color": "#1A1A1A",
+                      "size": 16
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "data": "19th floor, 2 number gate, Pranavanandji Ma...",
+                  "style": {
+                    "fontSize": 11,
+                    "color": "#666666"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "actions": [
+          {
+            "type": "container",
+            "margin": {"right": 8},
+            "decoration": {
+              "color": "#FF6B35",
+              "borderRadius": 15
+            },
+            "padding": {"horizontal": 10, "vertical": 4},
+            "child": {
+              "type": "text",
+              "data": "BUY\nONE",
+              "textAlign": "center",
+              "style": {
+                "fontSize": 10,
+                "fontWeight": "bold",
+                "color": "#FFFFFF",
+                "height": 1.2
+              }
+            }
+          },
+          {
+            "type": "container",
+            "margin": {"right": 12},
+            "width": 32,
+            "height": 32,
+            "decoration": {
+              "color": "#333333",
+              "borderRadius": 16
+            },
+            "child": {
+              "type": "icon",
+              "icon": "person",
+              "color": "#FFFFFF",
+              "size": 18
+            }
+          }
         ]
+      },
+      {
+        "type": "sliverToBoxAdapter",
+        "child": {
+          "type": "padding",
+          "padding": {"horizontal": 16, "vertical": 16},
+          "child": {
+            "type": "column",
+            "children": [
+              {
+                "type": "container",
+                "height": 48,
+                "padding": {"horizontal": 16},
+                "decoration": {
+                  "color": "#F5F5F5",
+                  "borderRadius": 24,
+                  "border": {
+                    "color": "#E0E0E0",
+                    "width": 1
+                  }
+                },
+                "child": {
+                  "type": "row",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "icon": "search",
+                      "color": "#999999",
+                      "size": 20
+                    },
+                    {
+                      "type": "sizedBox",
+                      "width": 12
+                    },
+                    {
+                      "type": "expanded",
+                      "child": {
+                        "type": "text",
+                        "data": "Search for 'Burger'",
+                        "style": {
+                          "fontSize": 14,
+                          "color": "#999999"
+                        }
+                      }
+                    },
+                    {
+                      "type": "icon",
+                      "icon": "mic",
+                      "color": "#FF6B35",
+                      "size": 20
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "sizedBox",
+                "height": 20
+              },
+              {
+                "type": "container",
+                "decoration": {
+                  "gradient": {
+                    "type": "linear",
+                    "colors": ["#FF6B35", "#FF5722"],
+                    "begin": "topLeft",
+                    "end": "bottomRight"
+                  },
+                  "borderRadius": 12
+                },
+                "padding": {"all": 16},
+                "child": {
+                  "type": "row",
+                  "children": [
+                    {
+                      "type": "expanded",
+                      "child": {
+                        "type": "column",
+                        "crossAxisAlignment": "start",
+                        "children": [
+                          {
+                            "type": "text",
+                            "data": "Celebrate",
+                            "style": {
+                              "fontSize": 22,
+                              "fontWeight": "bold",
+                              "color": "#FFFFFF"
+                            }
+                          },
+                          {
+                            "type": "text",
+                            "data": "Raksha Bandhan",
+                            "style": {
+                              "fontSize": 22,
+                              "fontWeight": "bold",
+                              "color": "#FFFFFF"
+                            }
+                          },
+                          {
+                            "type": "sizedBox",
+                            "height": 8
+                          },
+                          {
+                            "type": "container",
+                            "padding": {"horizontal": 12, "vertical": 6},
+                            "decoration": {
+                              "color": "#8B0000",
+                              "borderRadius": 16
+                            },
+                            "child": {
+                              "type": "text",
+                              "data": "SHOP ON INSTAMART",
+                              "style": {
+                                "fontSize": 11,
+                                "fontWeight": "bold",
+                                "color": "#FFFFFF"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "type": "image",
+                      "url": "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=120&h=120&fit=crop",
+                      "width": 80,
+                      "height": 80
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "sizedBox",
+                "height": 20
+              },
+              {
+                "type": "row",
+                "mainAxisAlignment": "spaceBetween",
+                "children": [
+                  {
+                    "type": "expanded",
+                    "child": {
+                      "type": "container",
+                      "height": 140,
+                      "margin": {"right": 8},
+                      "decoration": {
+                        "color": "#FFFFFF",
+                        "borderRadius": 12,
+                        "boxShadow": [
+                          {
+                            "color": "#E0E0E0",
+                            "blurRadius": 8,
+                            "offset": {"dx": 0, "dy": 2}
+                          }
+                        ]
+                      },
+                      "child": {
+                        "type": "column",
+                        "children": [
+                          {
+                            "type": "expanded",
+                            "child": {
+                              "type": "stack",
+                              "children": [
+                                {
+                                  "type": "positioned",
+                                  "left": 12,
+                                  "top": 12,
+                                  "child": {
+                                    "type": "container",
+                                    "padding": {"horizontal": 6, "vertical": 3},
+                                    "decoration": {
+                                      "color": "#FF5722",
+                                      "borderRadius": 8
+                                    },
+                                    "child": {
+                                      "type": "text",
+                                      "data": "LIVE NOW",
+                                      "style": {
+                                        "fontSize": 9,
+                                        "fontWeight": "bold",
+                                        "color": "#FFFFFF"
+                                      }
+                                    }
+                                  }
+                                },
+                                {
+                                  "type": "positioned",
+                                  "right": 8,
+                                  "top": 8,
+                                  "child": {
+                                    "type": "image",
+                                    "url": "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=60&h=60&fit=crop",
+                                    "width": 50,
+                                    "height": 50
+                                  }
+                                },
+                                {
+                                  "type": "positioned",
+                                  "left": 12,
+                                  "bottom": 12,
+                                  "child": {
+                                    "type": "column",
+                                    "crossAxisAlignment": "start",
+                                    "children": [
+                                      {
+                                        "type": "text",
+                                        "data": "FOOD DELIVERY",
+                                        "style": {
+                                          "fontSize": 13,
+                                          "fontWeight": "bold",
+                                          "color": "#1A1A1A"
+                                        }
+                                      },
+                                      {
+                                        "type": "text",
+                                        "data": "BIG BIRTHDAY BASH",
+                                        "style": {
+                                          "fontSize": 10,
+                                          "color": "#666666"
+                                        }
+                                      }
+                                    ]
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "type": "expanded",
+                    "child": {
+                      "type": "container",
+                      "height": 140,
+                      "margin": {"left": 8},
+                      "decoration": {
+                        "color": "#FFFFFF",
+                        "borderRadius": 12,
+                        "boxShadow": [
+                          {
+                            "color": "#E0E0E0",
+                            "blurRadius": 8,
+                            "offset": {"dx": 0, "dy": 2}
+                          }
+                        ]
+                      },
+                      "child": {
+                        "type": "stack",
+                        "children": [
+                          {
+                            "type": "positioned",
+                            "left": 12,
+                            "top": 12,
+                            "child": {
+                              "type": "container",
+                              "padding": {"horizontal": 6, "vertical": 3},
+                              "decoration": {
+                                "color": "#4CAF50",
+                                "borderRadius": 8
+                              },
+                              "child": {
+                                "type": "text",
+                                "data": "FREE ₹100",
+                                "style": {
+                                  "fontSize": 9,
+                                  "fontWeight": "bold",
+                                  "color": "#FFFFFF"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "type": "positioned",
+                            "left": 12,
+                            "top": 32,
+                            "child": {
+                              "type": "container",
+                              "padding": {"horizontal": 6, "vertical": 2},
+                              "decoration": {
+                                "color": "#E8F5E8",
+                                "borderRadius": 6
+                              },
+                              "child": {
+                                "type": "text",
+                                "data": "⏰ Ends in 12h:35m",
+                                "style": {
+                                  "fontSize": 8,
+                                  "fontWeight": "w500",
+                                  "color": "#4CAF50"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "type": "positioned",
+                            "right": 8,
+                            "top": 8,
+                            "child": {
+                              "type": "image",
+                              "url": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=60&h=60&fit=crop",
+                              "width": 50,
+                              "height": 50
+                            }
+                          },
+                          {
+                            "type": "positioned",
+                            "left": 12,
+                            "bottom": 20,
+                            "child": {
+                              "type": "text",
+                              "data": "INSTAMART",
+                              "style": {
+                                "fontSize": 13,
+                                "fontWeight": "bold",
+                                "color": "#1A1A1A"
+                              }
+                            }
+                          },
+                          {
+                            "type": "positioned",
+                            "left": 12,
+                            "bottom": 6,
+                            "child": {
+                              "type": "container",
+                              "padding": {"horizontal": 6, "vertical": 2},
+                              "decoration": {
+                                "color": "#FFF3E0",
+                                "borderRadius": 8
+                              },
+                              "child": {
+                                "type": "text",
+                                "data": "⚡ 11 MINS",
+                                "style": {
+                                  "fontSize": 9,
+                                  "fontWeight": "bold",
+                                  "color": "#FF9800"
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "sizedBox",
+                "height": 16
+              },
+              {
+                "type": "row",
+                "mainAxisAlignment": "spaceBetween",
+                "children": [
+                  {
+                    "type": "expanded",
+                    "child": {
+                      "type": "container",
+                      "height": 140,
+                      "margin": {"right": 8},
+                      "decoration": {
+                        "color": "#FFFFFF",
+                        "borderRadius": 12,
+                        "boxShadow": [
+                          {
+                            "color": "#E0E0E0",
+                            "blurRadius": 8,
+                            "offset": {"dx": 0, "dy": 2}
+                          }
+                        ]
+                      },
+                      "child": {
+                        "type": "stack",
+                        "children": [
+                          {
+                            "type": "positioned",
+                            "left": 12,
+                            "top": 12,
+                            "child": {
+                              "type": "container",
+                              "padding": {"horizontal": 6, "vertical": 3},
+                              "decoration": {
+                                "color": "#FF9800",
+                                "borderRadius": 8
+                              },
+                              "child": {
+                                "type": "text",
+                                "data": "UP TO 50% OFF",
+                                "style": {
+                                  "fontSize": 8,
+                                  "fontWeight": "bold",
+                                  "color": "#FFFFFF"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "type": "positioned",
+                            "right": 8,
+                            "top": 8,
+                            "child": {
+                              "type": "image",
+                              "url": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=60&h=60&fit=crop",
+                              "width": 50,
+                              "height": 50
+                            }
+                          },
+                          {
+                            "type": "positioned",
+                            "left": 12,
+                            "bottom": 12,
+                            "child": {
+                              "type": "column",
+                              "crossAxisAlignment": "start",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "data": "DINEOUT",
+                                  "style": {
+                                    "fontSize": 13,
+                                    "fontWeight": "bold",
+                                    "color": "#1A1A1A"
+                                  }
+                                },
+                                {
+                                  "type": "text",
+                                  "data": "CASHBACK CARNIVAL",
+                                  "style": {
+                                    "fontSize": 10,
+                                    "color": "#666666"
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "type": "expanded",
+                    "child": {
+                      "type": "container",
+                      "height": 140,
+                      "margin": {"left": 8},
+                      "decoration": {
+                        "color": "#FFFFFF",
+                        "borderRadius": 12,
+                        "boxShadow": [
+                          {
+                            "color": "#E0E0E0",
+                            "blurRadius": 8,
+                            "offset": {"dx": 0, "dy": 2}
+                          }
+                        ]
+                      },
+                      "child": {
+                        "type": "stack",
+                        "children": [
+                          {
+                            "type": "positioned",
+                            "left": 12,
+                            "top": 12,
+                            "child": {
+                              "type": "container",
+                              "padding": {"horizontal": 6, "vertical": 3},
+                              "decoration": {
+                                "color": "#E91E63",
+                                "borderRadius": 8
+                              },
+                              "child": {
+                                "type": "text",
+                                "data": "NEW",
+                                "style": {
+                                  "fontSize": 9,
+                                  "fontWeight": "bold",
+                                  "color": "#FFFFFF"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "type": "positioned",
+                            "right": 8,
+                            "top": 8,
+                            "child": {
+                              "type": "image",
+                              "url": "https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?w=60&h=60&fit=crop",
+                              "width": 50,
+                              "height": 50
+                            }
+                          },
+                          {
+                            "type": "positioned",
+                            "left": 12,
+                            "bottom": 12,
+                            "child": {
+                              "type": "column",
+                              "crossAxisAlignment": "start",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "data": "SCENES",
+                                  "style": {
+                                    "fontSize": 13,
+                                    "fontWeight": "bold",
+                                    "color": "#1A1A1A"
+                                  }
+                                },
+                                {
+                                  "type": "text",
+                                  "data": "DISCOVER EVENTS NEARBY",
+                                  "style": {
+                                    "fontSize": 9,
+                                    "color": "#666666"
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "sizedBox",
+                "height": 32
+              },
+              {
+                "type": "text",
+                "data": "FEATURED FOR YOU",
+                "style": {
+                  "fontSize": 16,
+                  "fontWeight": "bold",
+                  "color": "#1A1A1A"
+                }
+              },
+              {
+                "type": "sizedBox",
+                "height": 16
+              },
+              {
+                "type": "pageView",
+                "height": 160,
+                "viewportFraction": 1.0,
+                "children": [
+                  {
+                    "type": "container",
+                    "margin": {"horizontal": 2},
+                    "decoration": {
+                      "gradient": {
+                        "type": "linear",
+                        "colors": ["#FF6B35", "#FF8E53"],
+                        "begin": "topLeft",
+                        "end": "bottomRight"
+                      },
+                      "borderRadius": 12
+                    },
+                    "child": {
+                      "type": "stack",
+                      "children": [
+                        {
+                          "type": "positioned",
+                          "left": 16,
+                          "top": 20,
+                          "child": {
+                            "type": "column",
+                            "crossAxisAlignment": "start",
+                            "children": [
+                              {
+                                "type": "text",
+                                "data": "AUTHENTIC, HOMESTYLE & FRESH?",
+                                "style": {
+                                  "fontSize": 14,
+                                  "fontWeight": "bold",
+                                  "color": "#FFFFFF"
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "type": "positioned",
+                          "right": 16,
+                          "bottom": 16,
+                          "child": {
+                            "type": "row",
+                            "children": [
+                              {
+                                "type": "image",
+                                "url": "https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=40&h=40&fit=crop",
+                                "width": 32,
+                                "height": 32
+                              },
+                              {
+                                "type": "sizedBox",
+                                "width": 8
+                              },
+                              {
+                                "type": "image",
+                                "url": "https://images.unsplash.com/photo-1571997478779-2adcbbe9ab2f?w=40&h=40&fit=crop",
+                                "width": 32,
+                                "height": 32
+                              },
+                              {
+                                "type": "sizedBox",
+                                "width": 8
+                              },
+                              {
+                                "type": "image",
+                                "url": "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=40&h=40&fit=crop",
+                                "width": 32,
+                                "height": 32
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "sizedBox",
+                "height": 16
+              },
+              {
+                "type": "dotIndicator",
+                "itemCount": 1,
+                "currentIndex": 0,
+                "activeColor": "#FF6B35",
+                "inactiveColor": "#E0E0E0"
+              }
+            ]
+          }
+        }
       }
-    }
+    ]
   }
+  
 }

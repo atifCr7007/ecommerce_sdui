@@ -492,7 +492,7 @@
                               },
                               "action": {
                                 "type": "navigate_to_shop",
-                                "shopId": "traditional-kitchen"
+                                "shopId": "shop_001"
                               }
                             }
                           ]
@@ -508,7 +508,7 @@
                     },
                     "action": {
                       "type": "navigate_to_shop",
-                      "shopId": "traditional-kitchen"
+                      "shopId": "shop_001"
                     }
                   },
                   {
@@ -946,6 +946,9 @@
               {
                 "type": "sizedBox",
                 "height": 32
+              },
+              {
+                "_comment": "In The Spotlight"
               },
               {
                 "type": "row",

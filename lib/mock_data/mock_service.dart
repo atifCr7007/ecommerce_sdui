@@ -115,10 +115,21 @@ class MockDataService {
         await _loadMockProducts();
       }
 
-      return _cachedProducts!.firstWhere(
-        (product) => product.id == productId,
-        orElse: () => _generateSingleProduct(productId),
-      );
+      // First try exact match
+      try {
+        return _cachedProducts!.firstWhere(
+          (product) => product.id == productId,
+        );
+      } catch (e) {
+        // If exact match fails, try to map shop-specific product IDs to actual products
+        Product? mappedProduct = _mapShopProductToActual(productId);
+        if (mappedProduct != null) {
+          return mappedProduct;
+        }
+
+        // If no mapping found, generate a product with proper naming
+        return _generateSingleProduct(productId);
+      }
     } catch (e) {
       debugPrint('Error getting product by ID: $e');
       return _generateSingleProduct(productId);
@@ -485,10 +496,83 @@ class MockDataService {
     });
   }
 
+  /// Maps shop-specific product IDs to actual products from JSON
+  Product? _mapShopProductToActual(String productId) {
+    if (_cachedProducts == null || _cachedProducts!.isEmpty) {
+      return null;
+    }
+
+    // Map shop-specific product IDs to actual product IDs
+    final productMappings = {
+      // Sweet Delights shop products
+      'food_sweet-delights_1': 'gooey_chocolate_brownie',
+      'food_sweet-delights_2': 'prod_food_002', // Vanilla Cupcake
+      'food_sweet-delights_3': 'prod_food_003', // Strawberry Cheesecake
+
+      // Gourmet Kitchen shop products
+      'food_gourmet-kitchen_1': 'gooey_chocolate_brownie',
+      'food_gourmet-kitchen_2': 'prod_food_002',
+      'food_gourmet-kitchen_3': 'prod_food_003',
+
+      // General mappings for other shops
+      'food_traditional-kitchen_1': 'gooey_chocolate_brownie',
+      'food_pizza-hut_1': 'prod_food_002',
+      'food_fresh-bowl-co_1': 'prod_food_003',
+    };
+
+    final actualProductId = productMappings[productId];
+    if (actualProductId != null) {
+      try {
+        return _cachedProducts!.firstWhere(
+          (product) => product.id == actualProductId,
+        );
+      } catch (e) {
+        debugPrint('Product mapping found but product not in cache: $actualProductId');
+      }
+    }
+
+    // If no specific mapping, try to find a food product for food-related IDs
+    if (productId.startsWith('food_')) {
+      final foodProducts = _cachedProducts!.where(
+        (p) => p.categories?.any((c) => c.name.toLowerCase().contains('food')) ?? false,
+      ).toList();
+
+      if (foodProducts.isNotEmpty) {
+        // Return a random food product but make it consistent for the same productId
+        final index = productId.hashCode.abs() % foodProducts.length;
+        return foodProducts[index];
+      }
+    }
+
+    return null;
+  }
+
   /// Generates a single product
   Product _generateSingleProduct(String productId, [String? categoryName]) {
-    final category = categoryName ?? 'General';
-    final productNumber = productId.hashCode % 1000;
+    String category = categoryName ?? 'General';
+    String productName = 'Product';
+
+    // Generate better names based on productId patterns
+    if (productId.startsWith('food_')) {
+      category = 'Food & Beverages';
+      final foodNames = [
+        'Gooey Chocolate Brownie',
+        'Vanilla Cupcake',
+        'Strawberry Cheesecake',
+        'Chocolate Chip Cookie',
+        'Red Velvet Cake',
+        'Lemon Tart',
+        'Blueberry Muffin',
+        'Caramel Macchiato',
+        'Tiramisu',
+        'Apple Pie',
+      ];
+      final nameIndex = productId.hashCode.abs() % foodNames.length;
+      productName = foodNames[nameIndex];
+    } else {
+      final productNumber = productId.hashCode % 1000;
+      productName = '$category Product ${productNumber.abs()}';
+    }
 
     // Map category names to IDs
     final categoryMap = {
@@ -509,20 +593,20 @@ class MockDataService {
 
     return Product(
       id: productId,
-      title: '$category Product ${productNumber.abs()}',
+      title: productName,
       description:
           'High-quality $category product with excellent features and great value.',
-      thumbnail: _getCategoryImageUrl(category, productNumber),
+      thumbnail: _getCategoryImageUrl(category, productId.hashCode % 1000),
       images: [
         ProductImage(
           id: '${productId}_img_1',
-          url: _getCategoryImageUrl(category, productNumber),
+          url: _getCategoryImageUrl(category, productId.hashCode % 1000),
         ),
       ],
       variants: _generateVariantsForCategory(
         productId,
         category,
-        productNumber,
+        productId.hashCode % 1000,
       ),
       categories: [
         ProductCategory(

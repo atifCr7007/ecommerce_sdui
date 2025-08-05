@@ -35,6 +35,12 @@ Product _$ProductFromJson(Map<String, dynamic> json) => Product(
   updatedAt: json['updatedAt'] == null
       ? null
       : DateTime.parse(json['updatedAt'] as String),
+  price: (json['price'] as num?)?.toDouble(),
+  originalPrice: (json['originalPrice'] as num?)?.toDouble(),
+  category: json['category'] as String?,
+  shopId: json['shopId'] as String?,
+  isVegetarian: json['isVegetarian'] as bool?,
+  reviewCount: (json['reviewCount'] as num?)?.toInt(),
 );
 
 Map<String, dynamic> _$ProductToJson(Product instance) => <String, dynamic>{
@@ -54,6 +60,12 @@ Map<String, dynamic> _$ProductToJson(Product instance) => <String, dynamic>{
   'externalId': instance.externalId,
   'createdAt': instance.createdAt?.toIso8601String(),
   'updatedAt': instance.updatedAt?.toIso8601String(),
+  'price': instance.price,
+  'originalPrice': instance.originalPrice,
+  'category': instance.category,
+  'shopId': instance.shopId,
+  'isVegetarian': instance.isVegetarian,
+  'reviewCount': instance.reviewCount,
 };
 
 ProductImage _$ProductImageFromJson(Map<String, dynamic> json) => ProductImage(

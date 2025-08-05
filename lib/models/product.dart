@@ -21,6 +21,14 @@ class Product {
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
+  // Additional properties for SDUI
+  final double? price;
+  final double? originalPrice;
+  final String? category;
+  final String? shopId;
+  final bool? isVegetarian;
+  final int? reviewCount;
+
   Product({
     required this.id,
     required this.title,
@@ -38,6 +46,12 @@ class Product {
     this.externalId,
     this.createdAt,
     this.updatedAt,
+    this.price,
+    this.originalPrice,
+    this.category,
+    this.shopId,
+    this.isVegetarian,
+    this.reviewCount,
   });
 
   factory Product.fromJson(Map<String, dynamic> json) =>

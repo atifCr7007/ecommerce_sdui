@@ -5,14 +5,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../services/cart_service.dart';
 import '../services/payment_service.dart';
 import '../services/order_service.dart';
-import '../mock_data/mock_service.dart';
+import '../services/kong_service.dart';
 import '../config/app_config.dart';
 import '../utils/debug_logger.dart';
 
 class CartController extends GetxController {
   // Services
   late final CartService _cartService;
-  late final MockDataService _mockDataService;
+  late final KongService _kongService;
   late final PaymentService _paymentService;
   late final OrderService _orderService;
 
@@ -46,7 +46,7 @@ class CartController extends GetxController {
   void _initializeServices() {
     try {
       _cartService = CartService();
-      _mockDataService = MockDataService();
+      _kongService = KongService();
       _paymentService = PaymentService();
       _orderService = OrderService();
       if (kDebugMode) {
@@ -132,13 +132,28 @@ class CartController extends GetxController {
       isLoading.value = true;
       error.value = null;
 
-      if (AppConfig.useMockData) {
-        final response = await _mockDataService.getCart(cartId.value);
-        cart.value = response.cart;
-      } else {
-        final response = await _cartService.getCart(cartId.value);
-        cart.value = response.cart;
-      }
+      // Use KongService for cart operations
+      final cartModel = await _kongService.getCart(cartId.value);
+
+      // Convert CartModel to Cart for compatibility
+      cart.value = Cart(
+        id: cartModel.id,
+        items: cartModel.items.map((item) => CartItem(
+          id: item.id,
+          variantId: item.productId, // Use productId as variantId for compatibility
+          title: item.productName,
+          description: null, // CartItemModel doesn't have description
+          thumbnail: item.productImage,
+          quantity: item.quantity,
+          unitPrice: (item.unitPrice * 100).round(), // Convert to cents
+          total: (item.unitPrice * item.quantity * 100).round(), // Convert to cents
+        )).toList(),
+        subtotal: (cartModel.subtotal * 100).round(), // Convert to cents
+        total: (cartModel.total * 100).round(), // Convert to cents
+        currencyCode: cartModel.currency,
+        createdAt: cartModel.createdAt,
+        updatedAt: cartModel.updatedAt,
+      );
     } catch (e) {
       error.value = 'Failed to load cart: $e';
       debugPrint('Error loading cart: $e');
@@ -195,33 +210,28 @@ class CartController extends GetxController {
         await createNewCart();
       }
 
-      if (AppConfig.useMockData) {
-        if (kDebugMode) {
-          debugPrint(
-            '[CartController] Using mock data service for add to cart',
-          );
-        }
-        final response = await _mockDataService.addToCart(
-          productId,
-          variantId,
-          quantity: quantity,
-          cartId: cartId.value,
-        );
-        cart.value = response.cart;
-      } else {
-        if (kDebugMode) {
-          debugPrint(
-            '[CartController] Using real cart service for add to cart',
-          );
-        }
-        final response = await _cartService.addToCart(
-          productId,
-          variantId,
-          quantity: quantity,
-          cartId: cartId.value,
-        );
-        cart.value = response.cart;
-      }
+      // Use KongService for add to cart
+      final cartModel = await _kongService.addToCart(productId, quantity, cartId.value);
+
+      // Convert CartModel to Cart for compatibility
+      cart.value = Cart(
+        id: cartModel.id,
+        items: cartModel.items.map((item) => CartItem(
+          id: item.id,
+          variantId: item.productId,
+          title: item.productName,
+          description: null,
+          thumbnail: item.productImage,
+          quantity: item.quantity,
+          unitPrice: (item.unitPrice * 100).round(),
+          total: (item.unitPrice * item.quantity * 100).round(),
+        )).toList(),
+        subtotal: (cartModel.subtotal * 100).round(),
+        total: (cartModel.total * 100).round(),
+        currencyCode: cartModel.currency,
+        createdAt: cartModel.createdAt,
+        updatedAt: cartModel.updatedAt,
+      );
 
       DebugLogger.cartOperation(
         'Successfully added item to cart',
@@ -272,23 +282,10 @@ class CartController extends GetxController {
       isLoading.value = true;
       error.value = null;
 
-      if (AppConfig.useMockData) {
-        final response = await _mockDataService.updateCartItemQuantity(
-          cartId.value,
-          lineItemId,
-          quantity,
-        );
-        cart.value = response.cart;
-      } else {
-        final response = await _cartService.updateCartItem(
-          cartId.value,
-          lineItemId,
-          quantity,
-        );
-        cart.value = response.cart;
-      }
-
-      return true;
+      // For now, updating quantity is not supported by KongService
+      // This would need to be implemented by removing and re-adding the item
+      // TODO: Implement updateCartItemQuantity in KongService
+      throw UnimplementedError('Update cart item quantity not yet implemented in KongService');
     } catch (e) {
       error.value = 'Failed to update item: $e';
       debugPrint('Error updating cart item: $e');
@@ -305,19 +302,40 @@ class CartController extends GetxController {
       isLoading.value = true;
       error.value = null;
 
-      if (AppConfig.useMockData) {
-        final response = await _mockDataService.removeCartItem(
-          cartId.value,
-          lineItemId,
-        );
-        cart.value = response.cart;
-      } else {
-        final response = await _cartService.removeFromCart(
-          cartId.value,
-          lineItemId,
-        );
-        cart.value = response.cart;
+      // Use KongService for remove from cart
+      // Note: KongService removeFromCart expects productId, not lineItemId
+      // We need to find the productId from the lineItemId
+      final currentCart = cart.value;
+      if (currentCart == null) {
+        throw Exception('No cart found');
       }
+
+      final itemToRemove = currentCart.items.firstWhere(
+        (item) => item.id == lineItemId,
+        orElse: () => throw Exception('Item not found in cart'),
+      );
+
+      final cartModel = await _kongService.removeFromCart(itemToRemove.variantId, cartId.value);
+
+      // Convert CartModel to Cart for compatibility
+      cart.value = Cart(
+        id: cartModel.id,
+        items: cartModel.items.map((item) => CartItem(
+          id: item.id,
+          variantId: item.productId,
+          title: item.productName,
+          description: null,
+          thumbnail: item.productImage,
+          quantity: item.quantity,
+          unitPrice: (item.unitPrice * 100).round(),
+          total: (item.unitPrice * item.quantity * 100).round(),
+        )).toList(),
+        subtotal: (cartModel.subtotal * 100).round(),
+        total: (cartModel.total * 100).round(),
+        currencyCode: cartModel.currency,
+        createdAt: cartModel.createdAt,
+        updatedAt: cartModel.updatedAt,
+      );
 
       Get.snackbar(
         'Success',

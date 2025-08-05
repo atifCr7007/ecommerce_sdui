@@ -1,6 +1,4 @@
 import 'package:get/get.dart';
-import 'package:flutter/services.dart' show rootBundle;
-import 'dart:convert';
 import 'package:ecommerce_sdui/models/shop.dart';
 import 'package:ecommerce_sdui/models/product.dart';
 import 'package:ecommerce_sdui/services/mock_shop_service.dart';
@@ -52,8 +50,8 @@ class ShopDetailController extends GetxController {
       // Load shop products
       await _loadShopProducts(shopId);
 
-      // Load shop detail UI configuration
-      await _loadShopDetailUI(shop);
+      // Shop detail is now native Flutter, no need to load JSON UI
+      DebugLogger.jsonParsing('ShopDetailController using native Flutter UI for shop: ${shop.name}');
 
       DebugLogger.jsonParsing('ShopDetailController loaded successfully: ${shop.name}');
     } catch (e) {
@@ -162,61 +160,7 @@ class ShopDetailController extends GetxController {
     return products;
   }
 
-  /// Load shop detail UI configuration
-  Future<void> _loadShopDetailUI(Shop shop) async {
-    try {
-      // Load shop detail UI configuration
-      final String jsonString = await rootBundle.loadString('assets/json_ui/shop_detail.json');
-      final dynamic decodedJson = json.decode(jsonString);
 
-      if (decodedJson is! Map<String, dynamic>) {
-        throw Exception('Invalid JSON format');
-      }
-
-      // Populate template with shop data
-      final shopData = {
-        'shopName': shop.name,
-        'shopLogo': shop.logo,
-        'shopRating': shop.rating.toString(),
-        'deliveryTime': '30-35 mins', // Mock delivery time
-        'location': shop.contact.address?.city ?? 'Unknown',
-        'reviewCount': '${(shop.reviewCount / 1000).toStringAsFixed(1)}K+',
-      };
-
-      final populatedConfig = _populateTemplate(decodedJson, shopData);
-      shopDetailUIConfig.value = populatedConfig;
-      DebugLogger.jsonParsing('Loaded shop detail UI configuration');
-    } catch (e) {
-      DebugLogger.jsonParsing('Error loading shop detail UI: $e');
-      throw Exception('Failed to load shop detail UI: $e');
-    }
-  }
-
-  /// Helper method to populate template with data
-  Map<String, dynamic> _populateTemplate(Map<String, dynamic> template, Map<String, dynamic> data) {
-    final Map<String, dynamic> result = {};
-
-    template.forEach((key, value) {
-      if (value is String && value.startsWith('{{') && value.endsWith('}}')) {
-        // Extract placeholder name
-        final placeholder = value.substring(2, value.length - 2);
-        result[key] = data[placeholder] ?? value;
-      } else if (value is Map<String, dynamic>) {
-        result[key] = _populateTemplate(value, data);
-      } else if (value is List) {
-        result[key] = value.map((item) {
-          if (item is Map<String, dynamic>) {
-            return _populateTemplate(item, data);
-          }
-          return item;
-        }).toList();
-      } else {
-        result[key] = value;
-      }
-    });
-
-    return result;
-  }
 
   /// Filter products based on search query and selected filters
   void filterProducts() {

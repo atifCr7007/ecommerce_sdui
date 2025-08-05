@@ -12,6 +12,7 @@ Shop _$ShopFromJson(Map<String, dynamic> json) => Shop(
   description: json['description'] as String,
   logo: json['logo'] as String,
   bannerImage: json['bannerImage'] as String?,
+  image: json['image'] as String?,
   rating: (json['rating'] as num).toDouble(),
   reviewCount: (json['reviewCount'] as num).toInt(),
   category: json['category'] as String,
@@ -23,6 +24,18 @@ Shop _$ShopFromJson(Map<String, dynamic> json) => Shop(
   contact: ShopContact.fromJson(json['contact'] as Map<String, dynamic>),
   createdAt: DateTime.parse(json['createdAt'] as String),
   updatedAt: DateTime.parse(json['updatedAt'] as String),
+  tags:
+      (json['tags'] as List<dynamic>?)?.map((e) => e as String).toList() ??
+      const [],
+  deliveryTime: json['deliveryTime'] as String? ?? '30-45 mins',
+  cuisines:
+      (json['cuisines'] as List<dynamic>?)?.map((e) => e as String).toList() ??
+      const [],
+  location: json['location'] as String? ?? 'Unknown',
+  distance: json['distance'] as String? ?? '2.5 km',
+  isOpen: json['isOpen'] as bool? ?? true,
+  deliveryFee: (json['deliveryFee'] as num?)?.toDouble() ?? 0.0,
+  minimumOrder: (json['minimumOrder'] as num?)?.toDouble() ?? 0.0,
 );
 
 Map<String, dynamic> _$ShopToJson(Shop instance) => <String, dynamic>{
@@ -31,6 +44,7 @@ Map<String, dynamic> _$ShopToJson(Shop instance) => <String, dynamic>{
   'description': instance.description,
   'logo': instance.logo,
   'bannerImage': instance.bannerImage,
+  'image': instance.image,
   'rating': instance.rating,
   'reviewCount': instance.reviewCount,
   'category': instance.category,
@@ -40,6 +54,14 @@ Map<String, dynamic> _$ShopToJson(Shop instance) => <String, dynamic>{
   'contact': instance.contact,
   'createdAt': instance.createdAt.toIso8601String(),
   'updatedAt': instance.updatedAt.toIso8601String(),
+  'tags': instance.tags,
+  'deliveryTime': instance.deliveryTime,
+  'cuisines': instance.cuisines,
+  'location': instance.location,
+  'distance': instance.distance,
+  'isOpen': instance.isOpen,
+  'deliveryFee': instance.deliveryFee,
+  'minimumOrder': instance.minimumOrder,
 };
 
 ShopContact _$ShopContactFromJson(Map<String, dynamic> json) => ShopContact(

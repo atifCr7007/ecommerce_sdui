@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ecommerce_sdui/models/shop.dart';
-import 'package:ecommerce_sdui/mock_data/mock_service.dart';
-import 'package:ecommerce_sdui/services/mock_shop_service.dart';
-import 'package:ecommerce_sdui/config/app_config.dart';
+import 'package:ecommerce_sdui/models/product.dart';
+import 'package:ecommerce_sdui/services/kong_service.dart';
 
 class MarketplaceController extends GetxController {
-  final MockDataService _mockDataService = MockDataService();
-  final MockShopService _mockShopService = MockShopService();
+  final KongService _kongService = KongService();
 
   // Observable state
   final isLoading = false.obs;
@@ -86,17 +84,13 @@ class MarketplaceController extends GetxController {
 
       debugPrint('[MarketplaceController] Loading marketplace...');
 
-      if (AppConfig.useMockData) {
-        // Use the new MockShopService for diverse shop data
-        final allShops = _mockShopService.getAllShops();
-        shops.value = allShops;
-        debugPrint(
-          '[MarketplaceController] Loaded ${allShops.length} shops from MockShopService',
-        );
-      } else {
-        // TODO: Implement real API call
-        shops.value = [];
-      }
+      // Use KongService which handles mock/real API switching
+      final shopModels = await _kongService.getShops();
+      shops.value = shopModels.map((shopModel) => shopModel.toShop()).toList();
+
+      debugPrint(
+        '[MarketplaceController] Loaded ${shops.length} shops from KongService',
+      );
     } catch (e) {
       error.value = 'Failed to load marketplace: $e';
       debugPrint('[MarketplaceController] Error loading marketplace: $e');
@@ -113,18 +107,35 @@ class MarketplaceController extends GetxController {
 
       debugPrint('[MarketplaceController] Loading shop: $shopId');
 
-      if (AppConfig.useMockData) {
-        final response = await _mockDataService.getShop(shopId);
-        selectedShop.value = response.shopWithProducts;
+      // Use KongService to get shop and products
+      final shopModel = await _kongService.getShopById(shopId);
+      if (shopModel != null) {
+        final products = await _kongService.getProducts(shopId);
+
+        // Convert to legacy format for compatibility
+        final convertedProducts = products.map((p) => Product(
+          id: p.id,
+          title: p.name,
+          description: p.description,
+          price: p.price,
+          thumbnail: p.imageUrl,
+        )).toList();
+
+        selectedShop.value = ShopWithProducts(
+          shop: shopModel.toShop(),
+          products: convertedProducts,
+          featuredProducts: convertedProducts.where((p) => products.any((pm) => pm.id == p.id && pm.isFeatured)).toList(),
+        );
+
         debugPrint(
-          '[MarketplaceController] Loaded shop: ${response.shopWithProducts.shop.name}',
+          '[MarketplaceController] Loaded shop: ${shopModel.name}',
         );
         debugPrint(
-          '[MarketplaceController] Shop has ${response.shopWithProducts.products.length} products',
+          '[MarketplaceController] Shop has ${products.length} products',
         );
       } else {
-        // TODO: Implement real API call
         selectedShop.value = null;
+        error.value = 'Shop not found: $shopId';
       }
     } catch (e) {
       error.value = 'Failed to load shop: $e';

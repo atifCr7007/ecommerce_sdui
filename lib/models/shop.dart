@@ -11,6 +11,8 @@ class Shop {
   final String description;
   final String logo;
   final String? bannerImage;
+  final String? image; // Main shop image
+  final String imageUrl; // Computed image URL for compatibility
   final double rating;
   final int reviewCount;
   final String category;
@@ -21,12 +23,25 @@ class Shop {
   final DateTime createdAt;
   final DateTime updatedAt;
 
+  // Additional properties for SDUI
+  final List<String> tags;
+  final String deliveryTime;
+  final List<String> cuisines;
+  final String location;
+  final String distance;
+  final bool isOpen;
+  final double deliveryFee;
+  final double minimumOrder;
+
+
+
   Shop({
     required this.id,
     required this.name,
     required this.description,
     required this.logo,
     this.bannerImage,
+    this.image,
     required this.rating,
     required this.reviewCount,
     required this.category,
@@ -36,7 +51,15 @@ class Shop {
     required this.contact,
     required this.createdAt,
     required this.updatedAt,
-  });
+    this.tags = const [],
+    this.deliveryTime = '30-45 mins',
+    this.cuisines = const [],
+    this.location = 'Unknown',
+    this.distance = '2.5 km',
+    this.isOpen = true,
+    this.deliveryFee = 0.0,
+    this.minimumOrder = 0.0,
+  }) : imageUrl = bannerImage ?? image ?? logo;
 
   factory Shop.fromJson(Map<String, dynamic> json) => _$ShopFromJson(json);
   Map<String, dynamic> toJson() => _$ShopToJson(this);

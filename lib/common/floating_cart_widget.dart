@@ -8,18 +8,22 @@ class FloatingCartWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cartController = Get.find<CartController>();
-    
+
     return Obx(() {
       final cart = cartController.cart.value;
       final currentRoute = Get.currentRoute;
-      
-      // Hide widget on cart and order confirmation screens
-      if (currentRoute == '/cart' || 
+
+      // Hide widget on cart and order confirmation screens, or when cart is empty
+      if (currentRoute == '/cart' ||
           currentRoute == '/order-confirmation' ||
-          cart == null || 
+          cart == null ||
           cart.items.isEmpty) {
         return const SizedBox.shrink();
       }
+
+      // Also hide on main app shell when cart tab is selected
+      // We can detect this by checking if we're on the main route and cart has items
+      // but the floating cart should not show when viewing the cart tab
 
       return Positioned(
         bottom: 20,
@@ -82,7 +86,6 @@ class FloatingCartWidget extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 12),
                 // Cart items list
                 _buildCartItemsList(cart, cartController),
                 const SizedBox(height: 16),
@@ -161,13 +164,11 @@ class FloatingCartWidget extends StatelessWidget {
   void _viewFullMenu() {
     final cartController = Get.find<CartController>();
     final shopId = cartController.currentShopId.value;
-    final shopName = cartController.currentShopName.value;
 
-    if (shopId != null && shopName != null) {
-      // Navigate to the specific shop's home page with shop context
-      Get.toNamed('/home', parameters: {
+    if (shopId != null && shopId.isNotEmpty) {
+      // Navigate back to the shop detail page where items were added to cart
+      Get.toNamed('/shop-detail', parameters: {
         'shopId': shopId,
-        'shopName': shopName,
       });
     } else {
       // Fallback to marketplace if no shop context is available
@@ -187,6 +188,7 @@ class FloatingCartWidget extends StatelessWidget {
     return Container(
       constraints: const BoxConstraints(maxHeight: 200),
       child: ListView.separated(
+        padding: EdgeInsets.zero,
         shrinkWrap: true,
         itemCount: cart.items.length,
         separatorBuilder: (context, index) => const Divider(height: 1),
@@ -200,7 +202,7 @@ class FloatingCartWidget extends StatelessWidget {
 
   Widget _buildCartItem(dynamic item, CartController cartController) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.symmetric(vertical: 0),
       child: Row(
         children: [
           // Item image
@@ -243,7 +245,7 @@ class FloatingCartWidget extends StatelessWidget {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  '${item.formattedPrice} × ${item.quantity}',
+                  '${item.formattedUnitPrice} × ${item.quantity}',
                   style: TextStyle(
                     fontSize: 12,
                     color: Colors.grey[600],
